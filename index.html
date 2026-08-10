@@ -3,15 +3,16 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>EletroCalc - Calculadora de Carregamento de Veículos Elétricos</title>
+<title>EletroCalc - Calculadora de Carregamento Veicular</title>
 
-<!-- Configurações PWA -->
+<!-- Configurações PWA e Logo -->
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#10b981">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="EletroCalc">
-<link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/5557/5557284.png">
+<link rel="icon" type="image/png" href="logo.png">
+<link rel="apple-touch-icon" href="logo.png">
 
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
@@ -25,7 +26,6 @@
 --primary-hover: #059669;
 --text-main: #f8fafc;
 --text-muted: #94a3b8;
---accent: #3b82f6;
 }
 
 * {
@@ -57,23 +57,15 @@ box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5);
 
 .header {
 text-align: center;
-margin-bottom: 24px;
+margin-bottom: 20px;
 }
 
-.header h1 {
-font-size: 1.8rem;
-font-weight: 700;
-color: var(--primary);
-display: flex;
-align-items: center;
-justify-content: center;
-gap: 8px;
-}
-
-.header p {
-font-size: 0.875rem;
-color: var(--text-muted);
-margin-top: 4px;
+.header img.app-logo {
+width: 100%;
+max-width: 280px;
+height: auto;
+margin-bottom: 8px;
+object-fit: contain;
 }
 
 .form-group {
@@ -261,8 +253,7 @@ background-color: var(--primary-hover);
 
 <div class="container" id="app-container">
 <div class="header">
-<h1>⚡ EletroCalc</h1>
-<p>Calculadora de Carga para Veículos Elétricos</p>
+<img src="logo.png" alt="EletroCalc - Calculadora de Carregamento Veicular" class="app-logo">
 </div>
 
 <div class="form-group">
@@ -446,22 +437,21 @@ if (isShared && power > 0) {
 power = power / 2;
 }
 
-// Formatação em R$ XX,00 document.getElementById('totalCostDisplay').textContent =R{totalCost.toFixed(2).replace('.', ',')}; document.getElementById('kwhNeededDisplay').textContent =Energia necessária: ${neededKwh.toFixed(1)} kWh;
+document.getElementById('totalCostDisplay').textContent = R$ {neededKwh.toFixed(1)} kWh`;
 
 if (power > 0 && diffPct > 0) {
 const totalHours = neededKwh / power;
 const hours = Math.floor(totalHours);
 const minutes = Math.round((totalHours - hours) * 60);
-document.getElementById('timeDisplay').textContent = Tempo estimado:${hours}h ${minutes}min;
+document.getElementById('timeDisplay').textContent = Tempo estimado: ${hours}h ${minutes}min;
 } else {
 document.getElementById('timeDisplay').textContent = Tempo estimado: 0h 0min;
 }
 
-// Autonomia Atual vs. Autonomia com Meta Desejada
 const currentKm = Math.round((car.km100 * currentPct) / 100);
 const targetKm = Math.round((car.km100 * targetPct) / 100);
 
-document.getElementById('rangeDisplay').textContent = Atual:${currentKm} km ➔ Com Meta: ${targetKm} km`;
+document.getElementById('rangeDisplay').textContent = Atual: ${currentKm} km ➔ Com Meta: ${targetKm} km;
 }
 
 function exportPDF() {

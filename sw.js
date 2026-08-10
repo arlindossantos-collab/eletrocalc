@@ -1,7 +1,8 @@
-const CACHE_NAME = 'eletrocalc-v2';
+const CACHE_NAME = 'eletrocalc-v3';
 const ASSETS = [
 './index.html',
 './manifest.json',
+'./logo.png',
 'https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap',
 'https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js'
 ];

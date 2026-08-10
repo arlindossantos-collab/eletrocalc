@@ -1,9 +1,9 @@
 {
 "short_name": "EletroCalc",
-"name": "EletroCalc - Calculadora de Carregamento EV",
+"name": "EletroCalc - Calculadora de Carregamento Veicular",
 "icons": [
 {
-"src": "https://cdn-icons-png.flaticon.com/512/5557/5557284.png",
+"src": "logo.png",
 "type": "image/png",
 "sizes": "512x512",
 "purpose": "any maskable"
