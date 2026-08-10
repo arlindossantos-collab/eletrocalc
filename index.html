@@ -15,7 +15,6 @@
   <link rel="apple-touch-icon" href="logo.png">
 
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
   
   <style>
     :root {
@@ -306,7 +305,7 @@
     </label>
   </div>
 
-  <div class="result-card" id="pdfReport">
+  <div class="result-card">
     <div class="result-price" id="totalCostDisplay">R$ 0,00</div>
     <div class="result-detail" id="kwhNeededDisplay">Energia necessária: 0.0 kWh</div>
     <div class="divider"></div>
@@ -318,7 +317,7 @@
     </div>
   </div>
 
-  <button class="btn-action" onclick="exportPDF()">Exportar Resumo / PDF</button>
+  <button class="btn-action" onclick="exportTXT()">Exportar Resumo (.txt)</button>
 </div>
 
 <script>
@@ -460,7 +459,7 @@
     document.getElementById('rangeDisplay').textContent = `Atual: ${currentKm} km ➔ Com Meta: ${targetKm} km`;
   }
 
-  function exportPDF() {
+  function exportTXT() {
     const selectedId = parseInt(document.getElementById('vehicleSelect').value);
     const car = evDatabase.find(c => c.id === selectedId) || evDatabase[0];
     const currentPct = parseFloat(document.getElementById('currentBattery').value);
@@ -480,9 +479,11 @@
     }
 
     const isShared = document.getElementById('sharedPower').checked;
+    const sharedText = isShared ? "Sim" : "Não";
+
     if (isShared && powerNum > 0) {
       powerNum = powerNum / 2;
-      powerStr += ` (Compartilhada: ${powerNum.toFixed(1).replace('.', ',')} kW)`;
+      powerStr += ` (Efetiva: ${powerNum.toFixed(1).replace('.', ',')} kW)`;
     }
 
     const diffPct = Math.max(0, targetPct - currentPct);
@@ -500,72 +501,46 @@
     const currentKm = Math.round((car.km100 * currentPct) / 100);
     const targetKm = Math.round((car.km100 * targetPct) / 100);
     const dataAtual = new Date().toLocaleDateString('pt-BR');
+    const horaAtual = new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
 
-    const reportHtml = `
-      <div style="font-family: 'Plus Jakarta Sans', sans-serif; background-color: #0f172a; color: #f8fafc; padding: 30px; border-radius: 16px; width: 420px; margin: 0 auto; box-sizing: border-box; border: 1px solid #334155;">
-        <div style="text-align: center; margin-bottom: 20px; border-bottom: 1px solid #334155; padding-bottom: 15px;">
-          <img src="logo.png" style="max-width: 220px; height: auto;" />
-          <p style="font-size: 11px; color: #94a3b8; margin-top: 8px;">Relatório de Carregamento — ${dataAtual}</p>
-        </div>
+    // Conteúdo formatado do TXT
+    const txtContent = 
+`==================================================
+                 ⚡ ELETROCALC
+    Relatório de Estimativa de Carregamento
+==================================================
+Data: ${dataAtual} às ${horaAtual}
 
-        <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px; font-size: 13px;">
-          <tr style="border-bottom: 1px solid #1e293b;">
-            <td style="padding: 8px 0; color: #94a3b8;">Veículo:</td>
-            <td style="padding: 8px 0; text-align: right; font-weight: 600; color: #f8fafc;">${car.marca} ${car.modelo} (${car.kwh} kWh)</td>
-          </tr>
-          <tr style="border-bottom: 1px solid #1e293b;">
-            <td style="padding: 8px 0; color: #94a3b8;">Carga Atual:</td>
-            <td style="padding: 8px 0; text-align: right; font-weight: 600; color: #f8fafc;">${currentPct}%</td>
-          </tr>
-          <tr style="border-bottom: 1px solid #1e293b;">
-            <td style="padding: 8px 0; color: #94a3b8;">Meta Desejada:</td>
-            <td style="padding: 8px 0; text-align: right; font-weight: 600; color: #f8fafc;">${targetPct}%</td>
-          </tr>
-          <tr style="border-bottom: 1px solid #1e293b;">
-            <td style="padding: 8px 0; color: #94a3b8;">Potência do Carregador:</td>
-            <td style="padding: 8px 0; text-align: right; font-weight: 600; color: #f8fafc;">${powerStr}</td>
-          </tr>
-          <tr style="border-bottom: 1px solid #1e293b;">
-            <td style="padding: 8px 0; color: #94a3b8;">Valor por kWh:</td>
-            <td style="padding: 8px 0; text-align: right; font-weight: 600; color: #f8fafc;">R$ ${pricePerKwh.toFixed(2).replace('.', ',')}</td>
-          </tr>
-        </table>
+--- DADOS DO VEÍCULO E PARÂMETROS ---
+Marca / Modelo:           ${car.marca} ${car.modelo}
+Capacidade da Bateria:    ${car.kwh} kWh
+Carga Atual:              ${currentPct}%
+Meta Desejada:            ${targetPct}%
+Potência do Carregador:   ${powerStr}
+Valor por kWh:            R$ ${pricePerKwh.toFixed(2).replace('.', ',')}
+Potência Compartilhada:   ${sharedText}
 
-        <div style="background: linear-gradient(135deg, #064e3b 0%, #022c22 100%); border: 1px solid #059669; border-radius: 14px; padding: 18px; text-align: center;">
-          <div style="font-size: 32px; font-weight: 700; color: #34d399; margin-bottom: 2px;">R$ ${totalCost.toFixed(2).replace('.', ',')}</div>
-          <div style="font-size: 13px; color: #a7f3d0; margin-bottom: 12px;">Energia necessária: ${neededKwh.toFixed(1)} kWh</div>
-          
-          <div style="height: 1px; background-color: #059669; opacity: 0.4; margin: 10px 0;"></div>
-          
-          <div style="font-size: 15px; font-weight: 600; color: #ffffff; margin-bottom: 10px;">Tempo estimado: ${timeStr}</div>
-          
-          <div style="background-color: rgba(0, 0, 0, 0.25); border-radius: 8px; padding: 8px;">
-            <div style="font-size: 10px; text-transform: uppercase; color: #a7f3d0; letter-spacing: 0.5px; margin-bottom: 2px;">ESTIMATIVA DE AUTONOMIA</div>
-            <div style="font-size: 13px; font-weight: 700; color: #6ee7b7;">Atual: ${currentKm} km ➔ Com Meta: ${targetKm} km</div>
-          </div>
-        </div>
+--- RESUMO FINANCEIRO E TÉCNICO ---
+VALOR TOTAL ESTIMADO:     R$ ${totalCost.toFixed(2).replace('.', ',')}
+Energia Necessária:       ${neededKwh.toFixed(1)} kWh
+Tempo Estimado de Carga:  ${timeStr}
 
-        <div style="text-align: center; margin-top: 18px; font-size: 10px; color: #64748b;">
-          EletroCalc — Calculadora de Carregamento Veicular
-        </div>
-      </div>
-    `;
+--- ESTIMATIVA DE AUTONOMIA ---
+Autonomia Atual:          ${currentKm} km
+Autonomia Com Meta:       ${targetKm} km
+Autonomia Total (100%):   ${car.km100} km
+==================================================
+EletroCalc — Calculadora de Carregamento Veicular
+==================================================`;
 
-    const tempDiv = document.createElement('div');
-    tempDiv.innerHTML = reportHtml;
-    document.body.appendChild(tempDiv);
-
-    const opt = {
-      margin:       0.3,
-      filename:     `EletroCalc_${car.marca}_${car.modelo}.pdf`,
-      image:        { type: 'jpeg', quality: 0.98 },
-      html2canvas:  { scale: 2, useCORS: true },
-      jsPDF:        { unit: 'in', format: 'a4', orientation: 'portrait' }
-    };
-
-    html2pdf().set(opt).from(tempDiv).save().then(() => {
-      document.body.removeChild(tempDiv);
-    });
+    // Download do arquivo TXT
+    const blob = new Blob([txtContent], { type: 'text/plain;charset=utf-8' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = `EletroCalc_${car.marca}_${car.modelo}.txt`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   }
 
   window.onload = initApp;
