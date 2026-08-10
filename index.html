@@ -192,7 +192,7 @@ margin-bottom: 20px;
 }
 
 .result-price {
-font-size: 2rem;
+font-size: 2.2rem;
 font-weight: 700;
 color: #34d399;
 margin-bottom: 4px;
@@ -218,9 +218,24 @@ color: #ffffff;
 margin-bottom: 6px;
 }
 
-.result-range {
-font-size: 0.9rem;
-font-weight: 500;
+.result-range-box {
+background-color: rgba(0, 0, 0, 0.25);
+border-radius: 10px;
+padding: 10px;
+margin-top: 10px;
+}
+
+.result-range-title {
+font-size: 0.8rem;
+text-transform: uppercase;
+letter-spacing: 0.5px;
+color: #a7f3d0;
+margin-bottom: 4px;
+}
+
+.result-range-value {
+font-size: 1rem;
+font-weight: 700;
 color: #6ee7b7;
 }
 
@@ -257,14 +272,16 @@ background-color: var(--primary-hover);
 
 <div class="form-group">
 <div class="range-labels">
-<span>Carga Atual: <strong id="currentBatteryVal">38%</strong></span>
+<span>Carga Atual:</span>
+<strong id="currentBatteryVal">38%</strong>
 </div>
 <input type="range" id="currentBattery" min="0" max="100" value="38" oninput="validateAndUpdateBattery(); calculate();">
 </div>
 
 <div class="form-group">
 <div class="range-labels">
-<span>Meta Desejada: <strong id="targetBatteryVal">80%</strong></span>
+<span>Meta Desejada:</span>
+<strong id="targetBatteryVal">80%</strong>
 </div>
 <input type="range" id="targetBattery" min="0" max="100" value="80" oninput="validateAndUpdateBattery(); calculate();">
 </div>
@@ -303,7 +320,11 @@ background-color: var(--primary-hover);
 <div class="result-detail" id="kwhNeededDisplay">Energia necessária: 0.0 kWh</div>
 <div class="divider"></div>
 <div class="result-time" id="timeDisplay">Tempo estimado: 0h 0min</div>
-<div class="result-range" id="rangeDisplay">Autonomia: 0 km → 0 km (Total: 0 km)</div>
+
+<div class="result-range-box">
+<div class="result-range-title">Estimativa de Autonomia</div>
+<div class="result-range-value" id="rangeDisplay">Atual: 0 km ➔ Com Meta: 0 km</div>
+</div>
 </div>
 
 <button class="btn-action" onclick="exportPDF()">Exportar Resumo / PDF</button>
@@ -344,6 +365,7 @@ const evDatabase = [
 
 function initApp() {
 const vehicleSelect = document.getElementById('vehicleSelect');
+vehicleSelect.innerHTML = '';
 
 evDatabase.sort((a, b) => a.marca.localeCompare(b.marca) || a.modelo.localeCompare(b.modelo));
 
@@ -424,21 +446,22 @@ if (isShared && power > 0) {
 power = power / 2;
 }
 
-document.getElementById('totalCostDisplay').textContent = R$ {neededKwh.toFixed(1)} kWh`;
+// Formatação em R$ XX,00 document.getElementById('totalCostDisplay').textContent =R{totalCost.toFixed(2).replace('.', ',')}; document.getElementById('kwhNeededDisplay').textContent =Energia necessária: ${neededKwh.toFixed(1)} kWh;
 
 if (power > 0 && diffPct > 0) {
 const totalHours = neededKwh / power;
 const hours = Math.floor(totalHours);
 const minutes = Math.round((totalHours - hours) * 60);
-document.getElementById('timeDisplay').textContent = Tempo estimado: ${hours}h ${minutes}min;
+document.getElementById('timeDisplay').textContent = Tempo estimado:${hours}h ${minutes}min;
 } else {
 document.getElementById('timeDisplay').textContent = Tempo estimado: 0h 0min;
 }
 
+// Autonomia Atual vs. Autonomia com Meta Desejada
 const currentKm = Math.round((car.km100 * currentPct) / 100);
 const targetKm = Math.round((car.km100 * targetPct) / 100);
 
-document.getElementById('rangeDisplay').textContent = Autonomia: ${currentKm} km → ${targetKm} km (100%: ${car.km100} km);
+document.getElementById('rangeDisplay').textContent = Atual:${currentKm} km ➔ Com Meta: ${targetKm} km`;
 }
 
 function exportPDF() {
@@ -461,8 +484,8 @@ window.onload = initApp;
 if ('serviceWorker' in navigator) {
 window.addEventListener('load', () => {
 navigator.serviceWorker.register('./sw.js')
-.then(reg => console.log('Service Worker registrado com sucesso:', reg))
-.catch(err => console.error('Erro ao registrar o Service Worker:', err));
+.then(reg => console.log('Service Worker registrado:', reg))
+.catch(err => console.error('Erro no Service Worker:', err));
 });
 }
 </script>
