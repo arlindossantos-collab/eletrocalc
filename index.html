@@ -7,24 +7,29 @@
   
   <!-- Configurações PWA e Logo -->
   <link rel="manifest" href="manifest.json">
-  <meta name="theme-color" content="#10b981">
+  <meta name="theme-color" content="#1e293b">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="EletroCalc">
   <link rel="icon" type="image/png" href="logo.png">
   <link rel="apple-touch-icon" href="logo.png">
 
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   
   <style>
     :root {
-      --bg-color: #0f172a;
+      --bg-color: #1e293b;
       --card-bg: #1e293b;
-      --card-border: #334155;
+      --shadow-dark: #141c28;
+      --shadow-light: #28364e;
       --primary: #10b981;
       --primary-hover: #059669;
       --text-main: #f8fafc;
       --text-muted: #94a3b8;
+      --text-kwh: #3b82f6;
+      --text-time: #f59e0b;
+      --text-range: #a855f7;
+      --danger: #ef4444;
     }
 
     * {
@@ -44,26 +49,25 @@
       padding: 20px;
     }
 
-    .container {
+    .neu-container {
       width: 100%;
-      max-width: 480px;
-      background-color: var(--card-bg);
-      border: 1px solid var(--card-border);
-      border-radius: 24px;
-      padding: 24px;
-      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5);
+      max-width: 460px;
+      background: var(--bg-color);
+      border-radius: 30px;
+      padding: 28px;
+      box-shadow:  12px 12px 24px var(--shadow-dark),
+                  -12px -12px 24px var(--shadow-light);
     }
 
     .header {
       text-align: center;
-      margin-bottom: 20px;
+      margin-bottom: 24px;
     }
 
     .header img.app-logo {
       width: 100%;
-      max-width: 320px;
+      max-width: 260px;
       height: auto;
-      margin-bottom: 8px;
       object-fit: contain;
     }
 
@@ -73,26 +77,32 @@
 
     .form-group label {
       display: block;
-      font-size: 0.875rem;
+      font-size: 0.85rem;
       font-weight: 600;
       margin-bottom: 8px;
-      color: var(--text-main);
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
     }
 
-    select, input {
+    .neu-input {
       width: 100%;
-      padding: 12px 16px;
-      background-color: #0f172a;
-      border: 1px solid var(--card-border);
-      border-radius: 12px;
+      padding: 14px 18px;
+      background: var(--bg-color);
+      border: none;
+      border-radius: 16px;
       color: var(--text-main);
-      font-size: 1rem;
+      font-size: 0.95rem;
+      font-weight: 600;
       outline: none;
-      transition: border-color 0.2s;
+      box-shadow: inset 4px 4px 8px var(--shadow-dark),
+                  inset -4px -4px 8px var(--shadow-light);
+      transition: all 0.2s;
     }
 
-    select:focus, input:focus {
-      border-color: var(--primary);
+    select.neu-input option, select.neu-input optgroup {
+      background-color: #0f172a;
+      color: var(--text-main);
     }
 
     .manual-power-container {
@@ -100,35 +110,66 @@
       display: none;
     }
 
-    .range-labels {
+    .range-header {
       display: flex;
       justify-content: space-between;
       font-size: 0.85rem;
-      color: var(--text-muted);
-      margin-bottom: 6px;
+      font-weight: 600;
+      color: var(--text-main);
+      margin-bottom: 8px;
     }
 
     input[type="range"] {
-      padding: 0;
-      height: 8px;
-      accent-color: var(--primary);
+      -webkit-appearance: none;
+      appearance: none;
+      width: 100%;
+      height: 10px;
+      border-radius: 10px;
+      background: var(--bg-color);
+      outline: none;
+      box-shadow: inset 2px 2px 5px var(--shadow-dark),
+                  inset -2px -2px 5px var(--shadow-light);
       cursor: pointer;
     }
 
-    .toggle-container {
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: #f8fafc;
+      box-shadow: 2px 2px 5px var(--shadow-dark);
+      cursor: pointer;
+      border: 2px solid var(--bg-color);
+    }
+
+    input[type="range"]::-moz-range-thumb {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: #f8fafc;
+      box-shadow: 2px 2px 5px var(--shadow-dark);
+      cursor: pointer;
+      border: 2px solid var(--bg-color);
+    }
+
+    .neu-toggle {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      background-color: #0f172a;
-      padding: 12px 16px;
-      border-radius: 12px;
-      border: 1px solid var(--card-border);
-      margin-bottom: 20px;
+      padding: 14px 18px;
+      border-radius: 16px;
+      background: var(--bg-color);
+      box-shadow: 4px 4px 8px var(--shadow-dark),
+                 -4px -4px 8px var(--shadow-light);
+      margin-bottom: 24px;
     }
 
-    .toggle-container span {
-      font-size: 0.9rem;
-      font-weight: 500;
+    .neu-toggle span {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-main);
     }
 
     .switch {
@@ -138,148 +179,176 @@
       height: 24px;
     }
 
-    .switch input {
-      opacity: 0;
-      width: 0;
-      height: 0;
-    }
+    .switch input { opacity: 0; width: 0; height: 0; }
 
-    .slider {
+    .slider-toggle {
       position: absolute;
       cursor: pointer;
       top: 0; left: 0; right: 0; bottom: 0;
-      background-color: #334155;
+      background-color: var(--bg-color);
       transition: .4s;
       border-radius: 24px;
+      box-shadow: inset 2px 2px 4px var(--shadow-dark),
+                  inset -2px -2px 4px var(--shadow-light);
     }
 
-    .slider:before {
+    .slider-toggle:before {
       position: absolute;
       content: "";
       height: 18px;
       width: 18px;
       left: 3px;
       bottom: 3px;
-      background-color: white;
+      background-color: var(--text-muted);
       transition: .4s;
       border-radius: 50%;
     }
 
-    input:checked + .slider {
+    input:checked + .slider-toggle:before {
+      transform: translateX(20px);
       background-color: var(--primary);
     }
 
-    input:checked + .slider:before {
-      transform: translateX(20px);
-    }
-
-    .result-card {
-      background: linear-gradient(135deg, #064e3b 0%, #022c22 100%);
-      border: 1px solid #059669;
-      border-radius: 16px;
-      padding: 20px;
+    .neu-result-card {
+      padding: 24px;
+      border-radius: 24px;
+      background: var(--bg-color);
       text-align: center;
+      box-shadow: inset 5px 5px 10px var(--shadow-dark),
+                  inset -5px -5px 10px var(--shadow-light);
       margin-bottom: 20px;
     }
 
     .result-price {
-      font-size: 2.2rem;
-      font-weight: 700;
+      font-size: 3rem;
+      font-weight: 800;
       color: #34d399;
-      margin-bottom: 4px;
+      line-height: 1.1;
+      margin-bottom: 6px;
     }
 
-    .result-detail {
-      font-size: 0.9rem;
-      color: #a7f3d0;
-      margin-bottom: 6px;
+    .result-kwh {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--text-kwh);
+      margin-bottom: 12px;
     }
 
     .divider {
-      height: 1px;
-      background-color: #059669;
-      opacity: 0.4;
-      margin: 12px 0;
+      height: 2px;
+      border-radius: 2px;
+      background: var(--bg-color);
+      box-shadow: inset 1px 1px 2px var(--shadow-dark),
+                  inset -1px -1px 2px var(--shadow-light);
+      margin: 14px 0;
     }
 
     .result-time {
-      font-size: 1.1rem;
-      font-weight: 600;
-      color: #ffffff;
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--text-time);
       margin-bottom: 6px;
     }
 
-    .result-range-box {
-      background-color: rgba(0, 0, 0, 0.25);
-      border-radius: 10px;
-      padding: 10px;
-      margin-top: 10px;
+    .result-range {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--text-range);
     }
 
-    .result-range-title {
-      font-size: 0.8rem;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      color: #a7f3d0;
-      margin-bottom: 4px;
+    /* Painel do Cronômetro Ativo */
+    .timer-panel {
+      display: none;
+      background: var(--bg-color);
+      padding: 18px;
+      border-radius: 20px;
+      margin-bottom: 20px;
+      text-align: center;
+      box-shadow: inset 4px 4px 8px var(--shadow-dark),
+                  inset -4px -4px 8px var(--shadow-light);
     }
 
-    .result-range-value {
-      font-size: 1rem;
+    .timer-display {
+      font-size: 2.2rem;
+      font-weight: 800;
+      color: var(--text-time);
+      letter-spacing: 1px;
+      margin: 6px 0;
+    }
+
+    .timer-alert {
+      font-size: 0.85rem;
       font-weight: 700;
-      color: #6ee7b7;
+      color: var(--text-muted);
+    }
+
+    .button-group {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
     }
 
     .btn-action {
       width: 100%;
-      padding: 14px;
-      background-color: var(--primary);
-      color: #022c22;
+      padding: 16px;
+      background: var(--bg-color);
+      color: var(--primary);
       border: none;
-      border-radius: 12px;
+      border-radius: 16px;
       font-size: 1rem;
-      font-weight: 700;
+      font-weight: 800;
       cursor: pointer;
-      transition: background-color 0.2s;
+      box-shadow: 6px 6px 12px var(--shadow-dark),
+                 -6px -6px 12px var(--shadow-light);
+      transition: all 0.2s;
     }
 
-    .btn-action:hover {
-      background-color: var(--primary-hover);
+    .btn-start-charge {
+      color: #38bdf8;
+    }
+
+    .btn-cancel-charge {
+      color: var(--danger);
+    }
+
+    .btn-action:active {
+      box-shadow: inset 3px 3px 6px var(--shadow-dark),
+                  inset -3px -3px 6px var(--shadow-light);
     }
   </style>
 </head>
 <body>
 
-<div class="container" id="app-container">
+<div class="neu-container" id="app-container">
   <div class="header">
-    <img src="logo.png" alt="EletroCalc - Calculadora de Carregamento Veicular" class="app-logo">
+    <img src="logo.png" alt="EletroCalc Logo" class="app-logo">
   </div>
 
   <div class="form-group">
     <label for="vehicleSelect">Selecione o Veículo</label>
-    <select id="vehicleSelect" onchange="calculate()"></select>
+    <select id="vehicleSelect" class="neu-input" onchange="calculate()"></select>
   </div>
 
   <div class="form-group">
-    <div class="range-labels">
-      <span>Carga Atual:</span>
+    <div class="range-header">
+      <span style="color: var(--text-muted);">Carga Atual</span>
       <strong id="currentBatteryVal">38%</strong>
     </div>
     <input type="range" id="currentBattery" min="0" max="100" value="38" oninput="validateAndUpdateBattery(); calculate();">
   </div>
 
   <div class="form-group">
-    <div class="range-labels">
-      <span>Meta Desejada:</span>
+    <div class="range-header">
+      <span style="color: var(--text-muted);">Meta Desejada</span>
       <strong id="targetBatteryVal">80%</strong>
     </div>
     <input type="range" id="targetBattery" min="0" max="100" value="80" oninput="validateAndUpdateBattery(); calculate();">
   </div>
 
   <div class="form-group">
-    <label for="chargerPower">Potência do Carregador (kW)</label>
-    <select id="chargerPower" onchange="toggleManualPower(); calculate();">
-      <option value="3.7">3.7 kW (Portátil / Tomada 20A)</option>
+    <label for="chargerPower">Potência do Carregador</label>
+    <select id="chargerPower" class="neu-input" onchange="toggleManualPower(); calculate();">
+      <option value="3.7">3.7 kW (Portátil / 20A)</option>
       <option value="7.4" selected>7.4 kW (Wallbox Monofásico)</option>
       <option value="11">11.0 kW (Wallbox Trifásico)</option>
       <option value="22">22.0 kW (AC Rápido)</option>
@@ -288,89 +357,182 @@
       <option value="custom">Outra potência (Manual)</option>
     </select>
     <div class="manual-power-container" id="manualPowerGroup">
-      <input type="text" id="manualChargerPower" placeholder="Digite a potência em kW (ex: 2,5)" oninput="calculate()">
+      <input type="text" id="manualChargerPower" class="neu-input" placeholder="Digite a potência em kW (ex: 2,5)" oninput="calculate()">
     </div>
   </div>
 
   <div class="form-group">
     <label for="pricePerKwh">Valor por kWh (R$)</label>
-    <input type="text" id="pricePerKwh" value="1,59" oninput="calculate(); savePreferences();">
+    <input type="text" id="pricePerKwh" class="neu-input" value="1,59" oninput="calculate(); savePreferences();">
   </div>
 
-  <div class="toggle-container">
-    <span>Potência Compartilhada (Reduz pela metade)</span>
+  <div class="form-group">
+    <label for="startFee">Cobrança de Start / Início (R$)</label>
+    <input type="text" id="startFee" class="neu-input" value="0,00" oninput="calculate(); savePreferences();">
+  </div>
+
+  <div class="form-group">
+    <label for="alertMinutes">Alertar Faltando (Minutos)</label>
+    <input type="number" id="alertMinutes" class="neu-input" value="10" min="1" max="120" oninput="savePreferences();">
+  </div>
+
+  <div class="neu-toggle">
+    <span>Potência Compartilhada (Metade)</span>
     <label class="switch">
       <input type="checkbox" id="sharedPower" onchange="calculate()">
-      <span class="slider"></span>
+      <span class="slider-toggle"></span>
     </label>
   </div>
 
-  <div class="result-card">
+  <div class="neu-result-card">
     <div class="result-price" id="totalCostDisplay">R$ 0,00</div>
-    <div class="result-detail" id="kwhNeededDisplay">Energia necessária: 0.0 kWh</div>
+    <div class="result-kwh" id="kwhNeededDisplay">Energia necessária: 0.0 kWh</div>
     <div class="divider"></div>
     <div class="result-time" id="timeDisplay">Tempo estimado: 0h 0min</div>
-    
-    <div class="result-range-box">
-      <div class="result-range-title">Estimativa de Autonomia</div>
-      <div class="result-range-value" id="rangeDisplay">Atual: 0 km ➔ Com Meta: 0 km</div>
-    </div>
+    <div class="result-range" id="rangeDisplay">Atual: 0 km ➔ Com Meta: 0 km</div>
   </div>
 
-  <button class="btn-action" onclick="exportTXT()">Exportar Resumo (.txt)</button>
+  <!-- Painel do Temporizador Regressivo -->
+  <div class="timer-panel" id="timerPanel">
+    <div style="font-size: 0.8rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase;">Despertar em:</div>
+    <div class="timer-display" id="countdownDisplay">00:00:00</div>
+    <div class="timer-alert" id="timerStatusMsg">⚡ Notificação programada</div>
+  </div>
+
+  <div class="button-group">
+    <button class="btn-action btn-start-charge" id="startChargeBtn" onclick="startChargingTimer()">⚡ Iniciar Carregamento</button>
+    <button class="btn-action btn-cancel-charge" id="cancelChargeBtn" style="display: none;" onclick="stopChargingTimer()">⏹ Interromper Carregamento</button>
+    <button class="btn-action" onclick="exportTXT()">Exportar Resumo (.txt)</button>
+  </div>
 </div>
 
 <script>
   const evDatabase = [
-    // BYD
-    { id: 1, marca: "BYD", modelo: "Dolphin GS", kwh: 44.9, km100: 291 },
-    { id: 2, marca: "BYD", modelo: "Dolphin Mini", kwh: 38.8, km100: 280 },
-    { id: 3, marca: "BYD", modelo: "Dolphin Plus", kwh: 60.48, km100: 330 },
-    { id: 4, marca: "BYD", modelo: "Yuan Plus", kwh: 60.48, km100: 294 },
-    { id: 5, marca: "BYD", modelo: "Seal", kwh: 82.56, km100: 372 },
-    
-    // LEAPMOTOR
-    { id: 12, marca: "Leapmotor", modelo: "T03", kwh: 37.3, km100: 265 },
-    { id: 13, marca: "Leapmotor", modelo: "C10", kwh: 69.9, km100: 340 },
-    { id: 20, marca: "Leapmotor", modelo: "B10", kwh: 56.2, km100: 288 },
-
-    // OMODA / JAECOO
-    { id: 14, marca: "Omoda", modelo: "E5", kwh: 61.0, km100: 310 },
-    { id: 15, marca: "Jaecoo", modelo: "J6 EV", kwh: 65.7, km100: 320 },
-
-    // GEELY / ZEEKR
-    { id: 16, marca: "Geely / Zeekr", modelo: "Zeekr 001 (Standard)", kwh: 86.0, km100: 400 },
-    { id: 17, marca: "Geely / Zeekr", modelo: "Zeekr 001 (Long Range)", kwh: 100.0, km100: 450 },
-    { id: 18, marca: "Geely / Zeekr", modelo: "Zeekr X", kwh: 66.0, km100: 332 },
-    { id: 19, marca: "Geely", modelo: "Geometry E", kwh: 39.4, km100: 280 },
-
-    // OUTROS POPULARES
-    { id: 6, marca: "GWM", modelo: "Ora 03 Skin", kwh: 48.0, km100: 232 },
-    { id: 7, marca: "GWM", modelo: "Ora 03 GT", kwh: 63.0, km100: 319 },
-    { id: 8, marca: "Volvo", modelo: "EX30 Core/Plus", kwh: 51.0, km100: 250 },
-    { id: 9, marca: "Volvo", modelo: "EX30 Extended Range", kwh: 69.0, km100: 338 },
-    { id: 10, marca: "Renault", modelo: "Kwid E-Tech", kwh: 26.8, km100: 185 },
-    { id: 11, marca: "BMW", modelo: "i4 eDrive40", kwh: 80.7, km100: 422 }
+    {
+      marca: "BYD",
+      modelos: [
+        { id: 1, modelo: "Dolphin GS (100% EV)", kwh: 44.9, km100: 291 },
+        { id: 2, modelo: "Dolphin Mini (100% EV)", kwh: 38.8, km100: 280 },
+        { id: 3, modelo: "Dolphin Plus (100% EV)", kwh: 60.48, km100: 330 },
+        { id: 4, modelo: "Yuan Plus (100% EV)", kwh: 60.48, km100: 294 },
+        { id: 5, modelo: "Seal (100% EV)", kwh: 82.56, km100: 372 },
+        { id: 21, modelo: "Song Plus (Híbrido PHEV)", kwh: 18.3, km100: 105 },
+        { id: 22, modelo: "King GS (Híbrido PHEV)", kwh: 18.3, km100: 100 },
+        { id: 23, modelo: "Tan EV (100% EV)", kwh: 108.8, km100: 430 }
+      ]
+    },
+    {
+      marca: "GWM",
+      modelos: [
+        { id: 6, modelo: "Ora 03 Skin (100% EV)", kwh: 48.0, km100: 232 },
+        { id: 7, modelo: "Ora 03 GT (100% EV)", kwh: 63.0, km100: 319 },
+        { id: 24, modelo: "Haval H6 Premium PHEV19 (Híbrido)", kwh: 19.0, km100: 110 },
+        { id: 25, modelo: "Haval H6 GT PHEV34 (Híbrido)", kwh: 34.0, km100: 170 }
+      ]
+    },
+    {
+      marca: "Leapmotor",
+      modelos: [
+        { id: 12, modelo: "T03 (100% EV)", kwh: 37.3, km100: 265 },
+        { id: 13, modelo: "C10 (100% EV)", kwh: 69.9, km100: 340 },
+        { id: 20, modelo: "B10 (100% EV)", kwh: 56.2, km100: 288 }
+      ]
+    },
+    {
+      marca: "Volvo",
+      modelos: [
+        { id: 8, modelo: "EX30 Core/Plus (100% EV)", kwh: 51.0, km100: 250 },
+        { id: 9, modelo: "EX30 Extended Range (100% EV)", kwh: 69.0, km100: 338 },
+        { id: 26, modelo: "XC60 Recharge (Híbrido PHEV)", kwh: 18.8, km100: 78 },
+        { id: 27, modelo: "XC90 Recharge (Híbrido PHEV)", kwh: 18.8, km100: 71 },
+        { id: 28, modelo: "EX90 (100% EV)", kwh: 111.0, km100: 450 }
+      ]
+    },
+    {
+      marca: "BMW",
+      modelos: [
+        { id: 11, modelo: "i4 eDrive40 (100% EV)", kwh: 80.7, km100: 422 },
+        { id: 29, modelo: "iX3 M Sport (100% EV)", kwh: 80.0, km100: 381 },
+        { id: 30, modelo: "330e M Sport (Híbrido PHEV)", kwh: 12.0, km100: 56 },
+        { id: 31, modelo: "X5 xDrive50e (Híbrido PHEV)", kwh: 25.7, km100: 90 }
+      ]
+    },
+    {
+      marca: "Porsche",
+      modelos: [
+        { id: 32, modelo: "Taycan 4S (100% EV)", kwh: 89.0, km100: 380 },
+        { id: 33, modelo: "Cayenne E-Hybrid (Híbrido PHEV)", kwh: 25.9, km100: 70 },
+        { id: 34, modelo: "Panamera E-Hybrid (Híbrido PHEV)", kwh: 25.9, km100: 75 }
+      ]
+    },
+    {
+      marca: "Geely / Zeekr",
+      modelos: [
+        { id: 16, modelo: "Zeekr 001 (Standard)", kwh: 86.0, km100: 400 },
+        { id: 17, modelo: "Zeekr 001 (Long Range)", kwh: 100.0, km100: 450 },
+        { id: 18, modelo: "Zeekr X", kwh: 66.0, km100: 332 },
+        { id: 19, modelo: "Geometry E", kwh: 39.4, km100: 280 }
+      ]
+    },
+    {
+      marca: "Omoda / Jaecoo",
+      modelos: [
+        { id: 14, modelo: "Omoda E5 (100% EV)", kwh: 61.0, km100: 310 },
+        { id: 15, modelo: "Jaecoo J6 EV (100% EV)", kwh: 65.7, km100: 320 }
+      ]
+    },
+    {
+      marca: "Outros Populares",
+      modelos: [
+        { id: 10, modelo: "Renault Kwid E-Tech (100% EV)", kwh: 26.8, km100: 185 },
+        { id: 35, modelo: "Caoa Chery Tiggo 8 Pro Plug-in Hybrid", kwh: 19.2, km100: 77 },
+        { id: 36, modelo: "Audi Q5 TFSIe (Híbrido PHEV)", kwh: 17.9, km100: 62 }
+      ]
+    }
   ];
+
+  let timerInterval = null;
+  let totalEstimatedSeconds = 0;
+  let hasAlertedPreFinish = false;
+
+  function getAllCarsFlat() {
+    let list = [];
+    evDatabase.forEach(group => {
+      group.modelos.forEach(car => {
+        list.push({ ...car, marcaGroup: group.marca });
+      });
+    });
+    return list;
+  }
 
   function initApp() {
     const vehicleSelect = document.getElementById('vehicleSelect');
     vehicleSelect.innerHTML = '';
     
-    evDatabase.sort((a, b) => a.marca.localeCompare(b.marca) || a.modelo.localeCompare(b.modelo));
-
-    evDatabase.forEach(car => {
-      const option = document.createElement('option');
-      option.value = car.id;
-      option.textContent = `${car.marca} ${car.modelo} (${car.kwh} kWh)`;
-      vehicleSelect.appendChild(option);
+    evDatabase.forEach(group => {
+      const optgroup = document.createElement('optgroup');
+      optgroup.label = `--- ${group.marca} ---`;
+      
+      group.modelos.sort((a, b) => a.modelo.localeCompare(b.modelo));
+      group.modelos.forEach(car => {
+        const option = document.createElement('option');
+        option.value = car.id;
+        option.textContent = `${car.modelo} (${car.kwh} kWh)`;
+        optgroup.appendChild(option);
+      });
+      
+      vehicleSelect.appendChild(optgroup);
     });
 
     const savedCarId = localStorage.getItem('eletrocalc_car');
     const savedPrice = localStorage.getItem('eletrocalc_price');
+    const savedStartFee = localStorage.getItem('eletrocalc_startfee');
+    const savedAlertMinutes = localStorage.getItem('eletrocalc_alertmin');
 
     if (savedCarId) vehicleSelect.value = savedCarId;
     if (savedPrice) document.getElementById('pricePerKwh').value = savedPrice;
+    if (savedStartFee) document.getElementById('startFee').value = savedStartFee;
+    if (savedAlertMinutes) document.getElementById('alertMinutes').value = savedAlertMinutes;
 
     validateAndUpdateBattery();
     calculate();
@@ -386,6 +548,36 @@
     }
   }
 
+  function getGradientColor(pct) {
+    const colors = [
+      { p: 0,   r: 0,   g: 0,   b: 0 },
+      { p: 30,  r: 239, g: 68,  b: 68 },
+      { p: 50,  r: 249, g: 115, b: 22 },
+      { p: 75,  r: 234, g: 179, b: 8 },
+      { p: 100, r: 16,  g: 185, b: 129 }
+    ];
+
+    let lower = colors[0];
+    let upper = colors[colors.length - 1];
+
+    for (let i = 0; i < colors.length - 1; i++) {
+      if (pct >= colors[i].p && pct <= colors[i + 1].p) {
+        lower = colors[i];
+        upper = colors[i + 1];
+        break;
+      }
+    }
+
+    const range = upper.p - lower.p;
+    const factor = range === 0 ? 0 : (pct - lower.p) / range;
+
+    const r = Math.round(lower.r + factor * (upper.r - lower.r));
+    const g = Math.round(lower.g + factor * (upper.g - lower.g));
+    const b = Math.round(lower.b + factor * (upper.b - lower.b));
+
+    return `rgb(${r}, ${g}, ${b})`;
+  }
+
   function validateAndUpdateBattery() {
     let currentInput = document.getElementById('currentBattery');
     let targetInput = document.getElementById('targetBattery');
@@ -398,13 +590,26 @@
       targetInput.value = targetVal;
     }
 
-    document.getElementById('currentBatteryVal').textContent = currentVal + '%';
-    document.getElementById('targetBatteryVal').textContent = targetVal + '%';
+    // --- Atualização Visual da Carga Atual ---
+    const currentColor = getGradientColor(currentVal);
+    const currentValElem = document.getElementById('currentBatteryVal');
+    currentValElem.textContent = currentVal + '%';
+    currentValElem.style.color = currentColor;
+    currentInput.style.background = `linear-gradient(to right, ${currentColor} 0%, ${currentColor} ${currentVal}%, var(--bg-color) ${currentVal}%, var(--bg-color) 100%)`;
+
+    // --- Atualização Visual da Meta Desejada ---
+    const targetColor = getGradientColor(targetVal);
+    const targetValElem = document.getElementById('targetBatteryVal');
+    targetValElem.textContent = targetVal + '%';
+    targetValElem.style.color = targetColor;
+    targetInput.style.background = `linear-gradient(to right, ${targetColor} 0%, ${targetColor} ${targetVal}%, var(--bg-color) ${targetVal}%, var(--bg-color) 100%)`;
   }
 
   function savePreferences() {
     localStorage.setItem('eletrocalc_car', document.getElementById('vehicleSelect').value);
     localStorage.setItem('eletrocalc_price', document.getElementById('pricePerKwh').value);
+    localStorage.setItem('eletrocalc_startfee', document.getElementById('startFee').value);
+    localStorage.setItem('eletrocalc_alertmin', document.getElementById('alertMinutes').value);
   }
 
   function parseInputValue(id) {
@@ -413,12 +618,14 @@
   }
 
   function calculate() {
+    const allCars = getAllCarsFlat();
     const selectedId = parseInt(document.getElementById('vehicleSelect').value);
-    const car = evDatabase.find(c => c.id === selectedId) || evDatabase[0];
+    const car = allCars.find(c => c.id === selectedId) || allCars[0];
     
     const currentPct = parseFloat(document.getElementById('currentBattery').value);
     const targetPct = parseFloat(document.getElementById('targetBattery').value);
     const pricePerKwh = parseInputValue('pricePerKwh');
+    const startFee = parseInputValue('startFee');
     
     let powerSelectVal = document.getElementById('chargerPower').value;
     let power = 0;
@@ -435,7 +642,7 @@
 
     const diffPct = Math.max(0, targetPct - currentPct);
     const neededKwh = car.kwh * (diffPct / 100);
-    const totalCost = neededKwh * pricePerKwh;
+    const totalCost = (neededKwh * pricePerKwh) + startFee;
 
     if (isShared && power > 0) {
       power = power / 2;
@@ -446,10 +653,12 @@
 
     if (power > 0 && diffPct > 0) {
       const totalHours = neededKwh / power;
+      totalEstimatedSeconds = Math.round(totalHours * 3600);
       const hours = Math.floor(totalHours);
       const minutes = Math.round((totalHours - hours) * 60);
       document.getElementById('timeDisplay').textContent = `Tempo estimado: ${hours}h ${minutes}min`;
     } else {
+      totalEstimatedSeconds = 0;
       document.getElementById('timeDisplay').textContent = `Tempo estimado: 0h 0min`;
     }
 
@@ -459,12 +668,133 @@
     document.getElementById('rangeDisplay').textContent = `Atual: ${currentKm} km ➔ Com Meta: ${targetKm} km`;
   }
 
+  // --- Função do Temporizador Personalizado ---
+  function startChargingTimer() {
+    if (totalEstimatedSeconds <= 0) {
+      alert("Defina uma meta e selecione um carregador com potência válida para iniciar.");
+      return;
+    }
+
+    if ("Notification" in window && Notification.permission !== "granted") {
+      Notification.requestPermission();
+    }
+
+    hasAlertedPreFinish = false;
+    let remainingSeconds = totalEstimatedSeconds;
+    const alertMinutes = parseInt(document.getElementById('alertMinutes').value) || 10;
+    const alertSecondsThreshold = alertMinutes * 60;
+
+    document.getElementById('timerPanel').style.display = 'block';
+    document.getElementById('startChargeBtn').style.display = 'none';
+    document.getElementById('cancelChargeBtn').style.display = 'block';
+    document.getElementById('timerStatusMsg').textContent = `⚡ Notificação programada para faltar ${alertMinutes} min`;
+    document.getElementById('timerStatusMsg').style.color = "var(--text-muted)";
+
+    updateTimerDisplay(remainingSeconds);
+
+    if (timerInterval) clearInterval(timerInterval);
+
+    timerInterval = setInterval(() => {
+      remainingSeconds--;
+      updateTimerDisplay(remainingSeconds);
+
+      // Alerta faltado X minutos configurado pelo usuário
+      if (remainingSeconds <= alertSecondsThreshold && !hasAlertedPreFinish && remainingSeconds > 0) {
+        hasAlertedPreFinish = true;
+        triggerPreFinishAlert(alertMinutes);
+      }
+
+      // Término total da carga
+      if (remainingSeconds <= 0) {
+        clearInterval(timerInterval);
+        triggerFinalAlert();
+      }
+    }, 1000);
+  }
+
+  function stopChargingTimer() {
+    if (timerInterval) clearInterval(timerInterval);
+    document.getElementById('timerPanel').style.display = 'none';
+    document.getElementById('startChargeBtn').style.display = 'block';
+    document.getElementById('cancelChargeBtn').style.display = 'none';
+  }
+
+  function updateTimerDisplay(seconds) {
+    const h = Math.floor(seconds / 3600);
+    const m = Math.floor((seconds % 3600) / 60);
+    const s = seconds % 60;
+
+    const pad = num => String(num).padStart(2, '0');
+    document.getElementById('countdownDisplay').textContent = `${pad(h)}:${pad(m)}:${pad(s)}`;
+  }
+
+  function triggerPreFinishAlert(minutes) {
+    document.getElementById('timerStatusMsg').textContent = `⚠️ ATENÇÃO: Faltam ${minutes} minutos para encerrar a carga!`;
+    document.getElementById('timerStatusMsg').style.color = "#f59e0b";
+
+    if ("vibrate" in navigator) {
+      navigator.vibrate([500, 250, 500, 250, 500]);
+    }
+
+    playBeepSound();
+
+    if ("Notification" in window && Notification.permission === "granted") {
+      new Notification("⚡ EletroCalc — Alerta de Carga", {
+        body: `Faltam apenas ${minutes} minutos para atingir a meta de carregamento!`,
+        icon: "logo.png"
+      });
+    }
+  }
+
+  function triggerFinalAlert() {
+    document.getElementById('countdownDisplay').textContent = "00:00:00";
+    document.getElementById('timerStatusMsg').textContent = "Simulação de carregamento concluída!";
+    document.getElementById('timerStatusMsg').style.color = "#10b981";
+
+    if ("vibrate" in navigator) {
+      navigator.vibrate([1000, 300, 1000, 300, 1000]);
+    }
+
+    playBeepSound();
+
+    if ("Notification" in window && Notification.permission === "granted") {
+      new Notification("⚡ EletroCalc", {
+        body: "Simulação de carregamento concluída!",
+        icon: "logo.png"
+      });
+    }
+  }
+
+  function playBeepSound() {
+    try {
+      const ctx = new (window.AudioContext || window.webkitAudioContext)();
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+
+      osc.type = "sine";
+      osc.frequency.setValueAtTime(880, ctx.currentTime);
+      gain.gain.setValueAtTime(0.3, ctx.currentTime);
+
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+
+      osc.start();
+      osc.stop(ctx.currentTime + 1.2);
+    } catch(e) {
+      console.log("Áudio aguardando interação do usuário.");
+    }
+  }
+
   function exportTXT() {
+    const allCars = getAllCarsFlat();
     const selectedId = parseInt(document.getElementById('vehicleSelect').value);
-    const car = evDatabase.find(c => c.id === selectedId) || evDatabase[0];
+    const car = allCars.find(c => c.id === selectedId) || allCars[0];
+    
     const currentPct = parseFloat(document.getElementById('currentBattery').value);
     const targetPct = parseFloat(document.getElementById('targetBattery').value);
     const pricePerKwh = parseInputValue('pricePerKwh');
+    const startFee = parseInputValue('startFee');
+    const alertMin = parseInt(document.getElementById('alertMinutes').value) || 10;
     
     let powerSelectVal = document.getElementById('chargerPower').value;
     let powerStr = "";
@@ -488,7 +818,7 @@
 
     const diffPct = Math.max(0, targetPct - currentPct);
     const neededKwh = car.kwh * (diffPct / 100);
-    const totalCost = neededKwh * pricePerKwh;
+    const totalCost = (neededKwh * pricePerKwh) + startFee;
 
     let timeStr = "0h 0min";
     if (powerNum > 0 && diffPct > 0) {
@@ -503,7 +833,6 @@
     const dataAtual = new Date().toLocaleDateString('pt-BR');
     const horaAtual = new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
 
-    // Conteúdo formatado do TXT
     const txtContent = 
 `==================================================
                  ⚡ ELETROCALC
@@ -512,12 +841,14 @@
 Data: ${dataAtual} às ${horaAtual}
 
 --- DADOS DO VEÍCULO E PARÂMETROS ---
-Marca / Modelo:           ${car.marca} ${car.modelo}
+Marca / Modelo:           ${car.marcaGroup} ${car.modelo}
 Capacidade da Bateria:    ${car.kwh} kWh
 Carga Atual:              ${currentPct}%
 Meta Desejada:            ${targetPct}%
 Potência do Carregador:   ${powerStr}
 Valor por kWh:            R$ ${pricePerKwh.toFixed(2).replace('.', ',')}
+Taxa de Start / Início:   R$ ${startFee.toFixed(2).replace('.', ',')}
+Alerta Programado:        Faltando ${alertMin} min
 Potência Compartilhada:   ${sharedText}
 
 --- RESUMO FINANCEIRO E TÉCNICO ---
@@ -533,11 +864,10 @@ Autonomia Total (100%):   ${car.km100} km
 EletroCalc — Calculadora de Carregamento Veicular
 ==================================================`;
 
-    // Download do arquivo TXT
     const blob = new Blob([txtContent], { type: 'text/plain;charset=utf-8' });
     const link = document.createElement('a');
     link.href = URL.createObjectURL(blob);
-    link.download = `EletroCalc_${car.marca}_${car.modelo}.txt`;
+    link.download = `EletroCalc_${car.marcaGroup}_${car.modelo}.txt`;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
