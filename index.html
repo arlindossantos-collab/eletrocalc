@@ -66,9 +66,10 @@
 
     .header img.app-logo {
       width: 100%;
-      max-width: 260px;
+      max-width: 416px; /* Aumentado em 30% (de 320px para 416px) */
       height: auto;
       object-fit: contain;
+      filter: drop-shadow(0px 4px 12px rgba(16, 185, 129, 0.25));
     }
 
     .form-group {
@@ -710,7 +711,6 @@
     document.getElementById('currentRangeDisplay').textContent = `Autonomia com carga atual: ${currentKm} km`;
     document.getElementById('targetRangeDisplay').textContent = `Autonomia com meta escolhida: ${targetKm} km`;
 
-    // Atualiza a contagem se a simulação já estiver ativa
     if (isTimerActive) {
       updateActiveTimerState();
     }
@@ -752,7 +752,6 @@
     const alertMinutes = parseInt(document.getElementById('alertMinutes').value) || 10;
     const alertSecondsThreshold = alertMinutes * 60;
 
-    // Rearma o alerta se a meta/potência foi aumentada e o tempo voltou a ser maior que a janela de alerta
     if (remainingSeconds > alertSecondsThreshold) {
       hasAlertedPreFinish = false;
       const minTextInitial = alertMinutes === 1 ? "1 min" : `${alertMinutes} min`;
