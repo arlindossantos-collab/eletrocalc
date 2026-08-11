@@ -66,10 +66,34 @@
 
     .header img.app-logo {
       width: 100%;
-      max-width: 416px; /* Aumentado em 30% (de 320px para 416px) */
+      max-width: 416px;
       height: auto;
       object-fit: contain;
       filter: drop-shadow(0px 4px 12px rgba(16, 185, 129, 0.25));
+    }
+
+    /* Bloco de Instruções do Topo */
+    .header-instructions {
+      margin-top: 14px;
+      padding: 12px 16px;
+      border-radius: 16px;
+      background: var(--bg-color);
+      box-shadow: inset 3px 3px 6px var(--shadow-dark),
+                  inset -3px -3px 6px var(--shadow-light);
+    }
+
+    .header-instructions p {
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 4px;
+    }
+
+    .header-instructions span {
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: var(--text-muted);
+      display: block;
     }
 
     .form-group {
@@ -330,6 +354,10 @@
 <div class="neu-container" id="app-container">
   <div class="header">
     <img src="logo.png" alt="EletroCalc Logo" class="app-logo">
+    <div class="header-instructions">
+      <p>Simule o carregamento de seu veículo elétrico.</p>
+      <span>Calcule valor, autonomia, tempo de carga e muito mais!</span>
+    </div>
   </div>
 
   <!-- DROPDOWN 1: MARCA DO VEÍCULO -->
