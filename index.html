@@ -28,7 +28,7 @@
       --text-muted: #94a3b8;
       --text-kwh: #3b82f6;
       --text-time: #f59e0b;
-      --text-range: #a855f7;
+      --text-range: #38bdf8; /* NOIR/AZUL CIANO NO LUGAR DO LILÁS */
       --danger: #ef4444;
     }
 
@@ -400,8 +400,8 @@
   </div>
 
   <div class="button-group">
-    <button class="btn-action btn-start-charge" id="startChargeBtn" onclick="startChargingTimer()">⚡ Iniciar Carregamento</button>
-    <button class="btn-action btn-cancel-charge" id="cancelChargeBtn" style="display: none;" onclick="stopChargingTimer()">⏹ Interromper Carregamento</button>
+    <button class="btn-action btn-start-charge" id="startChargeBtn" onclick="startChargingTimer()">⚡ Iniciar a Simulação</button>
+    <button class="btn-action btn-cancel-charge" id="cancelChargeBtn" style="display: none;" onclick="stopChargingTimer()">⏹ Interromper a Simulação</button>
     <button class="btn-action" onclick="exportTXT()">Exportar Resumo (.txt)</button>
   </div>
 </div>
@@ -687,7 +687,10 @@
     document.getElementById('timerPanel').style.display = 'block';
     document.getElementById('startChargeBtn').style.display = 'none';
     document.getElementById('cancelChargeBtn').style.display = 'block';
-    document.getElementById('timerStatusMsg').textContent = `⚡ Notificação programada para faltar ${alertMinutes} min`;
+    
+    // Formatação de concordância no agendamento inicial
+    const minTextInitial = alertMinutes === 1 ? "1 min" : `${alertMinutes} min`;
+    document.getElementById('timerStatusMsg').textContent = `⚡ Notificação programada para faltar ${minTextInitial}`;
     document.getElementById('timerStatusMsg').style.color = "var(--text-muted)";
 
     updateTimerDisplay(remainingSeconds);
@@ -729,7 +732,15 @@
   }
 
   function triggerPreFinishAlert(minutes) {
-    document.getElementById('timerStatusMsg').textContent = `⚠️ ATENÇÃO: Faltam ${minutes} minutos para encerrar a carga!`;
+    // Tratamento de concordância gramatical (Falta 1 minuto vs Faltam X minutos)
+    let alertMsg = "";
+    if (minutes === 1) {
+      alertMsg = "⚠️ ATENÇÃO: Falta 1 minuto para o fim da simulação!";
+    } else {
+      alertMsg = `⚠️ ATENÇÃO: Faltam ${minutes} minutos para o fim da simulação!`;
+    }
+
+    document.getElementById('timerStatusMsg').textContent = alertMsg;
     document.getElementById('timerStatusMsg').style.color = "#f59e0b";
 
     if ("vibrate" in navigator) {
@@ -740,7 +751,7 @@
 
     if ("Notification" in window && Notification.permission === "granted") {
       new Notification("⚡ EletroCalc — Alerta de Carga", {
-        body: `Faltam apenas ${minutes} minutos para atingir a meta de carregamento!`,
+        body: alertMsg.replace("⚠️ ATENÇÃO: ", ""),
         icon: "logo.png"
       });
     }
