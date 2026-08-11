@@ -28,7 +28,7 @@
       --text-muted: #94a3b8;
       --text-kwh: #3b82f6;
       --text-time: #f59e0b;
-      --text-range: #38bdf8; /* NOIR/AZUL CIANO NO LUGAR DO LILÁS */
+      --text-range: #38bdf8;
       --danger: #ef4444;
     }
 
@@ -100,7 +100,7 @@
       transition: all 0.2s;
     }
 
-    select.neu-input option, select.neu-input optgroup {
+    select.neu-input option {
       background-color: #0f172a;
       color: var(--text-main);
     }
@@ -254,9 +254,16 @@
       font-size: 0.9rem;
       font-weight: 600;
       color: var(--text-range);
+      line-height: 1.5;
     }
 
-    /* Painel do Cronômetro Ativo */
+    .result-range-inmetro {
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
     .timer-panel {
       display: none;
       background: var(--bg-color);
@@ -324,9 +331,16 @@
     <img src="logo.png" alt="EletroCalc Logo" class="app-logo">
   </div>
 
+  <!-- DROPDOWN 1: MARCA DO VEÍCULO -->
   <div class="form-group">
-    <label for="vehicleSelect">Selecione o Veículo</label>
-    <select id="vehicleSelect" class="neu-input" onchange="calculate()"></select>
+    <label for="brandSelect">Marca do Veículo</label>
+    <select id="brandSelect" class="neu-input" onchange="onBrandChange()"></select>
+  </div>
+
+  <!-- DROPDOWN 2: MODELO DO VEÍCULO -->
+  <div class="form-group">
+    <label for="modelSelect">Modelo do Veículo</label>
+    <select id="modelSelect" class="neu-input" onchange="calculate()"></select>
   </div>
 
   <div class="form-group">
@@ -389,7 +403,11 @@
     <div class="result-kwh" id="kwhNeededDisplay">Energia necessária: 0.0 kWh</div>
     <div class="divider"></div>
     <div class="result-time" id="timeDisplay">Tempo estimado: 0h 0min</div>
-    <div class="result-range" id="rangeDisplay">Atual: 0 km ➔ Com Meta: 0 km</div>
+    <div class="result-range">
+      <div id="currentRangeDisplay">Autonomia com carga atual: 0 km</div>
+      <div id="targetRangeDisplay">Autonomia com meta escolhida: 0 km</div>
+      <div class="result-range-inmetro">(Autonomia de acordo com o INMETRO)</div>
+    </div>
   </div>
 
   <!-- Painel do Temporizador Regressivo -->
@@ -494,6 +512,8 @@
   let timerInterval = null;
   let totalEstimatedSeconds = 0;
   let hasAlertedPreFinish = false;
+  let isTimerActive = false;
+  let timerStartTime = 0;
 
   function getAllCarsFlat() {
     let list = [];
@@ -506,35 +526,59 @@
   }
 
   function initApp() {
-    const vehicleSelect = document.getElementById('vehicleSelect');
-    vehicleSelect.innerHTML = '';
+    const brandSelect = document.getElementById('brandSelect');
+    brandSelect.innerHTML = '';
     
+    evDatabase.sort((a, b) => a.marca.localeCompare(b.marca));
     evDatabase.forEach(group => {
-      const optgroup = document.createElement('optgroup');
-      optgroup.label = `--- ${group.marca} ---`;
-      
-      group.modelos.sort((a, b) => a.modelo.localeCompare(b.modelo));
-      group.modelos.forEach(car => {
-        const option = document.createElement('option');
-        option.value = car.id;
-        option.textContent = `${car.modelo} (${car.kwh} kWh)`;
-        optgroup.appendChild(option);
-      });
-      
-      vehicleSelect.appendChild(optgroup);
+      const option = document.createElement('option');
+      option.value = group.marca;
+      option.textContent = group.marca;
+      brandSelect.appendChild(option);
     });
 
-    const savedCarId = localStorage.getItem('eletrocalc_car');
+    const savedCarId = parseInt(localStorage.getItem('eletrocalc_car'));
+    const allCars = getAllCarsFlat();
+    const savedCar = allCars.find(c => c.id === savedCarId);
+
+    if (savedCar) {
+      brandSelect.value = savedCar.marcaGroup;
+      populateModels(savedCar.marcaGroup);
+      document.getElementById('modelSelect').value = savedCar.id;
+    } else {
+      populateModels(evDatabase[0].marca);
+    }
+
     const savedPrice = localStorage.getItem('eletrocalc_price');
     const savedStartFee = localStorage.getItem('eletrocalc_startfee');
     const savedAlertMinutes = localStorage.getItem('eletrocalc_alertmin');
 
-    if (savedCarId) vehicleSelect.value = savedCarId;
     if (savedPrice) document.getElementById('pricePerKwh').value = savedPrice;
     if (savedStartFee) document.getElementById('startFee').value = savedStartFee;
     if (savedAlertMinutes) document.getElementById('alertMinutes').value = savedAlertMinutes;
 
     validateAndUpdateBattery();
+    calculate();
+  }
+
+  function populateModels(brandName) {
+    const modelSelect = document.getElementById('modelSelect');
+    modelSelect.innerHTML = '';
+
+    const brandData = evDatabase.find(b => b.marca === brandName) || evDatabase[0];
+    brandData.modelos.sort((a, b) => a.modelo.localeCompare(b.modelo));
+
+    brandData.modelos.forEach(car => {
+      const option = document.createElement('option');
+      option.value = car.id;
+      option.textContent = `${car.modelo} (${car.kwh} kWh)`;
+      modelSelect.appendChild(option);
+    });
+  }
+
+  function onBrandChange() {
+    const selectedBrand = document.getElementById('brandSelect').value;
+    populateModels(selectedBrand);
     calculate();
   }
 
@@ -590,14 +634,12 @@
       targetInput.value = targetVal;
     }
 
-    // --- Atualização Visual da Carga Atual ---
     const currentColor = getGradientColor(currentVal);
     const currentValElem = document.getElementById('currentBatteryVal');
     currentValElem.textContent = currentVal + '%';
     currentValElem.style.color = currentColor;
     currentInput.style.background = `linear-gradient(to right, ${currentColor} 0%, ${currentColor} ${currentVal}%, var(--bg-color) ${currentVal}%, var(--bg-color) 100%)`;
 
-    // --- Atualização Visual da Meta Desejada ---
     const targetColor = getGradientColor(targetVal);
     const targetValElem = document.getElementById('targetBatteryVal');
     targetValElem.textContent = targetVal + '%';
@@ -606,7 +648,7 @@
   }
 
   function savePreferences() {
-    localStorage.setItem('eletrocalc_car', document.getElementById('vehicleSelect').value);
+    localStorage.setItem('eletrocalc_car', document.getElementById('modelSelect').value);
     localStorage.setItem('eletrocalc_price', document.getElementById('pricePerKwh').value);
     localStorage.setItem('eletrocalc_startfee', document.getElementById('startFee').value);
     localStorage.setItem('eletrocalc_alertmin', document.getElementById('alertMinutes').value);
@@ -619,7 +661,7 @@
 
   function calculate() {
     const allCars = getAllCarsFlat();
-    const selectedId = parseInt(document.getElementById('vehicleSelect').value);
+    const selectedId = parseInt(document.getElementById('modelSelect').value);
     const car = allCars.find(c => c.id === selectedId) || allCars[0];
     
     const currentPct = parseFloat(document.getElementById('currentBattery').value);
@@ -665,10 +707,15 @@
     const currentKm = Math.round((car.km100 * currentPct) / 100);
     const targetKm = Math.round((car.km100 * targetPct) / 100);
 
-    document.getElementById('rangeDisplay').textContent = `Atual: ${currentKm} km ➔ Com Meta: ${targetKm} km`;
+    document.getElementById('currentRangeDisplay').textContent = `Autonomia com carga atual: ${currentKm} km`;
+    document.getElementById('targetRangeDisplay').textContent = `Autonomia com meta escolhida: ${targetKm} km`;
+
+    // Atualiza a contagem se a simulação já estiver ativa
+    if (isTimerActive) {
+      updateActiveTimerState();
+    }
   }
 
-  // --- Função do Temporizador Personalizado ---
   function startChargingTimer() {
     if (totalEstimatedSeconds <= 0) {
       alert("Defina uma meta e selecione um carregador com potência válida para iniciar.");
@@ -680,42 +727,57 @@
     }
 
     hasAlertedPreFinish = false;
-    let remainingSeconds = totalEstimatedSeconds;
-    const alertMinutes = parseInt(document.getElementById('alertMinutes').value) || 10;
-    const alertSecondsThreshold = alertMinutes * 60;
+    isTimerActive = true;
+    timerStartTime = Date.now();
 
     document.getElementById('timerPanel').style.display = 'block';
     document.getElementById('startChargeBtn').style.display = 'none';
     document.getElementById('cancelChargeBtn').style.display = 'block';
-    
-    // Formatação de concordância no agendamento inicial
-    const minTextInitial = alertMinutes === 1 ? "1 min" : `${alertMinutes} min`;
-    document.getElementById('timerStatusMsg').textContent = `⚡ Notificação programada para faltar ${minTextInitial}`;
-    document.getElementById('timerStatusMsg').style.color = "var(--text-muted)";
 
-    updateTimerDisplay(remainingSeconds);
+    updateActiveTimerState();
 
     if (timerInterval) clearInterval(timerInterval);
 
     timerInterval = setInterval(() => {
-      remainingSeconds--;
-      updateTimerDisplay(remainingSeconds);
-
-      // Alerta faltado X minutos configurado pelo usuário
-      if (remainingSeconds <= alertSecondsThreshold && !hasAlertedPreFinish && remainingSeconds > 0) {
-        hasAlertedPreFinish = true;
-        triggerPreFinishAlert(alertMinutes);
-      }
-
-      // Término total da carga
-      if (remainingSeconds <= 0) {
-        clearInterval(timerInterval);
-        triggerFinalAlert();
-      }
+      updateActiveTimerState();
     }, 1000);
   }
 
+  function updateActiveTimerState() {
+    if (!isTimerActive) return;
+
+    const elapsedSeconds = Math.floor((Date.now() - timerStartTime) / 1000);
+    let remainingSeconds = totalEstimatedSeconds - elapsedSeconds;
+
+    const alertMinutes = parseInt(document.getElementById('alertMinutes').value) || 10;
+    const alertSecondsThreshold = alertMinutes * 60;
+
+    // Rearma o alerta se a meta/potência foi aumentada e o tempo voltou a ser maior que a janela de alerta
+    if (remainingSeconds > alertSecondsThreshold) {
+      hasAlertedPreFinish = false;
+      const minTextInitial = alertMinutes === 1 ? "1 min" : `${alertMinutes} min`;
+      document.getElementById('timerStatusMsg').textContent = `⚡ Notificação programada para faltar ${minTextInitial}`;
+      document.getElementById('timerStatusMsg').style.color = "var(--text-muted)";
+    }
+
+    if (remainingSeconds <= 0) {
+      remainingSeconds = 0;
+      updateTimerDisplay(0);
+      clearInterval(timerInterval);
+      triggerFinalAlert();
+      return;
+    }
+
+    updateTimerDisplay(remainingSeconds);
+
+    if (remainingSeconds <= alertSecondsThreshold && !hasAlertedPreFinish) {
+      hasAlertedPreFinish = true;
+      triggerPreFinishAlert(alertMinutes);
+    }
+  }
+
   function stopChargingTimer() {
+    isTimerActive = false;
     if (timerInterval) clearInterval(timerInterval);
     document.getElementById('timerPanel').style.display = 'none';
     document.getElementById('startChargeBtn').style.display = 'block';
@@ -732,7 +794,6 @@
   }
 
   function triggerPreFinishAlert(minutes) {
-    // Tratamento de concordância gramatical (Falta 1 minuto vs Faltam X minutos)
     let alertMsg = "";
     if (minutes === 1) {
       alertMsg = "⚠️ ATENÇÃO: Falta 1 minuto para o fim da simulação!";
@@ -758,6 +819,7 @@
   }
 
   function triggerFinalAlert() {
+    isTimerActive = false;
     document.getElementById('countdownDisplay').textContent = "00:00:00";
     document.getElementById('timerStatusMsg').textContent = "Simulação de carregamento concluída!";
     document.getElementById('timerStatusMsg').style.color = "#10b981";
@@ -798,7 +860,7 @@
 
   function exportTXT() {
     const allCars = getAllCarsFlat();
-    const selectedId = parseInt(document.getElementById('vehicleSelect').value);
+    const selectedId = parseInt(document.getElementById('modelSelect').value);
     const car = allCars.find(c => c.id === selectedId) || allCars[0];
     
     const currentPct = parseFloat(document.getElementById('currentBattery').value);
@@ -867,9 +929,9 @@ VALOR TOTAL ESTIMADO:     R$ ${totalCost.toFixed(2).replace('.', ',')}
 Energia Necessária:       ${neededKwh.toFixed(1)} kWh
 Tempo Estimado de Carga:  ${timeStr}
 
---- ESTIMATIVA DE AUTONOMIA ---
-Autonomia Atual:          ${currentKm} km
-Autonomia Com Meta:       ${targetKm} km
+--- ESTIMATIVA DE AUTONOMIA (INMETRO) ---
+Autonomia Carga Atual:    ${currentKm} km
+Autonomia Meta Escolhida: ${targetKm} km
 Autonomia Total (100%):   ${car.km100} km
 ==================================================
 EletroCalc — Calculadora de Carregamento Veicular
