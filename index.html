@@ -1,4 +1,607 @@
-<!-- Banners de Anúncios (GIFs) -->
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EletroCalc - Calculadora de Carregamento Veicular</title>
+  
+  <!-- Configurações PWA e Logo -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#1e293b">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="EletroCalc">
+  <link rel="icon" type="image/png" href="logo.png">
+  <link rel="apple-touch-icon" href="logo.png">
+
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --bg-color: #1e293b;
+      --card-bg: #1e293b;
+      --shadow-dark: #141c28;
+      --shadow-light: #28364e;
+      --primary: #10b981;
+      --primary-hover: #059669;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --text-kwh: #3b82f6;
+      --text-time: #f59e0b;
+      --text-range: #38bdf8;
+      --danger: #ef4444;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-main);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .neu-container {
+      width: 100%;
+      max-width: 480px;
+      background: var(--bg-color);
+      border-radius: 30px;
+      padding: 28px;
+      box-shadow:  12px 12px 24px var(--shadow-dark),
+                  -12px -12px 24px var(--shadow-light);
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 24px;
+    }
+
+    .header img.app-logo {
+      width: 100%;
+      max-width: 416px;
+      height: auto;
+      object-fit: contain;
+      filter: drop-shadow(0px 4px 12px rgba(16, 185, 129, 0.25));
+    }
+
+    .header-instructions {
+      margin-top: 14px;
+      padding: 12px 16px;
+      border-radius: 16px;
+      background: var(--bg-color);
+      box-shadow: inset 3px 3px 6px var(--shadow-dark),
+                  inset -3px -3px 6px var(--shadow-light);
+    }
+
+    .header-instructions p {
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 4px;
+    }
+
+    .header-instructions span {
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: var(--text-muted);
+      display: block;
+    }
+
+    .form-group {
+      margin-bottom: 18px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .neu-input {
+      width: 100%;
+      padding: 14px 18px;
+      background: var(--bg-color);
+      border: none;
+      border-radius: 16px;
+      color: var(--text-main);
+      font-size: 0.95rem;
+      font-weight: 600;
+      outline: none;
+      box-shadow: inset 4px 4px 8px var(--shadow-dark),
+                  inset -4px -4px 8px var(--shadow-light);
+      transition: all 0.2s;
+    }
+
+    select.neu-input option {
+      background-color: #0f172a;
+      color: var(--text-main);
+    }
+
+    .neu-info-card {
+      background: var(--bg-color);
+      border-radius: 20px;
+      padding: 18px 20px;
+      margin-bottom: 22px;
+      box-shadow: inset 3px 3px 6px var(--shadow-dark),
+                  inset -3px -3px 6px var(--shadow-light);
+    }
+
+    .neu-info-title {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--primary);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .neu-info-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px 14px;
+    }
+
+    .neu-info-item {
+      font-size: 0.8rem;
+      line-height: 1.35;
+    }
+
+    .neu-info-item span.label {
+      color: var(--text-muted);
+      display: block;
+      font-weight: 600;
+      font-size: 0.7rem;
+      text-transform: uppercase;
+    }
+
+    .neu-info-item span.val {
+      color: var(--text-main);
+      font-weight: 700;
+      font-size: 0.85rem;
+    }
+
+    .manual-power-container {
+      margin-top: 14px;
+      padding: 16px;
+      border-radius: 20px;
+      background: var(--bg-color);
+      box-shadow: inset 3px 3px 6px var(--shadow-dark),
+                  inset -3px -3px 6px var(--shadow-light);
+      display: none;
+    }
+
+    .manual-subgrid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-top: 10px;
+    }
+
+    .range-header {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-main);
+      margin-bottom: 8px;
+    }
+
+    input[type="range"] {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 100%;
+      height: 10px;
+      border-radius: 10px;
+      background: var(--bg-color);
+      outline: none;
+      box-shadow: inset 2px 2px 5px var(--shadow-dark),
+                  inset -2px -2px 5px var(--shadow-light);
+      cursor: pointer;
+    }
+
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: #f8fafc;
+      box-shadow: 2px 2px 5px var(--shadow-dark);
+      cursor: pointer;
+      border: 2px solid var(--bg-color);
+    }
+
+    input[type="range"]::-moz-range-thumb {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: #f8fafc;
+      box-shadow: 2px 2px 5px var(--shadow-dark);
+      cursor: pointer;
+      border: 2px solid var(--bg-color);
+    }
+
+    .neu-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 18px;
+      border-radius: 16px;
+      background: var(--bg-color);
+      box-shadow: 4px 4px 8px var(--shadow-dark),
+                 -4px -4px 8px var(--shadow-light);
+      margin-bottom: 24px;
+    }
+
+    .neu-toggle span {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-main);
+    }
+
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 44px;
+      height: 24px;
+    }
+
+    .switch input { opacity: 0; width: 0; height: 0; }
+
+    .slider-toggle {
+      position: absolute;
+      cursor: pointer;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background-color: var(--bg-color);
+      transition: .4s;
+      border-radius: 24px;
+      box-shadow: inset 2px 2px 4px var(--shadow-dark),
+                  inset -2px -2px 4px var(--shadow-light);
+    }
+
+    .slider-toggle:before {
+      position: absolute;
+      content: "";
+      height: 18px;
+      width: 18px;
+      left: 3px;
+      bottom: 3px;
+      background-color: var(--text-muted);
+      transition: .4s;
+      border-radius: 50%;
+    }
+
+    input:checked + .slider-toggle:before {
+      transform: translateX(20px);
+      background-color: var(--primary);
+    }
+
+    .neu-result-card {
+      padding: 24px;
+      border-radius: 24px;
+      background: var(--bg-color);
+      text-align: center;
+      box-shadow: inset 5px 5px 10px var(--shadow-dark),
+                  inset -5px -5px 10px var(--shadow-light);
+      margin-bottom: 20px;
+    }
+
+    .result-price {
+      font-size: 3rem;
+      font-weight: 800;
+      color: #34d399;
+      line-height: 1.1;
+      margin-bottom: 6px;
+    }
+
+    .result-kwh {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--text-kwh);
+      margin-bottom: 12px;
+    }
+
+    .divider {
+      height: 2px;
+      border-radius: 2px;
+      background: var(--bg-color);
+      box-shadow: inset 1px 1px 2px var(--shadow-dark),
+                  inset -1px -1px 2px var(--shadow-light);
+      margin: 14px 0;
+    }
+
+    .result-time {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--text-time);
+      margin-bottom: 6px;
+    }
+
+    .power-limit-warning {
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: #f59e0b;
+      margin-bottom: 8px;
+      line-height: 1.35;
+    }
+
+    .result-range {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--text-range);
+      line-height: 1.5;
+    }
+
+    .result-range-inmetro {
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    .timer-panel {
+      display: none;
+      background: var(--bg-color);
+      padding: 18px;
+      border-radius: 20px;
+      margin-bottom: 20px;
+      text-align: center;
+      box-shadow: inset 4px 4px 8px var(--shadow-dark),
+                  inset -4px -4px 8px var(--shadow-light);
+    }
+
+    .timer-display {
+      font-size: 2.2rem;
+      font-weight: 800;
+      color: var(--text-time);
+      letter-spacing: 1px;
+      margin: 6px 0;
+    }
+
+    .timer-alert {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--text-muted);
+    }
+
+    .button-group {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+
+    .btn-action {
+      width: 100%;
+      padding: 16px;
+      background: var(--bg-color);
+      color: var(--primary);
+      border: none;
+      border-radius: 16px;
+      font-size: 1rem;
+      font-weight: 800;
+      cursor: pointer;
+      box-shadow: 6px 6px 12px var(--shadow-dark),
+                 -6px -6px 12px var(--shadow-light);
+      transition: all 0.2s;
+    }
+
+    .btn-start-charge {
+      color: #38bdf8;
+    }
+
+    .btn-cancel-charge {
+      color: var(--danger);
+    }
+
+    .btn-action:active {
+      box-shadow: inset 3px 3px 6px var(--shadow-dark),
+                  inset -3px -3px 6px var(--shadow-light);
+    }
+
+    .gif-banners-container {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      margin-top: 10px;
+    }
+
+    .gif-banner-slot {
+      width: 100%;
+      border-radius: 20px;
+      overflow: hidden;
+      background: var(--bg-color);
+      box-shadow: 6px 6px 12px var(--shadow-dark),
+                 -6px -6px 12px var(--shadow-light);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 120px;
+    }
+
+    .gif-banner-slot img {
+      width: 100%;
+      height: auto;
+      display: block;
+      object-fit: cover;
+    }
+  </style>
+</head>
+<body>
+
+<div class="neu-container" id="app-container">
+  <div class="header">
+    <img src="logo.png" alt="EletroCalc Logo" class="app-logo">
+    <div class="header-instructions">
+      <p>Simule o carregamento de seu veículo elétrico.</p>
+      <span>Calcule valor, autonomia, tempo de carga e muito mais!</span>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label for="brandSelect">Marca do Veículo</label>
+    <select id="brandSelect" class="neu-input" onchange="onBrandChange()"></select>
+  </div>
+
+  <div class="form-group">
+    <label for="modelSelect">Modelo do Veículo</label>
+    <select id="modelSelect" class="neu-input" onchange="calculate()"></select>
+  </div>
+
+  <div class="neu-info-card" id="carSpecCard">
+    <div class="neu-info-title">📋 Ficha Técnica do Veículo</div>
+    <div class="neu-info-grid">
+      <div class="neu-info-item"><span class="label">Marca</span><span class="val" id="specMarca">-</span></div>
+      <div class="neu-info-item"><span class="label">Modelo</span><span class="val" id="specModelo">-</span></div>
+      <div class="neu-info-item"><span class="label">Versão</span><span class="val" id="specVersao">-</span></div>
+      <div class="neu-info-item"><span class="label">Tecnologia</span><span class="val" id="specTecnologia">-</span></div>
+      <div class="neu-info-item"><span class="label">Motor Combustão</span><span class="val" id="specMotor">-</span></div>
+      <div class="neu-info-item"><span class="label">Potência Total</span><span class="val" id="specPotencia">-</span></div>
+      <div class="neu-info-item"><span class="label">Bateria</span><span class="val" id="specBateria">-</span></div>
+      <div class="neu-info-item"><span class="label">Autonomia Elétrica</span><span class="val" id="specAutonomiaEletrica">-</span></div>
+      <div class="neu-info-item"><span class="label">Autonomia Total</span><span class="val" id="specAutonomiaTotal">-</span></div>
+      <div class="neu-info-item"><span class="label">Tração</span><span class="val" id="specTracao">-</span></div>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="range-header">
+      <span style="color: var(--text-muted);">Carga Atual</span>
+      <strong id="currentBatteryVal">38%</strong>
+    </div>
+    <input type="range" id="currentBattery" min="0" max="100" value="38" oninput="validateAndUpdateBattery(); calculate();">
+  </div>
+
+  <div class="form-group">
+    <div class="range-header">
+      <span style="color: var(--text-muted);">Meta Desejada</span>
+      <strong id="targetBatteryVal">80%</strong>
+    </div>
+    <input type="range" id="targetBattery" min="0" max="100" value="80" oninput="validateAndUpdateBattery(); calculate();">
+  </div>
+
+  <div class="form-group">
+    <label for="chargerPower">Potência do Carregador</label>
+    <select id="chargerPower" class="neu-input" onchange="toggleManualPower(); calculate();">
+      <option value="3.7" data-type="ac">3.7 kW (Portátil / 20A)</option>
+      <option value="7.4" data-type="ac" selected>7.4 kW (Wallbox Monofásico)</option>
+      <option value="11" data-type="ac">11.0 kW (Wallbox Trifásico)</option>
+      <option value="22" data-type="ac">22.0 kW (AC Rápido)</option>
+      <option value="50" data-type="dc">50.0 kW (DC Rápido)</option>
+      <option value="150" data-type="dc">150.0 kW (DC Ultra-rápido)</option>
+      <option value="custom" data-type="ac">Outra potência (Manual)</option>
+    </select>
+
+    <div class="manual-power-container" id="manualPowerGroup">
+      <div style="font-size: 0.8rem; font-weight: 700; color: var(--primary); text-transform: uppercase; margin-bottom: 8px;">⚙️ Configuração Manual do Carregador</div>
+      
+      <div class="form-group">
+        <label for="manualType">Tipo de Corrente</label>
+        <select id="manualType" class="neu-input" onchange="calculate()">
+          <option value="ac">Corrente Alternada (AC)</option>
+          <option value="dc">Corrente Contínua (DC)</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="manualInputMode">Modo de Entrada</label>
+        <select id="manualInputMode" class="neu-input" onchange="onManualInputModeChange()">
+          <option value="kw">Informar Potência em kW diretamente</option>
+          <option value="va">Informar Voltagem (V) e Amperagem (A)</option>
+        </select>
+      </div>
+
+      <div id="manualKwBlock" class="form-group">
+        <label for="manualChargerPower">Potência do Carregador (kW)</label>
+        <input type="text" id="manualChargerPower" class="neu-input" placeholder="Digite a potência em kW (ex: 6,6 ou 22)" oninput="calculate()">
+      </div>
+
+      <div id="manualVaBlock" style="display: none;">
+        <div class="manual-subgrid">
+          <div class="form-group">
+            <label for="manualVoltage">Voltagem (V)</label>
+            <input type="text" id="manualVoltage" class="neu-input" placeholder="Ex: 220" value="220" oninput="calculateFromVA()">
+          </div>
+          <div class="form-group">
+            <label for="manualAmperage">Amperagem (A)</label>
+            <input type="text" id="manualAmperage" class="neu-input" placeholder="Ex: 32" value="32" oninput="calculateFromVA()">
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="manualPhases">Fases da Rede</label>
+          <select id="manualPhases" class="neu-input" onchange="calculateFromVA()">
+            <option value="1">Monofásico / Bifásico (V x A)</option>
+            <option value="3">Trifásico (V x A x √3 x 0,92)</option>
+          </select>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label for="pricePerKwh">Valor por kWh (R$)</label>
+    <input type="text" id="pricePerKwh" class="neu-input" value="1,59" oninput="calculate(); savePreferences();">
+  </div>
+
+  <div class="form-group">
+    <label for="startFee">Cobrança de Start / Início (R$)</label>
+    <input type="text" id="startFee" class="neu-input" value="0,00" oninput="calculate(); savePreferences();">
+  </div>
+
+  <div class="form-group">
+    <label for="alertMinutes">Alertar Faltando (Minutos)</label>
+    <input type="number" id="alertMinutes" class="neu-input" value="10" min="1" max="120" oninput="savePreferences();">
+  </div>
+
+  <div class="neu-toggle">
+    <span>Potência Compartilhada (Metade)</span>
+    <label class="switch">
+      <input type="checkbox" id="sharedPower" onchange="calculate()">
+      <span class="slider-toggle"></span>
+    </label>
+  </div>
+
+  <div class="neu-result-card">
+    <div class="result-price" id="totalCostDisplay">R$ 0,00</div>
+    <div class="result-kwh" id="kwhNeededDisplay">Energia necessária: 0.0 kWh</div>
+    <div class="divider"></div>
+    <div class="result-time" id="timeDisplay">Tempo estimado: 0h 0min</div>
+    <div class="power-limit-warning" id="limitWarning" style="display:none;"></div>
+    <div class="result-range">
+      <div id="currentRangeDisplay">Autonomia com carga atual: 0 km</div>
+      <div id="targetRangeDisplay">Autonomia com meta escolhida: 0 km</div>
+      <div class="result-range-inmetro">(Autonomia de acordo com o INMETRO / fabricante)</div>
+    </div>
+  </div>
+
+  <div class="timer-panel" id="timerPanel">
+    <div style="font-size: 0.8rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase;">Despertar em:</div>
+    <div class="timer-display" id="countdownDisplay">00:00:00</div>
+    <div class="timer-alert" id="timerStatusMsg">⚡ Notificação programada</div>
+  </div>
+
+  <div class="button-group">
+    <button class="btn-action btn-start-charge" id="startChargeBtn" onclick="startChargingTimer()">⚡ Iniciar a Simulação</button>
+    <button class="btn-action btn-cancel-charge" id="cancelChargeBtn" style="display: none;" onclick="stopChargingTimer()">⏹ Interromper a Simulação</button>
+    <button class="btn-action" onclick="exportTXT()">Exportar Resumo (.txt)</button>
+  </div>
+
+  <!-- Banners de Anúncios (GIFs) -->
   <div class="gif-banners-container">
     <div class="gif-banner-slot" id="gifSlot1">
       <img src="anuncio1.gif" alt="Anúncio 1 - Trailer Gourmet" onerror="this.style.display='none'; this.parentElement.innerHTML='<span style=\'color: var(--text-muted); font-size: 0.8rem; font-weight: 600; padding: 20px;\'>Espaço GIF 1</span>';">
@@ -7,3 +610,750 @@
       <img src="anuncio2.gif" alt="Anúncio 2 - Amplus Engenharia" onerror="this.style.display='none'; this.parentElement.innerHTML='<span style=\'color: var(--text-muted); font-size: 0.8rem; font-weight: 600; padding: 20px;\'>Espaço GIF 2</span>';">
     </div>
   </div>
+</div>
+
+<script>
+  const evDatabase = [
+    {
+      "marca": "BYD",
+      "modelos": [
+        { "id": 1, "marca": "BYD", "modelo": "Dolphin Mini", "versao": "EV", "disp_name": "Dolphin Mini EV", "tecnologia": "BEV", "motor": "—", "potencia": "75 cv", "bateria": "38,0 kWh", "autonomia_eletrica": "281 km", "autonomia_total": "—", "tracao": "FWD", "kwh": 38.0, "km100": 281, "maxAC": 6.6, "maxDC": 40.0 },
+        { "id": 2, "marca": "BYD", "modelo": "Dolphin", "versao": "GS", "disp_name": "Dolphin GS", "tecnologia": "BEV", "motor": "—", "potencia": "95 cv", "bateria": "44,9 kWh", "autonomia_eletrica": "292 km", "autonomia_total": "—", "tracao": "FWD", "kwh": 44.9, "km100": 292, "maxAC": 6.6, "maxDC": 60.0 },
+        { "id": 3, "marca": "BYD", "modelo": "Dolphin", "versao": "Plus", "disp_name": "Dolphin Plus", "tecnologia": "BEV", "motor": "—", "potencia": "204 cv", "bateria": "60,4 kWh", "autonomia_eletrica": "429 km", "autonomia_total": "—", "tracao": "FWD", "kwh": 60.4, "km100": 429, "maxAC": 11.0, "maxDC": 88.0 },
+        { "id": 4, "marca": "BYD", "modelo": "Yuan Pro", "versao": "EV", "disp_name": "Yuan Pro EV", "tecnologia": "BEV", "motor": "—", "potencia": "177 cv", "bateria": "45,1 kWh", "autonomia_eletrica": "320 km", "autonomia_total": "—", "tracao": "FWD", "kwh": 45.1, "km100": 320, "maxAC": 6.6, "maxDC": 65.0 },
+        { "id": 5, "marca": "BYD", "modelo": "Seal", "versao": "EV", "disp_name": "Seal EV", "tecnologia": "BEV", "motor": "—", "potencia": "531 cv", "bateria": "82,5 kWh", "autonomia_eletrica": "372 km", "autonomia_total": "—", "tracao": "AWD", "kwh": 82.5, "km100": 372, "maxAC": 11.0, "maxDC": 150.0 },
+        { "id": 6, "marca": "BYD", "modelo": "Sealion 7", "versao": "EV", "disp_name": "Sealion 7 EV", "tecnologia": "BEV", "motor": "—", "potencia": "530 cv", "bateria": "82,56 kWh", "autonomia_eletrica": "~500 km", "autonomia_total": "—", "tracao": "AWD", "kwh": 82.56, "km100": 500, "maxAC": 11.0, "maxDC": 150.0 },
+        { "id": 7, "marca": "BYD", "modelo": "Tan", "versao": "EV", "disp_name": "Tan EV", "tecnologia": "BEV", "motor": "—", "potencia": "517 cv", "bateria": "108,8 kWh", "autonomia_eletrica": "435 km", "autonomia_total": "—", "tracao": "AWD", "kwh": 108.8, "km100": 435, "maxAC": 11.0, "maxDC": 170.0 },
+        { "id": 8, "marca": "BYD", "modelo": "King", "versao": "GL", "disp_name": "King GL", "tecnologia": "PHEV", "motor": "—", "potencia": "209 cv", "bateria": "10,8 kWh", "autonomia_eletrica": "80 km", "autonomia_total": "—", "tracao": "FWD", "kwh": 10.8, "km100": 80, "maxAC": 3.3, "maxDC": 0.0 },
+        { "id": 9, "marca": "BYD", "modelo": "King", "versao": "GS", "disp_name": "King GS", "tecnologia": "PHEV", "motor": "—", "potencia": "235 cv", "bateria": "18,3 kWh", "autonomia_eletrica": "80 km*", "autonomia_total": "—", "tracao": "FWD", "kwh": 18.3, "km100": 80, "maxAC": 3.3, "maxDC": 18.0 },
+        { "id": 10, "marca": "BYD", "modelo": "Song Pro", "versao": "GL", "disp_name": "Song Pro GL", "tecnologia": "PHEV Flex", "motor": "—", "potencia": "207 cv", "bateria": "12,9 kWh", "autonomia_eletrica": "71 km", "autonomia_total": "—", "tracao": "FWD", "kwh": 12.9, "km100": 71, "maxAC": 3.3, "maxDC": 0.0 },
+        { "id": 11, "marca": "BYD", "modelo": "Song Pro", "versao": "GS", "disp_name": "Song Pro GS", "tecnologia": "PHEV Flex", "motor": "—", "potencia": "219 cv", "bateria": "18,3 kWh", "autonomia_eletrica": "72 km Inmetro", "autonomia_total": "—", "tracao": "FWD", "kwh": 18.3, "km100": 72, "maxAC": 3.3, "maxDC": 18.0 },
+        { "id": 12, "marca": "BYD", "modelo": "Song Plus", "versao": "DM-i", "disp_name": "Song Plus DM-i", "tecnologia": "PHEV", "motor": "—", "potencia": "245 cv", "bateria": "18,3 kWh", "autonomia_eletrica": "110 km", "autonomia_total": "—", "tracao": "FWD", "kwh": 18.3, "km100": 110, "maxAC": 3.3, "maxDC": 18.0 },
+        { "id": 13, "marca": "BYD", "modelo": "Song Plus Premium", "versao": "DM-i", "disp_name": "Song Plus Premium DM-i", "tecnologia": "PHEV", "motor": "—", "potencia": "324 cv", "bateria": "26,6 kWh", "autonomia_eletrica": "87 km", "autonomia_total": "—", "tracao": "AWD", "kwh": 26.6, "km100": 87, "maxAC": 6.6, "maxDC": 30.0 },
+        { "id": 14, "marca": "BYD", "modelo": "Shark", "versao": "GS", "disp_name": "Shark GS", "tecnologia": "PHEV", "motor": "—", "potencia": "437 cv", "bateria": "29,6 kWh", "autonomia_eletrica": "100 km", "autonomia_total": "—", "tracao": "AWD", "kwh": 29.6, "km100": 100, "maxAC": 6.6, "maxDC": 40.0 }
+      ]
+    },
+    {
+      "marca": "Leapmotor",
+      "modelos": [
+        { "id": 15, "marca": "Leapmotor", "modelo": "B10", "versao": "BEV", "disp_name": "B10 BEV", "tecnologia": "BEV", "motor": "—", "potencia": "218 cv", "bateria": "56,2 kWh", "autonomia_eletrica": "288 km", "autonomia_total": "—", "tracao": "FWD", "kwh": 56.2, "km100": 288, "maxAC": 11.0, "maxDC": 70.0 },
+        { "id": 16, "marca": "Leapmotor", "modelo": "C10", "versao": "Elétrico", "disp_name": "C10 Elétrico", "tecnologia": "BEV", "motor": "—", "potencia": "218 cv", "bateria": "69,9 kWh", "autonomia_eletrica": "340 km", "autonomia_total": "—", "tracao": "FWD", "kwh": 69.9, "km100": 340, "maxAC": 11.0, "maxDC": 84.0 },
+        { "id": 17, "marca": "Leapmotor", "modelo": "C10", "versao": "Ultra-Híbrido", "disp_name": "C10 Ultra-Híbrido", "tecnologia": "REEV", "motor": "1.5 gerador", "potencia": "215 cv", "bateria": "28,4 kWh", "autonomia_eletrica": "140 km", "autonomia_total": "—", "tracao": "RWD", "kwh": 28.4, "km100": 140, "maxAC": 6.6, "maxDC": 35.0 }
+      ]
+    },
+    {
+      "marca": "Geely",
+      "modelos": [
+        { "id": 18, "marca": "Geely", "modelo": "EX2", "versao": "Pro", "disp_name": "EX2 Pro", "tecnologia": "BEV", "motor": "—", "potencia": "116 cv", "bateria": "39,4 kWh", "autonomia_eletrica": "288 km", "autonomia_total": "—", "tracao": "FWD", "kwh": 39.4, "km100": 288, "maxAC": 6.6, "maxDC": 50.0 },
+        { "id": 19, "marca": "Geely", "modelo": "EX2", "versao": "Max", "disp_name": "EX2 Max", "tecnologia": "BEV", "motor": "—", "potencia": "116 cv", "bateria": "39,4 kWh", "autonomia_eletrica": "288 km", "autonomia_total": "—", "tracao": "FWD", "kwh": 39.4, "km100": 288, "maxAC": 6.6, "maxDC": 50.0 },
+        { "id": 20, "marca": "Geely", "modelo": "EX5", "versao": "Pro", "disp_name": "EX5 Pro", "tecnologia": "BEV", "motor": "—", "potencia": "218 cv", "bateria": "60,22 kWh", "autonomia_eletrica": "400 km", "autonomia_total": "—", "tracao": "FWD", "kwh": 60.22, "km100": 400, "maxAC": 11.0, "maxDC": 100.0 },
+        { "id": 21, "marca": "Geely", "modelo": "EX5", "versao": "Max", "disp_name": "EX5 Max", "tecnologia": "BEV", "motor": "—", "potencia": "218 cv", "bateria": "60,22 kWh", "autonomia_eletrica": "400 km", "autonomia_total": "—", "tracao": "FWD", "kwh": 60.22, "km100": 400, "maxAC": 11.0, "maxDC": 100.0 },
+        { "id": 22, "marca": "Geely", "modelo": "EX5 EM-i", "versao": "Pro", "disp_name": "EX5 EM-i Pro", "tecnologia": "PHEV", "motor": "—", "potencia": "262 cv", "bateria": "18,4 kWh", "autonomia_eletrica": "65 km", "autonomia_total": "—", "tracao": "FWD", "kwh": 18.4, "km100": 65, "maxAC": 6.6, "maxDC": 38.0 },
+        { "id": 23, "marca": "Geely", "modelo": "EX5 EM-i", "versao": "Max", "disp_name": "EX5 EM-i Max", "tecnologia": "PHEV", "motor": "—", "potencia": "262 cv", "bateria": "18,4 kWh", "autonomia_eletrica": "65 km", "autonomia_total": "—", "tracao": "FWD", "kwh": 18.4, "km100": 65, "maxAC": 6.6, "maxDC": 38.0 },
+        { "id": 24, "marca": "Geely", "modelo": "EX5 EM-i", "versao": "Ultra", "disp_name": "EX5 EM-i Ultra", "tecnologia": "PHEV", "motor": "—", "potencia": "262 cv", "bateria": "29,8 kWh", "autonomia_eletrica": "112 km", "autonomia_total": "—", "tracao": "FWD", "kwh": 29.8, "km100": 112, "maxAC": 6.6, "maxDC": 38.0 }
+      ]
+    },
+    {
+      "marca": "GWM",
+      "modelos": [
+        { "id": 25, "marca": "GWM", "modelo": "Ora 03", "versao": "Skin", "disp_name": "Ora 03 Skin", "tecnologia": "BEV", "motor": "—", "potencia": "171 cv", "bateria": "48 kWh", "autonomia_eletrica": "312 km", "autonomia_total": "—", "tracao": "FWD", "kwh": 48.0, "km100": 312, "maxAC": 11.0, "maxDC": 64.0 },
+        { "id": 26, "marca": "GWM", "modelo": "Ora 03", "versao": "BEV58", "disp_name": "Ora 03 BEV58", "tecnologia": "BEV", "motor": "—", "potencia": "171 cv", "bateria": "58 kWh", "autonomia_eletrica": "315 km", "autonomia_total": "—", "tracao": "FWD", "kwh": 58.0, "km100": 315, "maxAC": 11.0, "maxDC": 67.0 },
+        { "id": 27, "marca": "GWM", "modelo": "Ora 03", "versao": "GT", "disp_name": "Ora 03 GT", "tecnologia": "BEV", "motor": "—", "potencia": "171 cv", "bateria": "63 kWh", "autonomia_eletrica": "397 km", "autonomia_total": "—", "tracao": "FWD", "kwh": 63.0, "km100": 397, "maxAC": 11.0, "maxDC": 67.0 },
+        { "id": 28, "marca": "GWM", "modelo": "Haval H6", "versao": "HEV ONE", "disp_name": "Haval H6 HEV ONE", "tecnologia": "HEV", "motor": "—", "potencia": "243 cv", "bateria": "—", "autonomia_eletrica": "—", "autonomia_total": "—", "tracao": "FWD", "kwh": 0, "km100": 0, "maxAC": 0, "maxDC": 0 },
+        { "id": 29, "marca": "GWM", "modelo": "Haval H6", "versao": "HEV2", "disp_name": "Haval H6 HEV2", "tecnologia": "HEV", "motor": "—", "potencia": "243 cv", "bateria": "—", "autonomia_eletrica": "—", "autonomia_total": "—", "tracao": "FWD", "kwh": 0, "km100": 0, "maxAC": 0, "maxDC": 0 },
+        { "id": 30, "marca": "GWM", "modelo": "Haval H6", "versao": "PHEV19", "disp_name": "Haval H6 PHEV19", "tecnologia": "PHEV", "motor": "—", "potencia": "326 cv", "bateria": "19,0 kWh", "autonomia_eletrica": "110 km", "autonomia_total": "—", "tracao": "AWD", "kwh": 19.0, "km100": 110, "maxAC": 6.6, "maxDC": 33.0 },
+        { "id": 31, "marca": "GWM", "modelo": "Haval H6", "versao": "PHEV34", "disp_name": "Haval H6 PHEV34", "tecnologia": "PHEV", "motor": "—", "potencia": "393 cv", "bateria": "34,0 kWh", "autonomia_eletrica": "170 km", "autonomia_total": "—", "tracao": "AWD", "kwh": 34.0, "km100": 170, "maxAC": 6.6, "maxDC": 48.0 },
+        { "id": 86, "marca": "GWM", "modelo": "Haval H6", "versao": "PHEV35", "disp_name": "Haval H6 PHEV35", "tecnologia": "PHEV", "motor": "—", "potencia": "393 cv", "bateria": "35,0 kWh", "autonomia_eletrica": "175 km", "autonomia_total": "—", "tracao": "AWD", "kwh": 35.0, "km100": 175, "maxAC": 6.6, "maxDC": 48.0 },
+        { "id": 32, "marca": "GWM", "modelo": "Haval H6 GT", "versao": "PHEV", "disp_name": "Haval H6 GT PHEV", "tecnologia": "PHEV", "motor": "—", "potencia": "393 cv", "bateria": "34,0 kWh", "autonomia_eletrica": "170 km", "autonomia_total": "—", "tracao": "AWD", "kwh": 34.0, "km100": 170, "maxAC": 6.6, "maxDC": 48.0 },
+        { "id": 33, "marca": "GWM", "modelo": "Tank 300", "versao": "PHEV", "disp_name": "Tank 300 PHEV", "tecnologia": "PHEV", "motor": "—", "potencia": "394 cv", "bateria": "37,1 kWh", "autonomia_eletrica": "105 km", "autonomia_total": "—", "tracao": "AWD", "kwh": 37.1, "km100": 105, "maxAC": 6.6, "maxDC": 50.0 }
+      ]
+    },
+    {
+      "marca": "GAC/AION",
+      "modelos": [
+        { "id": 34, "marca": "GAC/AION", "modelo": "Aion UT", "versao": "Premium", "disp_name": "Aion UT Premium", "tecnologia": "BEV", "motor": "—", "potencia": "204 cv", "bateria": "44,12 kWh", "autonomia_eletrica": "253 km", "autonomia_total": "—", "tracao": "FWD", "kwh": 44.12, "km100": 253, "maxAC": 6.6, "maxDC": 60.0 },
+        { "id": 35, "marca": "GAC/AION", "modelo": "Aion UT", "versao": "Elite", "disp_name": "Aion UT Elite", "tecnologia": "BEV", "motor": "—", "potencia": "204 cv", "bateria": "60 kWh", "autonomia_eletrica": "310 km", "autonomia_total": "—", "tracao": "FWD", "kwh": 60.0, "km100": 310, "maxAC": 11.0, "maxDC": 80.0 },
+        { "id": 36, "marca": "GAC/AION", "modelo": "Aion ES", "versao": "Plus", "disp_name": "Aion ES Plus", "tecnologia": "BEV", "motor": "—", "potencia": "136 cv", "bateria": "55,2 kWh", "autonomia_eletrica": "314 km", "autonomia_total": "—", "tracao": "FWD", "kwh": 55.2, "km100": 314, "maxAC": 6.6, "maxDC": 80.0 },
+        { "id": 37, "marca": "GAC/AION", "modelo": "Aion Y", "versao": "Premium", "disp_name": "Aion Y Premium", "tecnologia": "BEV", "motor": "—", "potencia": "204 cv", "bateria": "63,2 kWh", "autonomia_eletrica": "316 km", "autonomia_total": "—", "tracao": "FWD", "kwh": 63.2, "km100": 316, "maxAC": 11.0, "maxDC": 80.0 },
+        { "id": 38, "marca": "GAC/AION", "modelo": "Aion V", "versao": "Elite", "disp_name": "Aion V Elite", "tecnologia": "BEV", "motor": "—", "potencia": "204 cv", "bateria": "75,3 kWh", "autonomia_eletrica": "392 km", "autonomia_total": "—", "tracao": "FWD", "kwh": 75.3, "km100": 392, "maxAC": 11.0, "maxDC": 120.0 },
+        { "id": 39, "marca": "GAC/AION", "modelo": "Hyptec HT", "versao": "Elite", "disp_name": "Hyptec HT Elite", "tecnologia": "BEV", "motor": "—", "potencia": "245 cv", "bateria": "72,7 kWh", "autonomia_eletrica": "362 km", "autonomia_total": "—", "tracao": "RWD", "kwh": 72.7, "km100": 362, "maxAC": 11.0, "maxDC": 150.0 }
+      ]
+    },
+    {
+      "marca": "OMODA",
+      "modelos": [
+        { "id": 40, "marca": "OMODA", "modelo": "Omoda 5", "versao": "HEV Luxury", "disp_name": "Omoda 5 HEV Luxury", "tecnologia": "HEV", "motor": "—", "potencia": "235 cv", "bateria": "1,83 kWh", "autonomia_eletrica": "—", "autonomia_total": "—", "tracao": "FWD", "kwh": 0, "km100": 0, "maxAC": 0, "maxDC": 0 },
+        { "id": 41, "marca": "OMODA", "modelo": "Omoda 5", "versao": "HEV Prestige", "disp_name": "Omoda 5 HEV Prestige", "tecnologia": "HEV", "motor": "—", "potencia": "235 cv", "bateria": "1,83 kWh", "autonomia_eletrica": "—", "autonomia_total": "—", "tracao": "FWD", "kwh": 0, "km100": 0, "maxAC": 0, "maxDC": 0 }
+      ]
+    },
+    {
+      "marca": "JAECOO",
+      "modelos": [
+        { "id": 42, "marca": "JAECOO", "modelo": "Jaecoo 7", "versao": "SHS Prestige", "disp_name": "Jaecoo 7 SHS Prestige", "tecnologia": "PHEV", "motor": "—", "potencia": "339 cv", "bateria": "18,3 kWh", "autonomia_eletrica": "79 km", "autonomia_total": "—", "tracao": "FWD", "kwh": 18.3, "km100": 79, "maxAC": 6.6, "maxDC": 40.0 }
+      ]
+    },
+    {
+      "marca": "CAOA Chery",
+      "modelos": [
+        { "id": 43, "marca": "CAOA Chery", "modelo": "Tiggo 5X", "versao": "Pro Max Drive", "disp_name": "Tiggo 5X Pro Max Drive", "tecnologia": "HEV", "motor": "—", "potencia": "—", "bateria": "—", "autonomia_eletrica": "—", "autonomia_total": "—", "tracao": "FWD", "kwh": 0, "km100": 0, "maxAC": 0, "maxDC": 0 },
+        { "id": 44, "marca": "CAOA Chery", "modelo": "Tiggo 7", "versao": "Pro Hybrid Max Drive", "disp_name": "Tiggo 7 Pro Hybrid Max Drive", "tecnologia": "HEV", "motor": "—", "potencia": "157 cv", "bateria": "—", "autonomia_eletrica": "—", "autonomia_total": "—", "tracao": "FWD", "kwh": 0, "km100": 0, "maxAC": 0, "maxDC": 0 }
+      ]
+    },
+    {
+      "marca": "FIAT",
+      "modelos": [
+        { "id": 45, "marca": "FIAT", "modelo": "Pulse", "versao": "Audace Hybrid", "disp_name": "Pulse Audace Hybrid", "tecnologia": "MHEV", "motor": "—", "potencia": "125 cv", "bateria": "—", "autonomia_eletrica": "—", "autonomia_total": "—", "tracao": "FWD", "kwh": 0, "km100": 0, "maxAC": 0, "maxDC": 0 },
+        { "id": 46, "marca": "FIAT", "modelo": "Pulse", "versao": "Impetus Hybrid", "disp_name": "Pulse Impetus Hybrid", "tecnologia": "MHEV", "motor": "—", "potencia": "125 cv", "bateria": "—", "autonomia_eletrica": "—", "autonomia_total": "—", "tracao": "FWD", "kwh": 0, "km100": 0, "maxAC": 0, "maxDC": 0 },
+        { "id": 47, "marca": "FIAT", "modelo": "Fastback", "versao": "Audace Hybrid", "disp_name": "Fastback Audace Hybrid", "tecnologia": "MHEV", "motor": "—", "potencia": "125 cv", "bateria": "—", "autonomia_eletrica": "—", "autonomia_total": "—", "tracao": "FWD", "kwh": 0, "km100": 0, "maxAC": 0, "maxDC": 0 },
+        { "id": 48, "marca": "FIAT", "modelo": "Fastback", "versao": "Impetus Hybrid", "disp_name": "Fastback Impetus Hybrid", "tecnologia": "MHEV", "motor": "—", "potencia": "125 cv", "bateria": "—", "autonomia_eletrica": "—", "autonomia_total": "—", "tracao": "FWD", "kwh": 0, "km100": 0, "maxAC": 0, "maxDC": 0 }
+      ]
+    },
+    {
+      "marca": "TOYOTA",
+      "modelos": [
+        { "id": 49, "marca": "TOYOTA", "modelo": "Corolla", "versao": "Hybrid", "disp_name": "Corolla Hybrid", "tecnologia": "HEV", "motor": "—", "potencia": "—", "bateria": "—", "autonomia_eletrica": "—", "autonomia_total": "—", "tracao": "FWD", "kwh": 0, "km100": 0, "maxAC": 0, "maxDC": 0 },
+        { "id": 50, "marca": "TOYOTA", "modelo": "Corolla Cross", "versao": "XRX Hybrid", "disp_name": "Corolla Cross XRX Hybrid", "tecnologia": "HEV", "motor": "—", "potencia": "101 cv*", "bateria": "—", "autonomia_eletrica": "—", "autonomia_total": "—", "tracao": "FWD", "kwh": 0, "km100": 0, "maxAC": 0, "maxDC": 0 },
+        { "id": 51, "marca": "TOYOTA", "modelo": "RAV4", "versao": "SX Connect", "disp_name": "RAV4 SX Connect", "tecnologia": "HEV", "motor": "—", "potencia": "222 cv", "bateria": "—", "autonomia_eletrica": "—", "autonomia_total": "—", "tracao": "AWD", "kwh": 0, "km100": 0, "maxAC": 0, "maxDC": 0 },
+        { "id": 52, "marca": "TOYOTA", "modelo": "RAV4", "versao": "XSE", "disp_name": "RAV4 XSE", "tecnologia": "PHEV", "motor": "—", "potencia": "306 cv", "bateria": "18,1 kWh", "autonomia_eletrica": "75 km", "autonomia_total": "—", "tracao": "AWD", "kwh": 18.1, "km100": 75, "maxAC": 6.6, "maxDC": 18.0 },
+        { "id": 53, "marca": "TOYOTA", "modelo": "bZ4X", "versao": "AWD", "disp_name": "bZ4X AWD", "tecnologia": "BEV", "motor": "—", "potencia": "343 cv", "bateria": "73,1 kWh", "autonomia_eletrica": "361 km", "autonomia_total": "—", "tracao": "AWD", "kwh": 73.1, "km100": 361, "maxAC": 11.0, "maxDC": 150.0 }
+      ]
+    },
+    {
+      "marca": "HONDA",
+      "modelos": [
+        { "id": 54, "marca": "HONDA", "modelo": "Civic", "versao": "Advanced Hybrid", "disp_name": "Civic Advanced Hybrid", "tecnologia": "HEV", "motor": "—", "potencia": "—", "bateria": "~1 kWh", "autonomia_eletrica": "—", "autonomia_total": "—", "tracao": "FWD", "kwh": 0, "km100": 0, "maxAC": 0, "maxDC": 0 },
+        { "id": 55, "marca": "HONDA", "modelo": "Accord", "versao": "Advanced Hybrid", "disp_name": "Accord Advanced Hybrid", "tecnologia": "HEV", "motor": "—", "potencia": "204 cv", "bateria": "1,05 kWh", "autonomia_eletrica": "—", "autonomia_total": "—", "tracao": "FWD", "kwh": 0, "km100": 0, "maxAC": 0, "maxDC": 0 },
+        { "id": 56, "marca": "HONDA", "modelo": "CR-V", "versao": "Advanced Hybrid", "disp_name": "CR-V Advanced Hybrid", "tecnologia": "HEV", "motor": "—", "potencia": "—", "bateria": "—", "autonomia_eletrica": "—", "autonomia_total": "—", "tracao": "AWD", "kwh": 0, "km100": 0, "maxAC": 0, "maxDC": 0 }
+      ]
+    },
+    {
+      "marca": "HYUNDAI",
+      "modelos": [
+        { "id": 57, "marca": "HYUNDAI", "modelo": "Kona", "versao": "Hybrid Ultimate", "disp_name": "Kona Hybrid Ultimate", "tecnologia": "HEV", "motor": "—", "potencia": "141 cv", "bateria": "1,32 kWh", "autonomia_eletrica": "—", "autonomia_total": "—", "tracao": "FWD", "kwh": 0, "km100": 0, "maxAC": 0, "maxDC": 0 },
+        { "id": 58, "marca": "HYUNDAI", "modelo": "Kona", "versao": "Hybrid Signature", "disp_name": "Kona Hybrid Signature", "tecnologia": "HEV", "motor": "—", "potencia": "141 cv", "bateria": "1,32 kWh", "autonomia_eletrica": "—", "autonomia_total": "—", "tracao": "FWD", "kwh": 0, "km100": 0, "maxAC": 0, "maxDC": 0 },
+        { "id": 59, "marca": "HYUNDAI", "modelo": "Ioniq 5", "versao": "—", "disp_name": "Ioniq 5", "tecnologia": "BEV", "motor": "—", "potencia": "325 cv", "bateria": "84 kWh", "autonomia_eletrica": "374 km", "autonomia_total": "—", "tracao": "AWD", "kwh": 84.0, "km100": 374, "maxAC": 11.0, "maxDC": 233.0 }
+      ]
+    },
+    {
+      "marca": "KIA",
+      "modelos": [
+        { "id": 60, "marca": "KIA", "modelo": "Niro", "versao": "EX", "disp_name": "Niro EX", "tecnologia": "HEV", "motor": "—", "potencia": "141 cv", "bateria": "—", "autonomia_eletrica": "—", "autonomia_total": "—", "tracao": "FWD", "kwh": 0, "km100": 0, "maxAC": 0, "maxDC": 0 },
+        { "id": 61, "marca": "KIA", "modelo": "Niro", "versao": "SX", "disp_name": "Niro SX", "tecnologia": "HEV", "motor": "—", "potencia": "141 cv", "bateria": "—", "autonomia_eletrica": "—", "autonomia_total": "—", "tracao": "FWD", "kwh": 0, "km100": 0, "maxAC": 0, "maxDC": 0 },
+        { "id": 62, "marca": "KIA", "modelo": "EV5", "versao": "Land", "disp_name": "EV5 Land", "tecnologia": "BEV", "motor": "—", "potencia": "217 cv", "bateria": "88,16 kWh", "autonomia_eletrica": "406 km", "autonomia_total": "—", "tracao": "FWD", "kwh": 88.16, "km100": 406, "maxAC": 11.0, "maxDC": 150.0 },
+        { "id": 63, "marca": "KIA", "modelo": "EV9", "versao": "GTL", "disp_name": "EV9 GTL", "tecnologia": "BEV", "motor": "—", "potencia": "384 cv", "bateria": "99 kWh", "autonomia_eletrica": "436 km", "autonomia_total": "—", "tracao": "AWD", "kwh": 99.0, "km100": 436, "maxAC": 11.0, "maxDC": 210.0 }
+      ]
+    },
+    {
+      "marca": "MG",
+      "modelos": [
+        { "id": 64, "marca": "MG", "modelo": "MG4", "versao": "Urban Comfort", "disp_name": "MG4 Urban Comfort", "tecnologia": "BEV", "motor": "—", "potencia": "150 cv", "bateria": "43 kWh", "autonomia_eletrica": "299 km", "autonomia_total": "—", "tracao": "RWD", "kwh": 43.0, "km100": 299, "maxAC": 6.6, "maxDC": 88.0 },
+        { "id": 65, "marca": "MG", "modelo": "MG4", "versao": "Urban Luxury", "disp_name": "MG4 Urban Luxury (43 kWh)", "tecnologia": "BEV", "motor": "—", "potencia": "150 cv", "bateria": "43 kWh", "autonomia_eletrica": "299 km", "autonomia_total": "—", "tracao": "RWD", "kwh": 43.0, "km100": 299, "maxAC": 6.6, "maxDC": 88.0 },
+        { "id": 66, "marca": "MG", "modelo": "MG4", "versao": "Urban Luxury", "disp_name": "MG4 Urban Luxury (54 kWh)", "tecnologia": "BEV", "motor": "—", "potencia": "160 cv", "bateria": "54 kWh", "autonomia_eletrica": "358 km", "autonomia_total": "—", "tracao": "RWD", "kwh": 54.0, "km100": 358, "maxAC": 6.6, "maxDC": 88.0 },
+        { "id": 67, "marca": "MG", "modelo": "MG4", "versao": "Luxury", "disp_name": "MG4 Luxury", "tecnologia": "BEV", "motor": "—", "potencia": "204 cv", "bateria": "64 kWh", "autonomia_eletrica": "364 km", "autonomia_total": "—", "tracao": "RWD", "kwh": 64.0, "km100": 364, "maxAC": 11.0, "maxDC": 140.0 }
+      ]
+    },
+    {
+      "marca": "RENAULT",
+      "modelos": [
+        { "id": 68, "marca": "RENAULT", "modelo": "Kwid E-Tech", "versao": "E-Tech", "disp_name": "Kwid E-Tech", "tecnologia": "BEV", "motor": "—", "potencia": "65 cv", "bateria": "26,8 kWh", "autonomia_eletrica": "180 km", "autonomia_total": "—", "tracao": "FWD", "kwh": 26.8, "km100": 180, "maxAC": 7.4, "maxDC": 30.0 },
+        { "id": 69, "marca": "RENAULT", "modelo": "Megane E-Tech", "versao": "E-Tech", "disp_name": "Megane E-Tech", "tecnologia": "BEV", "motor": "—", "potencia": "218 cv", "bateria": "60 kWh", "autonomia_eletrica": "248 km", "autonomia_total": "—", "tracao": "FWD", "kwh": 60.0, "km100": 248, "maxAC": 22.0, "maxDC": 130.0 }
+      ]
+    },
+    {
+      "marca": "VOLVO",
+      "modelos": [
+        { "id": 70, "marca": "VOLVO", "modelo": "EX30", "versao": "Plus", "disp_name": "EX30 Plus", "tecnologia": "BEV", "motor": "—", "potencia": "272 cv", "bateria": "51 kWh", "autonomia_eletrica": "250 km", "autonomia_total": "—", "tracao": "RWD", "kwh": 51.0, "km100": 250, "maxAC": 11.0, "maxDC": 134.0 },
+        { "id": 71, "marca": "VOLVO", "modelo": "EX30", "versao": "Ultra Twin Motor", "disp_name": "EX30 Ultra Twin Motor", "tecnologia": "BEV", "motor": "—", "potencia": "428 cv", "bateria": "69 kWh", "autonomia_eletrica": "316 km", "autonomia_total": "—", "tracao": "AWD", "kwh": 69.0, "km100": 316, "maxAC": 22.0, "maxDC": 153.0 },
+        { "id": 72, "marca": "VOLVO", "modelo": "EX30", "versao": "Cross Country", "disp_name": "EX30 Cross Country", "tecnologia": "BEV", "motor": "—", "potencia": "428 cv", "bateria": "69 kWh", "autonomia_eletrica": "327 km", "autonomia_total": "—", "tracao": "AWD", "kwh": 69.0, "km100": 327, "maxAC": 22.0, "maxDC": 153.0 }
+      ]
+    },
+    {
+      "marca": "CHEVROLET",
+      "modelos": [
+        { "id": 73, "marca": "CHEVROLET", "modelo": "Spark EUV", "versao": "41,9 kWh", "disp_name": "Spark EUV 41,9 kWh", "tecnologia": "BEV", "motor": "—", "potencia": "102 cv", "bateria": "41,9 kWh", "autonomia_eletrica": "260 km", "autonomia_total": "—", "tracao": "FWD", "kwh": 41.9, "km100": 260, "maxAC": 7.4, "maxDC": 50.0 },
+        { "id": 74, "marca": "CHEVROLET", "modelo": "Equinox EV", "versao": "85 kWh", "disp_name": "Equinox EV 85 kWh", "tecnologia": "BEV", "motor": "—", "potencia": "292 cv", "bateria": "85 kWh", "autonomia_eletrica": "442 km", "autonomia_total": "—", "tracao": "FWD", "kwh": 85.0, "km100": 442, "maxAC": 11.5, "maxDC": 150.0 }
+      ]
+    },
+    {
+      "marca": "SUZUKI",
+      "modelos": [
+        { "id": 75, "marca": "SUZUKI", "modelo": "e-Vitara", "versao": "—", "disp_name": "e-Vitara", "tecnologia": "BEV", "motor": "—", "potencia": "184 cv", "bateria": "61 kWh", "autonomia_eletrica": "293 km", "autonomia_total": "—", "tracao": "AWD", "kwh": 61.0, "km100": 293, "maxAC": 11.0, "maxDC": 100.0 }
+      ]
+    },
+    {
+      "marca": "JETOUR",
+      "modelos": [
+        { "id": 76, "marca": "JETOUR", "modelo": "T1", "versao": "PHEV", "disp_name": "T1 PHEV", "tecnologia": "PHEV", "motor": "—", "potencia": "315 cv", "bateria": "26,7 kWh", "autonomia_eletrica": "88 km", "autonomia_total": "—", "tracao": "AWD", "kwh": 26.7, "km100": 88, "maxAC": 6.6, "maxDC": 30.0 },
+        { "id": 77, "marca": "JETOUR", "modelo": "T2", "versao": "PHEV", "disp_name": "T2 PHEV", "tecnologia": "PHEV", "motor": "—", "potencia": "339 cv", "bateria": "26,7 kWh", "autonomia_eletrica": "75 km", "autonomia_total": "—", "tracao": "AWD", "kwh": 26.7, "km100": 75, "maxAC": 6.6, "maxDC": 30.0 }
+      ]
+    },
+    {
+      "marca": "DENZA",
+      "modelos": [
+        { "id": 78, "marca": "DENZA", "modelo": "B5", "versao": "—", "disp_name": "B5", "tecnologia": "PHEV", "motor": "—", "potencia": "677 cv", "bateria": "31,8 kWh", "autonomia_eletrica": "74 km", "autonomia_total": "—", "tracao": "AWD", "kwh": 31.8, "km100": 74, "maxAC": 6.6, "maxDC": 100.0 },
+        { "id": 79, "marca": "DENZA", "modelo": "Z9 GT", "versao": "—", "disp_name": "Z9 GT", "tecnologia": "BEV", "motor": "—", "potencia": "965 cv", "bateria": "100 kWh", "autonomia_eletrica": "440 km", "autonomia_total": "—", "tracao": "AWD", "kwh": 100.0, "km100": 440, "maxAC": 11.0, "maxDC": 270.0 }
+      ]
+    },
+    {
+      "marca": "AVATR",
+      "modelos": [
+        { "id": 80, "marca": "AVATR", "modelo": "11", "versao": "5 lugares", "disp_name": "11 (5 lugares)", "tecnologia": "BEV", "motor": "—", "potencia": "585 cv", "bateria": "116 kWh", "autonomia_eletrica": "550 km", "autonomia_total": "—", "tracao": "AWD", "kwh": 116.0, "km100": 550, "maxAC": 11.0, "maxDC": 240.0 },
+        { "id": 81, "marca": "AVATR", "modelo": "11", "versao": "4 lugares", "disp_name": "11 (4 lugares)", "tecnologia": "BEV", "motor": "—", "potencia": "585 cv", "bateria": "116 kWh", "autonomia_eletrica": "550 km", "autonomia_total": "—", "tracao": "AWD", "kwh": 116.0, "km100": 550, "maxAC": 11.0, "maxDC": 240.0 }
+      ]
+    },
+    {
+      "marca": "LEXUS",
+      "modelos": [
+        { "id": 82, "marca": "LEXUS", "modelo": "ES", "versao": "350h", "disp_name": "ES 350h", "tecnologia": "HEV", "motor": "—", "potencia": "247 cv", "bateria": "Li-ion 251,6 V", "autonomia_eletrica": "—", "autonomia_total": "—", "tracao": "FWD", "kwh": 0, "km100": 0, "maxAC": 0, "maxDC": 0 }
+      ]
+    },
+    {
+      "marca": "PEUGEOT",
+      "modelos": [
+        { "id": 83, "marca": "PEUGEOT", "modelo": "e-2008", "versao": "—", "disp_name": "e-2008", "tecnologia": "BEV", "motor": "—", "potencia": "156 cv", "bateria": "54 kWh", "autonomia_eletrica": "261 km", "autonomia_total": "—", "tracao": "FWD", "kwh": 54.0, "km100": 261, "maxAC": 11.0, "maxDC": 100.0 },
+        { "id": 84, "marca": "PEUGEOT", "modelo": "e-208", "versao": "—", "disp_name": "e-208", "tecnologia": "BEV", "motor": "—", "potencia": "136 cv", "bateria": "50 kWh", "autonomia_eletrica": "220 km", "autonomia_total": "—", "tracao": "FWD", "kwh": 50.0, "km100": 220, "maxAC": 7.4, "maxDC": 100.0 },
+        { "id": 85, "marca": "PEUGEOT", "modelo": "e-Expert", "versao": "—", "disp_name": "e-Expert", "tecnologia": "BEV", "motor": "—", "potencia": "136 cv", "bateria": "75 kWh", "autonomia_eletrica": "230 km", "autonomia_total": "—", "tracao": "FWD", "kwh": 75.0, "km100": 230, "maxAC": 11.0, "maxDC": 100.0 }
+      ]
+    }
+  ];
+
+  let timerInterval = null;
+  let totalEstimatedSeconds = 0;
+  let hasAlertedPreFinish = false;
+  let isTimerActive = false;
+  let timerStartTime = 0;
+
+  function getAllCarsFlat() {
+    let list = [];
+    evDatabase.forEach(group => {
+      group.modelos.forEach(car => {
+        list.push({ ...car, marcaGroup: group.marca });
+      });
+    });
+    return list;
+  }
+
+  function initApp() {
+    const brandSelect = document.getElementById('brandSelect');
+    brandSelect.innerHTML = '';
+    
+    evDatabase.sort((a, b) => a.marca.localeCompare(b.marca));
+    evDatabase.forEach(group => {
+      const option = document.createElement('option');
+      option.value = group.marca;
+      option.textContent = group.marca;
+      brandSelect.appendChild(option);
+    });
+
+    const savedCarId = parseInt(localStorage.getItem('eletrocalc_car'));
+    const allCars = getAllCarsFlat();
+    const savedCar = allCars.find(c => c.id === savedCarId);
+
+    if (savedCar) {
+      brandSelect.value = savedCar.marcaGroup;
+      populateModels(savedCar.marcaGroup);
+      document.getElementById('modelSelect').value = savedCar.id;
+    } else {
+      populateModels(evDatabase[0].marca);
+    }
+
+    const savedPrice = localStorage.getItem('eletrocalc_price');
+    const savedStartFee = localStorage.getItem('eletrocalc_startfee');
+    const savedAlertMinutes = localStorage.getItem('eletrocalc_alertmin');
+
+    if (savedPrice) document.getElementById('pricePerKwh').value = savedPrice;
+    if (savedStartFee) document.getElementById('startFee').value = savedStartFee;
+    if (savedAlertMinutes) document.getElementById('alertMinutes').value = savedAlertMinutes;
+
+    validateAndUpdateBattery();
+    calculate();
+  }
+
+  function populateModels(brandName) {
+    const modelSelect = document.getElementById('modelSelect');
+    modelSelect.innerHTML = '';
+
+    const brandData = evDatabase.find(b => b.marca === brandName) || evDatabase[0];
+    brandData.modelos.sort((a, b) => a.disp_name.localeCompare(b.disp_name));
+
+    brandData.modelos.forEach(car => {
+      const option = document.createElement('option');
+      option.value = car.id;
+      option.textContent = `${car.disp_name} (${car.tecnologia})`;
+      modelSelect.appendChild(option);
+    });
+  }
+
+  function onBrandChange() {
+    const selectedBrand = document.getElementById('brandSelect').value;
+    populateModels(selectedBrand);
+    calculate();
+  }
+
+  function toggleManualPower() {
+    const select = document.getElementById('chargerPower');
+    const manualGroup = document.getElementById('manualPowerGroup');
+    if (select.value === 'custom') {
+      manualGroup.style.display = 'block';
+    } else {
+      manualGroup.style.display = 'none';
+    }
+  }
+
+  function onManualInputModeChange() {
+    const mode = document.getElementById('manualInputMode').value;
+    const kwBlock = document.getElementById('manualKwBlock');
+    const vaBlock = document.getElementById('manualVaBlock');
+
+    if (mode === 'kw') {
+      kwBlock.style.display = 'block';
+      vaBlock.style.display = 'none';
+    } else {
+      kwBlock.style.display = 'none';
+      vaBlock.style.display = 'block';
+      calculateFromVA();
+    }
+    calculate();
+  }
+
+  function calculateFromVA() {
+    const v = parseInputValue('manualVoltage');
+    const a = parseInputValue('manualAmperage');
+    const phases = parseInt(document.getElementById('manualPhases').value) || 1;
+
+    let computedKw = 0;
+    if (phases === 3) {
+      computedKw = (v * a * Math.sqrt(3) * 0.92) / 1000;
+    } else {
+      computedKw = (v * a) / 1000;
+    }
+
+    document.getElementById('manualChargerPower').value = computedKw.toFixed(2).replace('.', ',');
+    calculate();
+  }
+
+  function getGradientColor(pct) {
+    const colors = [
+      { p: 0,   r: 0,   g: 0,   b: 0 },
+      { p: 30,  r: 239, g: 68,  b: 68 },
+      { p: 50,  r: 249, g: 115, b: 22 },
+      { p: 75,  r: 234, g: 179, b: 8 },
+      { p: 100, r: 16,  g: 185, b: 129 }
+    ];
+
+    let lower = colors[0];
+    let upper = colors[colors.length - 1];
+
+    for (let i = 0; i < colors.length - 1; i++) {
+      if (pct >= colors[i].p && pct <= colors[i + 1].p) {
+        lower = colors[i];
+        upper = colors[i + 1];
+        break;
+      }
+    }
+
+    const range = upper.p - lower.p;
+    const factor = range === 0 ? 0 : (pct - lower.p) / range;
+
+    const r = Math.round(lower.r + factor * (upper.r - lower.r));
+    const g = Math.round(lower.g + factor * (upper.g - lower.g));
+    const b = Math.round(lower.b + factor * (upper.b - lower.b));
+
+    return `rgb(${r}, ${g}, ${b})`;
+  }
+
+  function validateAndUpdateBattery() {
+    let currentInput = document.getElementById('currentBattery');
+    let targetInput = document.getElementById('targetBattery');
+
+    let currentVal = parseInt(currentInput.value);
+    let targetVal = parseInt(targetInput.value);
+
+    if (targetVal < currentVal) {
+      targetVal = currentVal;
+      targetInput.value = targetVal;
+    }
+
+    const currentColor = getGradientColor(currentVal);
+    const currentValElem = document.getElementById('currentBatteryVal');
+    currentValElem.textContent = currentVal + '%';
+    currentValElem.style.color = currentColor;
+    currentInput.style.background = `linear-gradient(to right, ${currentColor} 0%, ${currentColor} ${currentVal}%, var(--bg-color) ${currentVal}%, var(--bg-color) 100%)`;
+
+    const targetColor = getGradientColor(targetVal);
+    const targetValElem = document.getElementById('targetBatteryVal');
+    targetValElem.textContent = targetVal + '%';
+    targetValElem.style.color = targetColor;
+    targetInput.style.background = `linear-gradient(to right, ${targetColor} 0%, ${targetColor} ${targetVal}%, var(--bg-color) ${targetVal}%, var(--bg-color) 100%)`;
+  }
+
+  function savePreferences() {
+    localStorage.setItem('eletrocalc_car', document.getElementById('modelSelect').value);
+    localStorage.setItem('eletrocalc_price', document.getElementById('pricePerKwh').value);
+    localStorage.setItem('eletrocalc_startfee', document.getElementById('startFee').value);
+    localStorage.setItem('eletrocalc_alertmin', document.getElementById('alertMinutes').value);
+  }
+
+  function parseInputValue(id) {
+    let valStr = document.getElementById(id).value.toString().replace(',', '.');
+    return parseFloat(valStr) || 0;
+  }
+
+  function updateCarSpecCard(car) {
+    document.getElementById('specMarca').textContent = car.marca || '—';
+    document.getElementById('specModelo').textContent = car.modelo || '—';
+    document.getElementById('specVersao').textContent = car.versao || '—';
+    document.getElementById('specTecnologia').textContent = car.tecnologia || '—';
+    document.getElementById('specMotor').textContent = car.motor || '—';
+    document.getElementById('specPotencia').textContent = car.potencia || '—';
+    document.getElementById('specBateria').textContent = car.bateria || '—';
+    document.getElementById('specAutonomiaEletrica').textContent = car.autonomia_eletrica || '—';
+    document.getElementById('specAutonomiaTotal').textContent = car.autonomia_total || '—';
+    document.getElementById('specTracao').textContent = car.tracao || '—';
+  }
+
+  function calculate() {
+    const allCars = getAllCarsFlat();
+    const selectedId = parseInt(document.getElementById('modelSelect').value);
+    const car = allCars.find(c => c.id === selectedId) || allCars[0];
+    
+    updateCarSpecCard(car);
+
+    const currentPct = parseFloat(document.getElementById('currentBattery').value);
+    const targetPct = parseFloat(document.getElementById('targetBattery').value);
+    const pricePerKwh = parseInputValue('pricePerKwh');
+    const startFee = parseInputValue('startFee');
+    
+    const powerSelect = document.getElementById('chargerPower');
+    let powerSelectVal = powerSelect.value;
+    let isDC = false;
+    let chargerPower = 0;
+
+    if (powerSelectVal === 'custom') {
+      chargerPower = parseInputValue('manualChargerPower');
+      isDC = document.getElementById('manualType').value === 'dc';
+    } else {
+      chargerPower = parseFloat(powerSelectVal) || 0;
+      let selectedOption = powerSelect.options[powerSelect.selectedIndex];
+      isDC = selectedOption ? selectedOption.getAttribute('data-type') === 'dc' : false;
+    }
+
+    const isShared = document.getElementById('sharedPower').checked;
+
+    savePreferences();
+
+    const diffPct = Math.max(0, targetPct - currentPct);
+    const neededKwh = car.kwh * (diffPct / 100);
+    const totalCost = (neededKwh * pricePerKwh) + startFee;
+
+    if (isShared && chargerPower > 0) {
+      chargerPower = chargerPower / 2;
+    }
+
+    let maxAllowed = isDC ? (car.maxDC !== undefined ? car.maxDC : 50) : (car.maxAC !== undefined ? car.maxAC : 6.6);
+    let effectivePower = chargerPower;
+    let isLimited = false;
+
+    const warningElem = document.getElementById('limitWarning');
+
+    if (car.kwh === 0) {
+      warningElem.style.display = 'block';
+      warningElem.textContent = `ℹ️ Veículo HEV/MHEV não plugável.`;
+      effectivePower = 0;
+    } else if (isDC && maxAllowed === 0) {
+      warningElem.style.display = 'block';
+      warningElem.textContent = `⚠️ O modelo ${car.modelo} ${car.versao} não possui suporte a recarga rápida em corrente contínua (DC).`;
+      effectivePower = 0;
+    } else if (effectivePower > maxAllowed && maxAllowed > 0) {
+      effectivePower = maxAllowed;
+      isLimited = true;
+      warningElem.style.display = 'block';
+      warningElem.textContent = `⚠️ Potência limitada pelo inversor de bordo do veículo (${car.modelo} ${car.versao}) a ${effectivePower} kW em ${isDC ? 'DC' : 'AC'}.`;
+    } else {
+      warningElem.style.display = 'none';
+    }
+
+    document.getElementById('totalCostDisplay').textContent = car.kwh > 0 ? `R$ ${totalCost.toFixed(2).replace('.', ',')}` : "R$ 0,00";
+    document.getElementById('kwhNeededDisplay').textContent = car.kwh > 0 ? `Energia necessária: ${neededKwh.toFixed(1)} kWh` : "Bateria não plugável";
+
+    if (effectivePower > 0 && diffPct > 0 && car.kwh > 0) {
+      const totalHours = neededKwh / effectivePower;
+      totalEstimatedSeconds = Math.round(totalHours * 3600);
+      const hours = Math.floor(totalHours);
+      const minutes = Math.round((totalHours - hours) * 60);
+      document.getElementById('timeDisplay').textContent = `Tempo estimado: ${hours}h ${minutes}min`;
+    } else {
+      totalEstimatedSeconds = 0;
+      document.getElementById('timeDisplay').textContent = `Tempo estimado: 0h 0min`;
+    }
+
+    if (car.km100 > 0) {
+      const currentKm = Math.round((car.km100 * currentPct) / 100);
+      const targetKm = Math.round((car.km100 * targetPct) / 100);
+      document.getElementById('currentRangeDisplay').textContent = `Autonomia com carga atual: ${currentKm} km`;
+      document.getElementById('targetRangeDisplay').textContent = `Autonomia com meta escolhida: ${targetKm} km`;
+    } else {
+      document.getElementById('currentRangeDisplay').textContent = `Autonomia elétrica: ${car.autonomia_eletrica}`;
+      document.getElementById('targetRangeDisplay').textContent = `Autonomia total: ${car.autonomia_total}`;
+    }
+
+    if (isTimerActive) {
+      updateActiveTimerState();
+    }
+  }
+
+  function startChargingTimer() {
+    if (totalEstimatedSeconds <= 0) {
+      alert("Defina uma meta e selecione um veículo/carregador com suporte a recarga elétrica.");
+      return;
+    }
+
+    if ("Notification" in window && Notification.permission !== "granted") {
+      Notification.requestPermission();
+    }
+
+    hasAlertedPreFinish = false;
+    isTimerActive = true;
+    timerStartTime = Date.now();
+
+    document.getElementById('timerPanel').style.display = 'block';
+    document.getElementById('startChargeBtn').style.display = 'none';
+    document.getElementById('cancelChargeBtn').style.display = 'block';
+
+    updateActiveTimerState();
+
+    if (timerInterval) clearInterval(timerInterval);
+
+    timerInterval = setInterval(() => {
+      updateActiveTimerState();
+    }, 1000);
+  }
+
+  function updateActiveTimerState() {
+    if (!isTimerActive) return;
+
+    const elapsedSeconds = Math.floor((Date.now() - timerStartTime) / 1000);
+    let remainingSeconds = totalEstimatedSeconds - elapsedSeconds;
+
+    const alertMinutes = parseInt(document.getElementById('alertMinutes').value) || 10;
+    const alertSecondsThreshold = alertMinutes * 60;
+
+    if (remainingSeconds > alertSecondsThreshold) {
+      hasAlertedPreFinish = false;
+      const minTextInitial = alertMinutes === 1 ? "1 min" : `${alertMinutes} min`;
+      document.getElementById('timerStatusMsg').textContent = `⚡ Notificação programada para faltar ${minTextInitial}`;
+      document.getElementById('timerStatusMsg').style.color = "var(--text-muted)";
+    }
+
+    if (remainingSeconds <= 0) {
+      remainingSeconds = 0;
+      updateTimerDisplay(0);
+      clearInterval(timerInterval);
+      triggerFinalAlert();
+      return;
+    }
+
+    updateTimerDisplay(remainingSeconds);
+
+    if (remainingSeconds <= alertSecondsThreshold && !hasAlertedPreFinish) {
+      hasAlertedPreFinish = true;
+      triggerPreFinishAlert(alertMinutes);
+    }
+  }
+
+  function stopChargingTimer() {
+    isTimerActive = false;
+    if (timerInterval) clearInterval(timerInterval);
+    document.getElementById('timerPanel').style.display = 'none';
+    document.getElementById('startChargeBtn').style.display = 'block';
+    document.getElementById('cancelChargeBtn').style.display = 'none';
+  }
+
+  function updateTimerDisplay(seconds) {
+    const h = Math.floor(seconds / 3600);
+    const m = Math.floor((seconds % 3600) / 60);
+    const s = seconds % 60;
+
+    const pad = num => String(num).padStart(2, '0');
+    document.getElementById('countdownDisplay').textContent = `${pad(h)}:${pad(m)}:${pad(s)}`;
+  }
+
+  function triggerPreFinishAlert(minutes) {
+    let alertMsg = minutes === 1 ? "⚠️ ATENÇÃO: Falta 1 minuto para o fim da simulação!" : `⚠️ ATENÇÃO: Faltam ${minutes} minutos para o fim da simulação!`;
+
+    document.getElementById('timerStatusMsg').textContent = alertMsg;
+    document.getElementById('timerStatusMsg').style.color = "#f59e0b";
+
+    if ("vibrate" in navigator) {
+      navigator.vibrate([500, 250, 500, 250, 500]);
+    }
+
+    playBeepSound();
+
+    if ("Notification" in window && Notification.permission === "granted") {
+      new Notification("⚡ EletroCalc — Alerta de Carga", {
+        body: alertMsg.replace("⚠️ ATENÇÃO: ", ""),
+        icon: "logo.png"
+      });
+    }
+  }
+
+  function triggerFinalAlert() {
+    isTimerActive = false;
+    document.getElementById('countdownDisplay').textContent = "00:00:00";
+    document.getElementById('timerStatusMsg').textContent = "Simulação de carregamento concluída!";
+    document.getElementById('timerStatusMsg').style.color = "#10b981";
+
+    if ("vibrate" in navigator) {
+      navigator.vibrate([1000, 300, 1000, 300, 1000]);
+    }
+
+    playBeepSound();
+
+    if ("Notification" in window && Notification.permission === "granted") {
+      new Notification("⚡ EletroCalc", {
+        body: "Simulação de carregamento concluída!",
+        icon: "logo.png"
+      });
+    }
+  }
+
+  function playBeepSound() {
+    try {
+      const ctx = new (window.AudioContext || window.webkitAudioContext)();
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+
+      osc.type = "sine";
+      osc.frequency.setValueAtTime(880, ctx.currentTime);
+      gain.gain.setValueAtTime(0.3, ctx.currentTime);
+
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+
+      osc.start();
+      osc.stop(ctx.currentTime + 1.2);
+    } catch(e) {
+      console.log("Áudio aguardando interação do usuário.");
+    }
+  }
+
+  function exportTXT() {
+    const allCars = getAllCarsFlat();
+    const selectedId = parseInt(document.getElementById('modelSelect').value);
+    const car = allCars.find(c => c.id === selectedId) || allCars[0];
+    
+    const currentPct = parseFloat(document.getElementById('currentBattery').value);
+    const targetPct = parseFloat(document.getElementById('targetBattery').value);
+    const pricePerKwh = parseInputValue('pricePerKwh');
+    const startFee = parseInputValue('startFee');
+    const alertMin = parseInt(document.getElementById('alertMinutes').value) || 10;
+    
+    let powerSelect = document.getElementById('chargerPower');
+    let powerSelectVal = powerSelect.value;
+    let isDC = false;
+    let chargerPower = 0;
+    let powerStr = "";
+
+    if (powerSelectVal === 'custom') {
+      chargerPower = parseInputValue('manualChargerPower');
+      isDC = document.getElementById('manualType').value === 'dc';
+      powerStr = `${chargerPower.toString().replace('.', ',')} kW (${isDC ? 'DC Manual' : 'AC Manual'})`;
+    } else {
+      chargerPower = parseFloat(powerSelectVal) || 0;
+      let selectedOption = powerSelect.options[powerSelect.selectedIndex];
+      isDC = selectedOption ? selectedOption.getAttribute('data-type') === 'dc' : false;
+      powerStr = `${chargerPower.toString().replace('.', ',')} kW`;
+    }
+
+    const isShared = document.getElementById('sharedPower').checked;
+    const sharedText = isShared ? "Sim" : "Não";
+
+    if (isShared && chargerPower > 0) {
+      chargerPower = chargerPower / 2;
+      powerStr += ` (Efetiva Compartilhada: ${chargerPower.toFixed(1).replace('.', ',')} kW)`;
+    }
+
+    let maxAllowed = isDC ? (car.maxDC !== undefined ? car.maxDC : 50) : (car.maxAC !== undefined ? car.maxAC : 6.6);
+    let effectivePower = chargerPower;
+
+    if (effectivePower > maxAllowed && maxAllowed > 0) {
+      effectivePower = maxAllowed;
+      powerStr += ` [Limitada pelo veículo a ${effectivePower} kW]`;
+    }
+
+    const diffPct = Math.max(0, targetPct - currentPct);
+    const neededKwh = car.kwh * (diffPct / 100);
+    const totalCost = (neededKwh * pricePerKwh) + startFee;
+
+    let timeStr = "0h 0min";
+    if (effectivePower > 0 && diffPct > 0 && car.kwh > 0) {
+      const totalHours = neededKwh / effectivePower;
+      const hours = Math.floor(totalHours);
+      const minutes = Math.round((totalHours - hours) * 60);
+      timeStr = `${hours}h ${minutes}min`;
+    }
+
+    const dataAtual = new Date().toLocaleDateString('pt-BR');
+    const horaAtual = new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+
+    const txtContent = 
+`==================================================
+                 ⚡ ELETROCALC
+    Relatório de Estimativa de Carregamento
+==================================================
+Data: ${dataAtual} às ${horaAtual}
+
+--- FICHA TÉCNICA DO VEÍCULO ---
+Marca:                    ${car.marca}
+Modelo:                   ${car.modelo}
+Versão:                   ${car.versao}
+Tecnologia:               ${car.tecnologia}
+Motor Combustão:          ${car.motor}
+Potência Total:           ${car.potencia}
+Bateria Especificada:     ${car.bateria}
+Autonomia Elétrica Spec:  ${car.autonomia_eletrica}
+Autonomia Total Spec:     ${car.autonomia_total}
+Tração:                   ${car.tracao}
+
+--- PARÂMETROS DA RECARGA ---
+Carga Atual:              ${currentPct}%
+Meta Desejada:            ${targetPct}%
+Potência Selecionada:     ${powerStr}
+Valor por kWh:            R$ ${pricePerKwh.toFixed(2).replace('.', ',')}
+Taxa de Start / Início:   R$ ${startFee.toFixed(2).replace('.', ',')}
+Alerta Programado:        Faltando ${alertMin} min
+Potência Compartilhada:   ${sharedText}
+
+--- RESUMO FINANCEIRO E TÉCNICO ---
+VALOR TOTAL ESTIMADO:     R$ ${totalCost.toFixed(2).replace('.', ',')}
+Energia Necessária:       ${car.kwh > 0 ? neededKwh.toFixed(1) + " kWh" : "N/A"}
+Tempo Estimado de Carga:  ${timeStr}
+==================================================
+EletroCalc — Calculadora de Carregamento Veicular
+==================================================`;
+
+    const blob = new Blob([txtContent], { type: 'text/plain;charset=utf-8' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = `EletroCalc_${car.marca}_${car.modelo}_${car.versao}.txt`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }
+
+  window.onload = initApp;
+</script>
+
+<script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('./sw.js')
+        .then(reg => console.log('Service Worker registrado:', reg))
+        .catch(err => console.error('Erro no Service Worker:', err));
+    });
+  }
+</script>
+
+</body>
+  </html>
