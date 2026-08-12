@@ -569,7 +569,8 @@
         { "id": 28, "marca": "GWM", "modelo": "Haval H6", "versao": "HEV ONE", "disp_name": "Haval H6 HEV ONE", "tecnologia": "HEV", "motor": "—", "potencia": "243 cv", "bateria": "—", "autonomia_eletrica": "—", "autonomia_total": "—", "tracao": "FWD", "kwh": 0, "km100": 0, "maxAC": 0, "maxDC": 0 },
         { "id": 29, "marca": "GWM", "modelo": "Haval H6", "versao": "HEV2", "disp_name": "Haval H6 HEV2", "tecnologia": "HEV", "motor": "—", "potencia": "243 cv", "bateria": "—", "autonomia_eletrica": "—", "autonomia_total": "—", "tracao": "FWD", "kwh": 0, "km100": 0, "maxAC": 0, "maxDC": 0 },
         { "id": 30, "marca": "GWM", "modelo": "Haval H6", "versao": "PHEV19", "disp_name": "Haval H6 PHEV19", "tecnologia": "PHEV", "motor": "—", "potencia": "326 cv", "bateria": "19,0 kWh", "autonomia_eletrica": "110 km", "autonomia_total": "—", "tracao": "AWD", "kwh": 19.0, "km100": 110, "maxAC": 6.6, "maxDC": 33.0 },
-        { "id": 31, "marca": "GWM", "modelo": "Haval H6", "versao": "PHEV35", "disp_name": "Haval H6 PHEV35", "tecnologia": "PHEV", "motor": "—", "potencia": "393 cv", "bateria": "34,0 kWh", "autonomia_eletrica": "170 km", "autonomia_total": "—", "tracao": "AWD", "kwh": 34.0, "km100": 170, "maxAC": 6.6, "maxDC": 48.0 },
+        { "id": 31, "marca": "GWM", "modelo": "Haval H6", "versao": "PHEV34", "disp_name": "Haval H6 PHEV34", "tecnologia": "PHEV", "motor": "—", "potencia": "393 cv", "bateria": "34,0 kWh", "autonomia_eletrica": "170 km", "autonomia_total": "—", "tracao": "AWD", "kwh": 34.0, "km100": 170, "maxAC": 6.6, "maxDC": 48.0 },
+        { "id": 86, "marca": "GWM", "modelo": "Haval H6", "versao": "PHEV35", "disp_name": "Haval H6 PHEV35", "tecnologia": "PHEV", "motor": "—", "potencia": "393 cv", "bateria": "35,0 kWh", "autonomia_eletrica": "175 km", "autonomia_total": "—", "tracao": "AWD", "kwh": 35.0, "km100": 175, "maxAC": 6.6, "maxDC": 48.0 },
         { "id": 32, "marca": "GWM", "modelo": "Haval H6 GT", "versao": "PHEV", "disp_name": "Haval H6 GT PHEV", "tecnologia": "PHEV", "motor": "—", "potencia": "393 cv", "bateria": "34,0 kWh", "autonomia_eletrica": "170 km", "autonomia_total": "—", "tracao": "AWD", "kwh": 34.0, "km100": 170, "maxAC": 6.6, "maxDC": 48.0 },
         { "id": 33, "marca": "GWM", "modelo": "Tank 300", "versao": "PHEV", "disp_name": "Tank 300 PHEV", "tecnologia": "PHEV", "motor": "—", "potencia": "394 cv", "bateria": "37,1 kWh", "autonomia_eletrica": "105 km", "autonomia_total": "—", "tracao": "AWD", "kwh": 37.1, "km100": 105, "maxAC": 6.6, "maxDC": 50.0 }
       ]
@@ -923,7 +924,6 @@
       chargerPower = chargerPower / 2;
     }
 
-    // APLICAÇÃO DINÂMICA DO TETO MÁXIMO DE CARREGAMENTO DO VEÍCULO
     let maxAllowed = isDC ? (car.maxDC || 50) : (car.maxAC || 6.6);
     let effectivePower = chargerPower;
     let isLimited = false;
