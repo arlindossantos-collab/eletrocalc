@@ -333,10 +333,11 @@
     }
 
     .power-limit-warning {
-      font-size: 0.75rem;
+      font-size: 0.78rem;
       font-weight: 600;
       color: #f59e0b;
       margin-bottom: 8px;
+      line-height: 1.35;
     }
 
     .result-range {
@@ -413,7 +414,6 @@
                   inset -3px -3px 6px var(--shadow-light);
     }
 
-    /* Banners para GIF na parte inferior (Recomendado: 840 x 300 px) */
     .gif-banners-container {
       display: flex;
       flex-direction: column;
@@ -507,7 +507,6 @@
       <option value="custom" data-type="ac">Outra potência (Manual)</option>
     </select>
 
-    <!-- Configuração Manual do Carregador (Suporta kW Direto ou V + A) -->
     <div class="manual-power-container" id="manualPowerGroup">
       <div style="font-size: 0.8rem; font-weight: 700; color: var(--primary); text-transform: uppercase; margin-bottom: 8px;">⚙️ Configuração Manual do Carregador</div>
       
@@ -527,13 +526,11 @@
         </select>
       </div>
 
-      <!-- Digitação Direta em kW -->
       <div id="manualKwBlock" class="form-group">
         <label for="manualChargerPower">Potência do Carregador (kW)</label>
         <input type="text" id="manualChargerPower" class="neu-input" placeholder="Digite a potência em kW (ex: 6,6 ou 22)" oninput="calculate()">
       </div>
 
-      <!-- Digitação em V e A -->
       <div id="manualVaBlock" style="display: none;">
         <div class="manual-subgrid">
           <div class="form-group">
@@ -604,7 +601,6 @@
     <button class="btn-action" onclick="exportTXT()">Exportar Resumo (.txt)</button>
   </div>
 
-  <!-- 2 Espaços Inferiores para GIFs Animados (Dimensão Recomendada: 840 x 300 px) -->
   <div class="gif-banners-container">
     <div class="gif-banner-slot" id="gifSlot1">
       <img src="banner1.gif" alt="Espaço Publicitário / GIF Animado 1" onerror="this.style.display='none'; this.parentElement.innerHTML='<span style=\'color: var(--text-muted); font-size: 0.8rem; font-weight: 600; padding: 20px;\'>Espaço GIF 1 (840 x 300 px)</span>';">
@@ -627,9 +623,9 @@
         { "id": 5, "marca": "BYD", "modelo": "Seal", "versao": "EV", "disp_name": "Seal EV", "tecnologia": "BEV", "motor": "—", "potencia": "531 cv", "bateria": "82,5 kWh", "autonomia_eletrica": "372 km", "autonomia_total": "—", "tracao": "AWD", "kwh": 82.5, "km100": 372, "maxAC": 11.0, "maxDC": 150.0 },
         { "id": 6, "marca": "BYD", "modelo": "Sealion 7", "versao": "EV", "disp_name": "Sealion 7 EV", "tecnologia": "BEV", "motor": "—", "potencia": "530 cv", "bateria": "82,56 kWh", "autonomia_eletrica": "~500 km", "autonomia_total": "—", "tracao": "AWD", "kwh": 82.56, "km100": 500, "maxAC": 11.0, "maxDC": 150.0 },
         { "id": 7, "marca": "BYD", "modelo": "Tan", "versao": "EV", "disp_name": "Tan EV", "tecnologia": "BEV", "motor": "—", "potencia": "517 cv", "bateria": "108,8 kWh", "autonomia_eletrica": "435 km", "autonomia_total": "—", "tracao": "AWD", "kwh": 108.8, "km100": 435, "maxAC": 11.0, "maxDC": 170.0 },
-        { "id": 8, "marca": "BYD", "modelo": "King", "versao": "GL", "disp_name": "King GL", "tecnologia": "PHEV", "motor": "—", "potencia": "209 cv", "bateria": "10,8 kWh", "autonomia_eletrica": "80 km", "autonomia_total": "—", "tracao": "FWD", "kwh": 10.8, "km100": 80, "maxAC": 3.3, "maxDC": 3.3 },
-        { "id": 9, "marca": "BYD", "modelo": "King", "versao": "GS", "disp_name": "King GS", "tecnologia": "PHEV", "motor": "—", "potencia": "235 cv", "bateria": "18,3 kWh", "autonomia_eletrica": "80 km*", "autonomia_total": "—", "tracao": "FWD", "kwh": 18.3, "km100": 80, "maxAC": 6.6, "maxDC": 18.0 },
-        { "id": 10, "marca": "BYD", "modelo": "Song Pro", "versao": "GL", "disp_name": "Song Pro GL", "tecnologia": "PHEV Flex", "motor": "—", "potencia": "207 cv", "bateria": "12,9 kWh", "autonomia_eletrica": "71 km", "autonomia_total": "—", "tracao": "FWD", "kwh": 12.9, "km100": 71, "maxAC": 3.3, "maxDC": 3.3 },
+        { "id": 8, "marca": "BYD", "modelo": "King", "versao": "GL", "disp_name": "King GL", "tecnologia": "PHEV", "motor": "—", "potencia": "209 cv", "bateria": "10,8 kWh", "autonomia_eletrica": "80 km", "autonomia_total": "—", "tracao": "FWD", "kwh": 10.8, "km100": 80, "maxAC": 3.3, "maxDC": 0.0 },
+        { "id": 9, "marca": "BYD", "modelo": "King", "versao": "GS", "disp_name": "King GS", "tecnologia": "PHEV", "motor": "—", "potencia": "235 cv", "bateria": "18,3 kWh", "autonomia_eletrica": "80 km*", "autonomia_total": "—", "tracao": "FWD", "kwh": 18.3, "km100": 80, "maxAC": 3.3, "maxDC": 18.0 },
+        { "id": 10, "marca": "BYD", "modelo": "Song Pro", "versao": "GL", "disp_name": "Song Pro GL", "tecnologia": "PHEV Flex", "motor": "—", "potencia": "207 cv", "bateria": "12,9 kWh", "autonomia_eletrica": "71 km", "autonomia_total": "—", "tracao": "FWD", "kwh": 12.9, "km100": 71, "maxAC": 3.3, "maxDC": 0.0 },
         { "id": 11, "marca": "BYD", "modelo": "Song Pro", "versao": "GS", "disp_name": "Song Pro GS", "tecnologia": "PHEV Flex", "motor": "—", "potencia": "219 cv", "bateria": "18,3 kWh", "autonomia_eletrica": "72 km Inmetro", "autonomia_total": "—", "tracao": "FWD", "kwh": 18.3, "km100": 72, "maxAC": 3.3, "maxDC": 18.0 },
         { "id": 12, "marca": "BYD", "modelo": "Song Plus", "versao": "DM-i", "disp_name": "Song Plus DM-i", "tecnologia": "PHEV", "motor": "—", "potencia": "245 cv", "bateria": "18,3 kWh", "autonomia_eletrica": "110 km", "autonomia_total": "—", "tracao": "FWD", "kwh": 18.3, "km100": 110, "maxAC": 3.3, "maxDC": 18.0 },
         { "id": 13, "marca": "BYD", "modelo": "Song Plus Premium", "versao": "DM-i", "disp_name": "Song Plus Premium DM-i", "tecnologia": "PHEV", "motor": "—", "potencia": "324 cv", "bateria": "26,6 kWh", "autonomia_eletrica": "87 km", "autonomia_total": "—", "tracao": "AWD", "kwh": 26.6, "km100": 87, "maxAC": 6.6, "maxDC": 30.0 },
@@ -1053,22 +1049,25 @@
       chargerPower = chargerPower / 2;
     }
 
-    let maxAllowed = isDC ? (car.maxDC || 50) : (car.maxAC || 6.6);
+    let maxAllowed = isDC ? (car.maxDC !== undefined ? car.maxDC : 50) : (car.maxAC !== undefined ? car.maxAC : 6.6);
     let effectivePower = chargerPower;
     let isLimited = false;
 
-    if (effectivePower > maxAllowed && maxAllowed > 0) {
-      effectivePower = maxAllowed;
-      isLimited = true;
-    }
-
     const warningElem = document.getElementById('limitWarning');
+
     if (car.kwh === 0) {
       warningElem.style.display = 'block';
-      warningElem.textContent = `ℹ️ Veículo HEV/MHEV não plugável ou sem porta de recarga rápida externa.`;
-    } else if (isLimited && chargerPower > 0) {
+      warningElem.textContent = `ℹ️ Veículo HEV/MHEV não plugável.`;
+      effectivePower = 0;
+    } else if (isDC && maxAllowed === 0) {
       warningElem.style.display = 'block';
-      warningElem.textContent = `⚠️ Potência limitada pelo veículo a ${effectivePower} kW (${isDC ? 'DC' : 'AC'}).`;
+      warningElem.textContent = `⚠️ O modelo ${car.modelo} ${car.versao} não possui suporte a recarga rápida em corrente contínua (DC).`;
+      effectivePower = 0;
+    } else if (effectivePower > maxAllowed && maxAllowed > 0) {
+      effectivePower = maxAllowed;
+      isLimited = true;
+      warningElem.style.display = 'block';
+      warningElem.textContent = `⚠️ Potência limitada pelo inversor de bordo do veículo (${car.modelo} ${car.versao}) a ${effectivePower} kW em ${isDC ? 'DC' : 'AC'}.`;
     } else {
       warningElem.style.display = 'none';
     }
@@ -1274,7 +1273,7 @@
       powerStr += ` (Efetiva Compartilhada: ${chargerPower.toFixed(1).replace('.', ',')} kW)`;
     }
 
-    let maxAllowed = isDC ? (car.maxDC || 50) : (car.maxAC || 6.6);
+    let maxAllowed = isDC ? (car.maxDC !== undefined ? car.maxDC : 50) : (car.maxAC !== undefined ? car.maxAC : 6.6);
     let effectivePower = chargerPower;
 
     if (effectivePower > maxAllowed && maxAllowed > 0) {
@@ -1345,7 +1344,6 @@ EletroCalc — Calculadora de Carregamento Veicular
   window.onload = initApp;
 </script>
 
-<!-- Registro do Service Worker -->
 <script>
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
