@@ -498,7 +498,7 @@
   <div class="form-group">
     <label for="chargerPower">Potência do Carregador</label>
     <select id="chargerPower" class="neu-input" onchange="toggleManualPower(); calculate();">
-      <option value="3.7" data-type="ac">3.7 kW (Portátil / 20A)</option>
+      <option value="3.7" data-type="ac">3.7 kW (Portátil / 20A - 220V)</option>
       <option value="7.4" data-type="ac" selected>7.4 kW (Wallbox Monofásico)</option>
       <option value="11" data-type="ac">11.0 kW (Wallbox Trifásico)</option>
       <option value="22" data-type="ac">22.0 kW (AC Rápido)</option>
@@ -507,6 +507,7 @@
       <option value="custom" data-type="ac">Outra potência (Manual)</option>
     </select>
 
+    <!-- Configuração Manual com Voltagem, Amperagem e Potência Recalculada -->
     <div class="manual-power-container" id="manualPowerGroup">
       <div style="font-size: 0.8rem; font-weight: 700; color: var(--primary); text-transform: uppercase; margin-bottom: 8px;">⚙️ Configuração Manual do Carregador</div>
       
@@ -518,37 +519,26 @@
         </select>
       </div>
 
-      <div class="form-group">
-        <label for="manualInputMode">Modo de Entrada</label>
-        <select id="manualInputMode" class="neu-input" onchange="onManualInputModeChange()">
-          <option value="kw">Informar Potência em kW diretamente</option>
-          <option value="va">Informar Voltagem (V) e Amperagem (A)</option>
-        </select>
-      </div>
-
-      <div id="manualKwBlock" class="form-group">
-        <label for="manualChargerPower">Potência do Carregador (kW)</label>
-        <input type="text" id="manualChargerPower" class="neu-input" placeholder="Digite a potência em kW (ex: 6,6 ou 22)" oninput="calculate()">
-      </div>
-
-      <div id="manualVaBlock" style="display: none;">
-        <div class="manual-subgrid">
-          <div class="form-group">
-            <label for="manualVoltage">Voltagem (V)</label>
-            <input type="text" id="manualVoltage" class="neu-input" placeholder="Ex: 220" value="220" oninput="calculateFromVA()">
-          </div>
-          <div class="form-group">
-            <label for="manualAmperage">Amperagem (A)</label>
-            <input type="text" id="manualAmperage" class="neu-input" placeholder="Ex: 32" value="32" oninput="calculateFromVA()">
-          </div>
-        </div>
+      <div class="manual-subgrid">
         <div class="form-group">
-          <label for="manualPhases">Fases da Rede</label>
-          <select id="manualPhases" class="neu-input" onchange="calculateFromVA()">
-            <option value="1">Monofásico / Bifásico (V x A)</option>
-            <option value="3">Trifásico (V x A x √3 x 0,92)</option>
+          <label for="manualVoltage">Voltagem (V)</label>
+          <select id="manualVoltage" class="neu-input" onchange="recalculateManualKw()">
+            <option value="220" selected>220 V</option>
+            <option value="127">127 V</option>
+            <option value="110">110 V</option>
+            <option value="380">380 V</option>
           </select>
         </div>
+
+        <div class="form-group">
+          <label for="manualAmperage">Amperagem (A)</label>
+          <input type="text" id="manualAmperage" class="neu-input" placeholder="Ex: 32" value="32" oninput="recalculateManualKw()">
+        </div>
+      </div>
+
+      <div class="form-group" style="margin-top: 10px;">
+        <label for="manualChargerPower">Potência Calculada (kW)</label>
+        <input type="text" id="manualChargerPower" class="neu-input" placeholder="Ex: 7,0" oninput="calculate()">
       </div>
     </div>
   </div>
@@ -866,6 +856,7 @@
     if (savedAlertMinutes) document.getElementById('alertMinutes').value = savedAlertMinutes;
 
     validateAndUpdateBattery();
+    recalculateManualKw();
     calculate();
   }
 
@@ -895,40 +886,20 @@
     const manualGroup = document.getElementById('manualPowerGroup');
     if (select.value === 'custom') {
       manualGroup.style.display = 'block';
+      recalculateManualKw();
     } else {
       manualGroup.style.display = 'none';
     }
   }
 
-  function onManualInputModeChange() {
-    const mode = document.getElementById('manualInputMode').value;
-    const kwBlock = document.getElementById('manualKwBlock');
-    const vaBlock = document.getElementById('manualVaBlock');
-
-    if (mode === 'kw') {
-      kwBlock.style.display = 'block';
-      vaBlock.style.display = 'none';
-    } else {
-      kwBlock.style.display = 'none';
-      vaBlock.style.display = 'block';
-      calculateFromVA();
+  function recalculateManualKw() {
+    const voltage = parseInputValue('manualVoltage');
+    const amperage = parseInputValue('manualAmperage');
+    
+    if (voltage > 0 && amperage > 0) {
+      const computedKw = (voltage * amperage) / 1000;
+      document.getElementById('manualChargerPower').value = computedKw.toFixed(2).replace('.', ',');
     }
-    calculate();
-  }
-
-  function calculateFromVA() {
-    const v = parseInputValue('manualVoltage');
-    const a = parseInputValue('manualAmperage');
-    const phases = parseInt(document.getElementById('manualPhases').value) || 1;
-
-    let computedKw = 0;
-    if (phases === 3) {
-      computedKw = (v * a * Math.sqrt(3) * 0.92) / 1000;
-    } else {
-      computedKw = (v * a) / 1000;
-    }
-
-    document.getElementById('manualChargerPower').value = computedKw.toFixed(2).replace('.', ',');
     calculate();
   }
 
@@ -1052,7 +1023,6 @@
 
     let maxAllowed = isDC ? (car.maxDC !== undefined ? car.maxDC : 50) : (car.maxAC !== undefined ? car.maxAC : 6.6);
     let effectivePower = chargerPower;
-    let isLimited = false;
 
     const warningElem = document.getElementById('limitWarning');
 
@@ -1066,7 +1036,6 @@
       effectivePower = 0;
     } else if (effectivePower > maxAllowed && maxAllowed > 0) {
       effectivePower = maxAllowed;
-      isLimited = true;
       warningElem.style.display = 'block';
       warningElem.textContent = `⚠️ Potência limitada pelo inversor de bordo do veículo (${car.modelo} ${car.versao}) a ${effectivePower} kW em ${isDC ? 'DC' : 'AC'}.`;
     } else {
@@ -1257,8 +1226,10 @@
 
     if (powerSelectVal === 'custom') {
       chargerPower = parseInputValue('manualChargerPower');
+      const voltage = parseInputValue('manualVoltage');
+      const ampVal = parseInputValue('manualAmperage');
       isDC = document.getElementById('manualType').value === 'dc';
-      powerStr = `${chargerPower.toString().replace('.', ',')} kW (${isDC ? 'DC Manual' : 'AC Manual'})`;
+      powerStr = `${chargerPower.toString().replace('.', ',')} kW (${voltage}V / ${ampVal}A) (${isDC ? 'DC Manual' : 'AC Manual'})`;
     } else {
       chargerPower = parseFloat(powerSelectVal) || 0;
       let selectedOption = powerSelect.options[powerSelect.selectedIndex];
@@ -1356,4 +1327,4 @@ EletroCalc — Calculadora de Carregamento Veicular
 </script>
 
 </body>
-  </html>
+</html>
