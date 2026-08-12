@@ -51,7 +51,7 @@
 
     .neu-container {
       width: 100%;
-      max-width: 460px;
+      max-width: 480px;
       background: var(--bg-color);
       border-radius: 30px;
       padding: 28px;
@@ -127,6 +127,53 @@
     select.neu-input option {
       background-color: #0f172a;
       color: var(--text-main);
+    }
+
+    /* CARD DE FICHA TÉCNICA */
+    .neu-info-card {
+      background: var(--bg-color);
+      border-radius: 20px;
+      padding: 18px 20px;
+      margin-bottom: 22px;
+      box-shadow: inset 3px 3px 6px var(--shadow-dark),
+                  inset -3px -3px 6px var(--shadow-light);
+    }
+
+    .neu-info-title {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--primary);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .neu-info-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px 14px;
+    }
+
+    .neu-info-item {
+      font-size: 0.8rem;
+      line-height: 1.35;
+    }
+
+    .neu-info-item span.label {
+      color: var(--text-muted);
+      display: block;
+      font-weight: 600;
+      font-size: 0.7rem;
+      text-transform: uppercase;
+    }
+
+    .neu-info-item span.val {
+      color: var(--text-main);
+      font-weight: 700;
+      font-size: 0.85rem;
     }
 
     .manual-power-container {
@@ -378,6 +425,23 @@
     <select id="modelSelect" class="neu-input" onchange="calculate()"></select>
   </div>
 
+  <!-- NOVO CAMPO DESCRITIVO: FICHA TÉCNICA DO VEÍCULO SELECIONADO -->
+  <div class="neu-info-card" id="carSpecCard">
+    <div class="neu-info-title">📋 Ficha Técnica do Veículo</div>
+    <div class="neu-info-grid">
+      <div class="neu-info-item"><span class="label">Marca</span><span class="val" id="specMarca">-</span></div>
+      <div class="neu-info-item"><span class="label">Modelo</span><span class="val" id="specModelo">-</span></div>
+      <div class="neu-info-item"><span class="label">Versão</span><span class="val" id="specVersao">-</span></div>
+      <div class="neu-info-item"><span class="label">Tecnologia</span><span class="val" id="specTecnologia">-</span></div>
+      <div class="neu-info-item"><span class="label">Motor Combustão</span><span class="val" id="specMotor">-</span></div>
+      <div class="neu-info-item"><span class="label">Potência Total</span><span class="val" id="specPotencia">-</span></div>
+      <div class="neu-info-item"><span class="label">Bateria</span><span class="val" id="specBateria">-</span></div>
+      <div class="neu-info-item"><span class="label">Autonomia Elétrica</span><span class="val" id="specAutonomiaEletrica">-</span></div>
+      <div class="neu-info-item"><span class="label">Autonomia Total</span><span class="val" id="specAutonomiaTotal">-</span></div>
+      <div class="neu-info-item"><span class="label">Tração</span><span class="val" id="specTracao">-</span></div>
+    </div>
+  </div>
+
   <div class="form-group">
     <div class="range-header">
       <span style="color: var(--text-muted);">Carga Atual</span>
@@ -442,7 +506,7 @@
     <div class="result-range">
       <div id="currentRangeDisplay">Autonomia com carga atual: 0 km</div>
       <div id="targetRangeDisplay">Autonomia com meta escolhida: 0 km</div>
-      <div class="result-range-inmetro">(Autonomia de acordo com o INMETRO)</div>
+      <div class="result-range-inmetro">(Autonomia de acordo com o INMETRO / fabricante)</div>
     </div>
   </div>
 
@@ -461,212 +525,206 @@
 </div>
 
 <script>
+  // BASE DE DADOS INTEGRADA FIELMENTE À PLANILHA AGOSTO/2026
   const evDatabase = [
     {
-      marca: "Audi",
-      modelos: [
-        { id: 36, modelo: "Q5 TFSIe (Híbrido PHEV)", kwh: 17.9, km100: 62, maxAC: 7.4, maxDC: 7.4 },
-        { id: 47, modelo: "Q8 e-tron 55 (100% EV)", kwh: 114.0, km100: 342, maxAC: 22.0, maxDC: 170 },
-        { id: 48, modelo: "Q4 e-tron (100% EV)", kwh: 82.0, km100: 380, maxAC: 11.0, maxDC: 135 },
-        { id: 49, modelo: "RS e-tron GT (100% EV)", kwh: 93.4, km100: 313, maxAC: 22.0, maxDC: 270 },
-        { id: 50, modelo: "Q6 e-tron (100% EV)", kwh: 100.0, km100: 410, maxAC: 11.0, maxDC: 270 }
+      "marca": "BYD",
+      "modelos": [
+        { "id": 1, "marca": "BYD", "modelo": "Dolphin Mini", "versao": "EV", "disp_name": "Dolphin Mini EV", "tecnologia": "BEV", "motor": "—", "potencia": "75 cv", "bateria": "38,0 kWh", "autonomia_eletrica": "281 km", "autonomia_total": "—", "tracao": "FWD", "kwh": 38.0, "km100": 281, "maxAC": 6.6, "maxDC": 40.0 },
+        { "id": 2, "marca": "BYD", "modelo": "Dolphin", "versao": "GS", "disp_name": "Dolphin GS", "tecnologia": "BEV", "motor": "—", "potencia": "95 cv", "bateria": "44,9 kWh", "autonomia_eletrica": "292 km", "autonomia_total": "—", "tracao": "FWD", "kwh": 44.9, "km100": 292, "maxAC": 6.6, "maxDC": 40.0 },
+        { "id": 3, "marca": "BYD", "modelo": "Dolphin", "versao": "Plus", "disp_name": "Dolphin Plus", "tecnologia": "BEV", "motor": "—", "potencia": "204 cv", "bateria": "60,4 kWh", "autonomia_eletrica": "429 km", "autonomia_total": "—", "tracao": "FWD", "kwh": 60.4, "km100": 429, "maxAC": 11.0, "maxDC": 80.0 },
+        { "id": 4, "marca": "BYD", "modelo": "Yuan Pro", "versao": "EV", "disp_name": "Yuan Pro EV", "tecnologia": "BEV", "motor": "—", "potencia": "177 cv", "bateria": "45,1 kWh", "autonomia_eletrica": "320 km", "autonomia_total": "—", "tracao": "FWD", "kwh": 45.1, "km100": 320, "maxAC": 6.6, "maxDC": 40.0 },
+        { "id": 5, "marca": "BYD", "modelo": "Seal", "versao": "EV", "disp_name": "Seal EV", "tecnologia": "BEV", "motor": "—", "potencia": "531 cv", "bateria": "82,5 kWh", "autonomia_eletrica": "372 km", "autonomia_total": "—", "tracao": "AWD", "kwh": 82.5, "km100": 372, "maxAC": 11.0, "maxDC": 150.0 },
+        { "id": 6, "marca": "BYD", "modelo": "Sealion 7", "versao": "EV", "disp_name": "Sealion 7 EV", "tecnologia": "BEV", "motor": "—", "potencia": "530 cv", "bateria": "82,56 kWh", "autonomia_eletrica": "~500 km", "autonomia_total": "—", "tracao": "AWD", "kwh": 82.56, "km100": 500, "maxAC": 11.0, "maxDC": 150.0 },
+        { "id": 7, "marca": "BYD", "modelo": "Tan", "versao": "EV", "disp_name": "Tan EV", "tecnologia": "BEV", "motor": "—", "potencia": "517 cv", "bateria": "108,8 kWh", "autonomia_eletrica": "435 km", "autonomia_total": "—", "tracao": "AWD", "kwh": 108.8, "km100": 435, "maxAC": 11.0, "maxDC": 150.0 },
+        { "id": 8, "marca": "BYD", "modelo": "King", "versao": "GL", "disp_name": "King GL", "tecnologia": "PHEV", "motor": "—", "potencia": "209 cv", "bateria": "não informado", "autonomia_eletrica": "80 km", "autonomia_total": "—", "tracao": "FWD", "kwh": 10.8, "km100": 80, "maxAC": 3.3, "maxDC": 3.3 },
+        { "id": 9, "marca": "BYD", "modelo": "King", "versao": "GS", "disp_name": "King GS", "tecnologia": "PHEV", "motor": "—", "potencia": "235 cv", "bateria": "não informado", "autonomia_eletrica": "80 km*", "autonomia_total": "—", "tracao": "FWD", "kwh": 18.3, "km100": 80, "maxAC": 6.6, "maxDC": 18.0 },
+        { "id": 10, "marca": "BYD", "modelo": "Song Pro", "versao": "GL", "disp_name": "Song Pro GL", "tecnologia": "PHEV Flex", "motor": "—", "potencia": "—", "bateria": "—", "autonomia_eletrica": "não informado", "autonomia_total": "—", "tracao": "FWD", "kwh": 12.9, "km100": 71, "maxAC": 3.3, "maxDC": 3.3 },
+        { "id": 11, "marca": "BYD", "modelo": "Song Pro", "versao": "GS", "disp_name": "Song Pro GS", "tecnologia": "PHEV Flex", "motor": "—", "potencia": "219 cv", "bateria": "não informado", "autonomia_eletrica": "72 km Inmetro", "autonomia_total": "—", "tracao": "FWD", "kwh": 18.3, "km100": 72, "maxAC": 3.3, "maxDC": 18.0 },
+        { "id": 12, "marca": "BYD", "modelo": "Song Plus", "versao": "DM-i", "disp_name": "Song Plus DM-i", "tecnologia": "PHEV", "motor": "—", "potencia": "245 cv", "bateria": "não informado", "autonomia_eletrica": "110 km", "autonomia_total": "—", "tracao": "FWD", "kwh": 18.3, "km100": 110, "maxAC": 3.3, "maxDC": 18.0 },
+        { "id": 13, "marca": "BYD", "modelo": "Song Plus Premium", "versao": "DM-i", "disp_name": "Song Plus Premium DM-i", "tecnologia": "PHEV", "motor": "—", "potencia": "324 cv", "bateria": "26,6 kWh", "autonomia_eletrica": "87 km", "autonomia_total": "—", "tracao": "AWD", "kwh": 26.6, "km100": 87, "maxAC": 6.6, "maxDC": 30.0 },
+        { "id": 14, "marca": "BYD", "modelo": "Shark", "versao": "GS", "disp_name": "Shark GS", "tecnologia": "PHEV", "motor": "—", "potencia": "437 cv", "bateria": "não informado", "autonomia_eletrica": "100 km", "autonomia_total": "—", "tracao": "AWD", "kwh": 29.6, "km100": 100, "maxAC": 6.6, "maxDC": 40.0 }
       ]
     },
     {
-      marca: "BMW",
-      modelos: [
-        { id: 11, modelo: "i4 eDrive40 (100% EV)", kwh: 80.7, km100: 422, maxAC: 11.0, maxDC: 205 },
-        { id: 29, modelo: "iX3 M Sport (100% EV)", kwh: 80.0, km100: 381, maxAC: 11.0, maxDC: 150 },
-        { id: 30, modelo: "330e M Sport (Híbrido PHEV)", kwh: 12.0, km100: 56, maxAC: 3.7, maxDC: 3.7 },
-        { id: 31, modelo: "X5 xDrive50e (Híbrido PHEV)", kwh: 25.7, km100: 90, maxAC: 7.4, maxDC: 7.4 },
-        { id: 43, modelo: "iX xDrive50 (100% EV)", kwh: 111.5, km100: 521, maxAC: 11.0, maxDC: 195 },
-        { id: 44, modelo: "iX1 xDrive30 (100% EV)", kwh: 66.5, km100: 303, maxAC: 22.0, maxDC: 130 },
-        { id: 45, modelo: "i7 xDrive60 (100% EV)", kwh: 101.7, km100: 479, maxAC: 11.0, maxDC: 195 },
-        { id: 46, modelo: "i5 eDrive40 (100% EV)", kwh: 81.2, km100: 390, maxAC: 22.0, maxDC: 205 },
-        { id: 101, modelo: "iX2 xDrive30 (100% EV)", kwh: 64.8, km100: 310, maxAC: 22.0, maxDC: 130 },
-        { id: 102, modelo: "XM (Híbrido PHEV)", kwh: 25.7, km100: 80, maxAC: 7.4, maxDC: 7.4 }
+      "marca": "Leapmotor",
+      "modelos": [
+        { "id": 15, "marca": "Leapmotor", "modelo": "B10", "versao": "BEV", "disp_name": "B10 BEV", "tecnologia": "BEV", "motor": "—", "potencia": "218 cv", "bateria": "56,2 kWh", "autonomia_eletrica": "288 km", "autonomia_total": "—", "tracao": "FWD", "kwh": 56.2, "km100": 288, "maxAC": 6.6, "maxDC": 80.0 },
+        { "id": 16, "marca": "Leapmotor", "modelo": "C10", "versao": "Elétrico", "disp_name": "C10 Elétrico", "tecnologia": "BEV", "motor": "—", "potencia": "218 cv", "bateria": "69,9 kWh", "autonomia_eletrica": "não informado", "autonomia_total": "—", "tracao": "FWD", "kwh": 69.9, "km100": 340, "maxAC": 11.0, "maxDC": 84.0 },
+        { "id": 17, "marca": "Leapmotor", "modelo": "C10", "versao": "Ultra-Híbrido", "disp_name": "C10 Ultra-Híbrido", "tecnologia": "REEV", "motor": "1.5 gerador", "potencia": "215 cv", "bateria": "28,4 kWh", "autonomia_eletrica": "não informado", "autonomia_total": "—", "tracao": "RWD", "kwh": 28.4, "km100": 140, "maxAC": 6.6, "maxDC": 35.0 }
       ]
     },
     {
-      marca: "BYD",
-      modelos: [
-        { id: 1, modelo: "Dolphin GS (100% EV)", kwh: 44.9, km100: 291, maxAC: 6.6, maxDC: 60 },
-        { id: 2, modelo: "Dolphin Mini (100% EV)", kwh: 38.8, km100: 280, maxAC: 6.6, maxDC: 40 },
-        { id: 113, modelo: "Dolphin SE (100% EV)", kwh: 30.0, km100: 220, maxAC: 3.3, maxDC: 30 },
-        { id: 3, modelo: "Dolphin Plus (100% EV)", kwh: 60.48, km100: 330, maxAC: 7.0, maxDC: 88 },
-        { id: 4, modelo: "Yuan Plus (100% EV)", kwh: 60.48, km100: 294, maxAC: 7.0, maxDC: 80 },
-        { id: 5, modelo: "Seal (100% EV)", kwh: 82.56, km100: 372, maxAC: 11.0, maxDC: 150 },
-        { id: 21, modelo: "Song Plus GS (Híbrido PHEV)", kwh: 18.3, km100: 105, maxAC: 3.3, maxDC: 18 },
-        { id: 114, modelo: "King GL (Híbrido PHEV)", kwh: 10.8, km100: 55, maxAC: 3.3, maxDC: 3.3 },
-        { id: 22, modelo: "King GS (Híbrido PHEV)", kwh: 18.3, km100: 100, maxAC: 6.6, maxDC: 18 },
-        { id: 23, modelo: "Tan EV (100% EV)", kwh: 108.8, km100: 430, maxAC: 11.0, maxDC: 170 },
-        { id: 37, modelo: "Han EV (100% EV)", kwh: 85.4, km100: 349, maxAC: 6.6, maxDC: 120 },
-        { id: 38, modelo: "Yuan Pro (100% EV)", kwh: 45.1, km100: 250, maxAC: 6.6, maxDC: 65 },
-        { id: 39, modelo: "Shark GS (Híbrido PHEV)", kwh: 29.6, km100: 100, maxAC: 6.6, maxDC: 40 },
-        { id: 82, modelo: "D9 MPV (100% EV)", kwh: 103.0, km100: 480, maxAC: 11.0, maxDC: 166 },
-        { id: 83, modelo: "Seagull / Dolphin Mini 30kWh", kwh: 30.0, km100: 220, maxAC: 3.3, maxDC: 30 },
-        { id: 84, modelo: "E2 (100% EV)", kwh: 43.2, km100: 300, maxAC: 6.6, maxDC: 50 },
-        { id: 85, modelo: "Song Pro PHEV", kwh: 18.3, km100: 100, maxAC: 3.3, maxDC: 18 },
-        { id: 86, modelo: "Qin Plus DM-i (Híbrido PHEV)", kwh: 8.3, km100: 50, maxAC: 3.3, maxDC: 3.3 },
-        { id: 87, modelo: "Frigate 07 (Híbrido PHEV)", kwh: 36.8, km100: 170, maxAC: 6.6, maxDC: 75 },
-        { id: 88, modelo: "Yangwang U8 (Híbrido EREV)", kwh: 49.05, km100: 180, maxAC: 6.6, maxDC: 110 },
-        { id: 89, modelo: "Yangwang U9 (100% EV)", kwh: 80.0, km100: 350, maxAC: 11.0, maxDC: 500 },
-        { id: 90, modelo: "Bao 5 / Leopard 5 (Híbrido PHEV)", kwh: 31.8, km100: 125, maxAC: 6.6, maxDC: 100 }
+      "marca": "Geely",
+      "modelos": [
+        { "id": 18, "marca": "Geely", "modelo": "EX2", "versao": "Pro", "disp_name": "EX2 Pro", "tecnologia": "BEV", "motor": "—", "potencia": "116 cv", "bateria": "39,4 kWh", "autonomia_eletrica": "288 km", "autonomia_total": "—", "tracao": "FWD", "kwh": 39.4, "km100": 288, "maxAC": 6.6, "maxDC": 40.0 },
+        { "id": 19, "marca": "Geely", "modelo": "EX2", "versao": "Max", "disp_name": "EX2 Max", "tecnologia": "BEV", "motor": "—", "potencia": "116 cv", "bateria": "39,4 kWh", "autonomia_eletrica": "288 km", "autonomia_total": "—", "tracao": "FWD", "kwh": 39.4, "km100": 288, "maxAC": 6.6, "maxDC": 40.0 },
+        { "id": 20, "marca": "Geely", "modelo": "EX5", "versao": "Pro", "disp_name": "EX5 Pro", "tecnologia": "BEV", "motor": "—", "potencia": "218 cv", "bateria": "60,22 kWh", "autonomia_eletrica": "400 km", "autonomia_total": "—", "tracao": "FWD", "kwh": 60.22, "km100": 400, "maxAC": 11.0, "maxDC": 80.0 },
+        { "id": 21, "marca": "Geely", "modelo": "EX5", "versao": "Max", "disp_name": "EX5 Max", "tecnologia": "BEV", "motor": "—", "potencia": "218 cv", "bateria": "60,22 kWh", "autonomia_eletrica": "400 km", "autonomia_total": "—", "tracao": "FWD", "kwh": 60.22, "km100": 400, "maxAC": 11.0, "maxDC": 80.0 },
+        { "id": 22, "marca": "Geely", "modelo": "EX5 EM-i", "versao": "Pro", "disp_name": "EX5 EM-i Pro", "tecnologia": "PHEV", "motor": "—", "potencia": "262 cv", "bateria": "18,4 kWh", "autonomia_eletrica": "65 km", "autonomia_total": "—", "tracao": "FWD", "kwh": 18.4, "km100": 65, "maxAC": 6.6, "maxDC": 18.0 },
+        { "id": 23, "marca": "Geely", "modelo": "EX5 EM-i", "versao": "Max", "disp_name": "EX5 EM-i Max", "tecnologia": "PHEV", "motor": "—", "potencia": "262 cv", "bateria": "18,4 kWh", "autonomia_eletrica": "65 km", "autonomia_total": "—", "tracao": "FWD", "kwh": 18.4, "km100": 65, "maxAC": 6.6, "maxDC": 18.0 },
+        { "id": 24, "marca": "Geely", "modelo": "EX5 EM-i", "versao": "Ultra", "disp_name": "EX5 EM-i Ultra", "tecnologia": "PHEV", "motor": "—", "potencia": "262 cv", "bateria": "29,8 kWh", "autonomia_eletrica": "112 km", "autonomia_total": "—", "tracao": "FWD", "kwh": 29.8, "km100": 112, "maxAC": 6.6, "maxDC": 30.0 }
       ]
     },
     {
-      marca: "Caoa Chery",
-      modelos: [
-        { id: 35, modelo: "Tiggo 8 Pro Plug-in Hybrid", kwh: 19.2, km100: 77, maxAC: 6.6, maxDC: 6.6 },
-        { id: 80, modelo: "iCar (100% EV)", kwh: 30.8, km100: 197, maxAC: 3.3, maxDC: 20 },
-        { id: 81, modelo: "Tiggo 7 Pro Hybrid (PHEV)", kwh: 19.2, km100: 75, maxAC: 6.6, maxDC: 6.6 }
+      "marca": "GWM",
+      "modelos": [
+        { "id": 25, "marca": "GWM", "modelo": "Ora 03", "versao": "Skin", "disp_name": "Ora 03 Skin", "tecnologia": "BEV", "motor": "—", "potencia": "171 cv", "bateria": "48 kWh", "autonomia_eletrica": "312 km", "autonomia_total": "—", "tracao": "FWD", "kwh": 48.0, "km100": 312, "maxAC": 6.6, "maxDC": 64.0 },
+        { "id": 26, "marca": "GWM", "modelo": "Ora 03", "versao": "BEV58", "disp_name": "Ora 03 BEV58", "tecnologia": "BEV", "motor": "—", "potencia": "171 cv", "bateria": "58 kWh", "autonomia_eletrica": "315 km", "autonomia_total": "—", "tracao": "FWD", "kwh": 58.0, "km100": 315, "maxAC": 6.6, "maxDC": 67.0 },
+        { "id": 27, "marca": "GWM", "modelo": "Ora 03", "versao": "GT", "disp_name": "Ora 03 GT", "tecnologia": "BEV", "motor": "—", "potencia": "171 cv", "bateria": "63 kWh", "autonomia_eletrica": "397 km", "autonomia_total": "—", "tracao": "FWD", "kwh": 63.0, "km100": 397, "maxAC": 11.0, "maxDC": 67.0 },
+        { "id": 28, "marca": "GWM", "modelo": "Haval H6", "versao": "HEV ONE", "disp_name": "Haval H6 HEV ONE", "tecnologia": "HEV", "motor": "—", "potencia": "243 cv", "bateria": "—", "autonomia_eletrica": "—", "autonomia_total": "—", "tracao": "FWD", "kwh": 0, "km100": 0, "maxAC": 0, "maxDC": 0 },
+        { "id": 29, "marca": "GWM", "modelo": "Haval H6", "versao": "HEV2", "disp_name": "Haval H6 HEV2", "tecnologia": "HEV", "motor": "—", "potencia": "243 cv", "bateria": "—", "autonomia_eletrica": "—", "autonomia_total": "—", "tracao": "FWD", "kwh": 0, "km100": 0, "maxAC": 0, "maxDC": 0 },
+        { "id": 30, "marca": "GWM", "modelo": "Haval H6", "versao": "PHEV19", "disp_name": "Haval H6 PHEV19", "tecnologia": "PHEV", "motor": "—", "potencia": "326 cv", "bateria": "19,0 kWh", "autonomia_eletrica": "110 km", "autonomia_total": "—", "tracao": "AWD", "kwh": 19.0, "km100": 110, "maxAC": 6.6, "maxDC": 33.0 },
+        { "id": 31, "marca": "GWM", "modelo": "Haval H6", "versao": "PHEV35", "disp_name": "Haval H6 PHEV35", "tecnologia": "PHEV", "motor": "—", "potencia": "393 cv", "bateria": "34,0 kWh", "autonomia_eletrica": "170 km", "autonomia_total": "—", "tracao": "AWD", "kwh": 34.0, "km100": 170, "maxAC": 6.6, "maxDC": 48.0 },
+        { "id": 32, "marca": "GWM", "modelo": "Haval H6 GT", "versao": "PHEV", "disp_name": "Haval H6 GT PHEV", "tecnologia": "PHEV", "motor": "—", "potencia": "393 cv", "bateria": "34,0 kWh", "autonomia_eletrica": "170 km", "autonomia_total": "—", "tracao": "AWD", "kwh": 34.0, "km100": 170, "maxAC": 6.6, "maxDC": 48.0 },
+        { "id": 33, "marca": "GWM", "modelo": "Tank 300", "versao": "PHEV", "disp_name": "Tank 300 PHEV", "tecnologia": "PHEV", "motor": "—", "potencia": "394 cv", "bateria": "37,1 kWh", "autonomia_eletrica": "105 km", "autonomia_total": "—", "tracao": "AWD", "kwh": 37.1, "km100": 105, "maxAC": 6.6, "maxDC": 50.0 }
       ]
     },
     {
-      marca: "Chevrolet",
-      modelos: [
-        { id: 64, modelo: "Bolt EV (100% EV)", kwh: 66.0, km100: 259, maxAC: 11.0, maxDC: 55 },
-        { id: 65, modelo: "Bolt EUV (100% EV)", kwh: 65.0, km100: 247, maxAC: 11.0, maxDC: 55 },
-        { id: 66, modelo: "Blazer EV RS (100% EV)", kwh: 85.0, km100: 381, maxAC: 22.0, maxDC: 190 },
-        { id: 67, modelo: "Equinox EV (100% EV)", kwh: 85.0, km100: 380, maxAC: 11.5, maxDC: 150 }
+      "marca": "GAC/AION",
+      "modelos": [
+        { "id": 34, "marca": "GAC/AION", "modelo": "Aion UT", "versao": "Premium", "disp_name": "Aion UT Premium", "tecnologia": "BEV", "motor": "—", "potencia": "204 cv", "bateria": "44,12 kWh", "autonomia_eletrica": "253 km", "autonomia_total": "—", "tracao": "FWD", "kwh": 44.12, "km100": 253, "maxAC": 6.6, "maxDC": 40.0 },
+        { "id": 35, "marca": "GAC/AION", "modelo": "Aion UT", "versao": "Elite", "disp_name": "Aion UT Elite", "tecnologia": "BEV", "motor": "—", "potencia": "204 cv", "bateria": "60 kWh", "autonomia_eletrica": "310 km", "autonomia_total": "—", "tracao": "FWD", "kwh": 60.0, "km100": 310, "maxAC": 11.0, "maxDC": 80.0 },
+        { "id": 36, "marca": "GAC/AION", "modelo": "Aion ES", "versao": "Plus", "disp_name": "Aion ES Plus", "tecnologia": "BEV", "motor": "—", "potencia": "136 cv", "bateria": "55,2 kWh", "autonomia_eletrica": "314 km", "autonomia_total": "—", "tracao": "FWD", "kwh": 55.2, "km100": 314, "maxAC": 6.6, "maxDC": 80.0 },
+        { "id": 37, "marca": "GAC/AION", "modelo": "Aion Y", "versao": "Premium", "disp_name": "Aion Y Premium", "tecnologia": "BEV", "motor": "—", "potencia": "204 cv", "bateria": "63,2 kWh", "autonomia_eletrica": "316 km", "autonomia_total": "—", "tracao": "FWD", "kwh": 63.2, "km100": 316, "maxAC": 11.0, "maxDC": 80.0 },
+        { "id": 38, "marca": "GAC/AION", "modelo": "Aion V", "versao": "Elite", "disp_name": "Aion V Elite", "tecnologia": "BEV", "motor": "—", "potencia": "204 cv", "bateria": "75,3 kWh", "autonomia_eletrica": "392 km", "autonomia_total": "—", "tracao": "FWD", "kwh": 75.3, "km100": 392, "maxAC": 11.0, "maxDC": 80.0 },
+        { "id": 39, "marca": "GAC/AION", "modelo": "Hyptec HT", "versao": "Elite", "disp_name": "Hyptec HT Elite", "tecnologia": "BEV", "motor": "—", "potencia": "245 cv", "bateria": "72,7 kWh", "autonomia_eletrica": "362 km", "autonomia_total": "—", "tracao": "RWD", "kwh": 72.7, "km100": 362, "maxAC": 11.0, "maxDC": 80.0 }
       ]
     },
     {
-      marca: "Citroën / Peugeot / Fiat",
-      modelos: [
-        { id: 60, modelo: "Peugeot e-208 GT (100% EV)", kwh: 50.0, km100: 220, maxAC: 7.4, maxDC: 100 },
-        { id: 61, modelo: "Peugeot e-2008 (100% EV)", kwh: 54.0, km100: 261, maxAC: 11.0, maxDC: 100 },
-        { id: 62, modelo: "Citroën ë-C4 (100% EV)", kwh: 50.0, km100: 230, maxAC: 7.4, maxDC: 100 },
-        { id: 63, modelo: "Fiat 500e (100% EV)", kwh: 42.0, km100: 227, maxAC: 11.0, maxDC: 85 }
+      "marca": "OMODA",
+      "modelos": [
+        { "id": 40, "marca": "OMODA", "modelo": "Omoda 5", "versao": "HEV Luxury", "disp_name": "Omoda 5 HEV Luxury", "tecnologia": "HEV", "motor": "—", "potencia": "235 cv", "bateria": "1,83 kWh", "autonomia_eletrica": "—", "autonomia_total": "—", "tracao": "FWD", "kwh": 0, "km100": 0, "maxAC": 0, "maxDC": 0 },
+        { "id": 41, "marca": "OMODA", "modelo": "Omoda 5", "versao": "HEV Prestige", "disp_name": "Omoda 5 HEV Prestige", "tecnologia": "HEV", "motor": "—", "potencia": "235 cv", "bateria": "1,83 kWh", "autonomia_eletrica": "—", "autonomia_total": "—", "tracao": "FWD", "kwh": 0, "km100": 0, "maxAC": 0, "maxDC": 0 }
       ]
     },
     {
-      marca: "Ford",
-      modelos: [
-        { id: 68, modelo: "Mustang Mach-E GT (100% EV)", kwh: 91.0, km100: 379, maxAC: 11.0, maxDC: 150 },
-        { id: 69, modelo: "E-Transit (100% EV)", kwh: 68.0, km100: 210, maxAC: 11.0, maxDC: 115 }
+      "marca": "JAECOO",
+      "modelos": [
+        { "id": 42, "marca": "JAECOO", "modelo": "Jaecoo 7", "versao": "SHS Prestige", "disp_name": "Jaecoo 7 SHS Prestige", "tecnologia": "PHEV", "motor": "—", "potencia": "339 cv", "bateria": "18,3 kWh", "autonomia_eletrica": "79 km", "autonomia_total": "—", "tracao": "FWD", "kwh": 18.3, "km100": 79, "maxAC": 6.6, "maxDC": 18.0 }
       ]
     },
     {
-      marca: "Geely / Zeekr / Geometry",
-      modelos: [
-        { id: 16, modelo: "Zeekr 001 (Standard)", kwh: 86.0, km100: 400, maxAC: 22.0, maxDC: 200 },
-        { id: 17, modelo: "Zeekr 001 (Long Range)", kwh: 100.0, km100: 450, maxAC: 22.0, maxDC: 360 },
-        { id: 18, modelo: "Zeekr X", kwh: 66.0, km100: 332, maxAC: 22.0, maxDC: 150 },
-        { id: 19, modelo: "Geometry E", kwh: 39.4, km100: 280, maxAC: 6.6, maxDC: 50 },
-        { id: 91, modelo: "Zeekr 009 MPV", kwh: 116.0, km100: 500, maxAC: 22.0, maxDC: 300 },
-        { id: 92, modelo: "Zeekr 007 Sedan", kwh: 75.0, km100: 420, maxAC: 11.0, maxDC: 500 },
-        { id: 93, modelo: "Geely Radar RD6 Pickup", kwh: 86.0, km100: 350, maxAC: 11.0, maxDC: 120 },
-        { id: 94, modelo: "Geely Galaxy L7 PHEV", kwh: 18.7, km100: 90, maxAC: 6.6, maxDC: 38 },
-        { id: 95, modelo: "Geely Galaxy E8 EV", kwh: 76.0, km100: 410, maxAC: 11.0, maxDC: 360 },
-        { id: 96, modelo: "Geometry C", kwh: 70.0, km100: 360, maxAC: 11.0, maxDC: 75 },
-        { id: 97, modelo: "Geometry A", kwh: 53.0, km100: 310, maxAC: 6.6, maxDC: 60 }
+      "marca": "CAOA Chery",
+      "modelos": [
+        { "id": 43, "marca": "CAOA Chery", "modelo": "Tiggo 5X", "versao": "Pro Max Drive", "disp_name": "Tiggo 5X Pro Max Drive", "tecnologia": "HEV", "motor": "—", "potencia": "—", "bateria": "—", "autonomia_eletrica": "—", "autonomia_total": "—", "tracao": "FWD", "kwh": 0, "km100": 0, "maxAC": 0, "maxDC": 0 },
+        { "id": 44, "marca": "CAOA Chery", "modelo": "Tiggo 7", "versao": "Pro Hybrid Max Drive", "disp_name": "Tiggo 7 Pro Hybrid Max Drive", "tecnologia": "HEV", "motor": "—", "potencia": "157 cv", "bateria": "—", "autonomia_eletrica": "—", "autonomia_total": "—", "tracao": "FWD", "kwh": 0, "km100": 0, "maxAC": 0, "maxDC": 0 }
       ]
     },
     {
-      marca: "GWM (Great Wall Motors)",
-      modelos: [
-        { id: 6, modelo: "Ora 03 Skin (100% EV)", kwh: 48.0, km100: 232, maxAC: 11.0, maxDC: 64 },
-        { id: 7, modelo: "Ora 03 GT (100% EV)", kwh: 63.0, km100: 319, maxAC: 11.0, maxDC: 67 },
-        { id: 24, modelo: "Haval H6 Premium PHEV19 (Híbrido)", kwh: 19.0, km100: 110, maxAC: 6.6, maxDC: 33 },
-        { id: 25, modelo: "Haval H6 GT PHEV34 (Híbrido)", kwh: 34.0, km100: 170, maxAC: 6.6, maxDC: 48 },
-        { id: 103, modelo: "Wey 05 PHEV (Híbrido)", kwh: 39.7, km100: 146, maxAC: 11.0, maxDC: 50 },
-        { id: 104, modelo: "Tank 300 PHEV (Híbrido)", kwh: 37.1, km100: 105, maxAC: 6.6, maxDC: 50 }
+      "marca": "FIAT",
+      "modelos": [
+        { "id": 45, "marca": "FIAT", "modelo": "Pulse", "versao": "Audace Hybrid", "disp_name": "Pulse Audace Hybrid", "tecnologia": "MHEV", "motor": "—", "potencia": "125 cv", "bateria": "—", "autonomia_eletrica": "—", "autonomia_total": "—", "tracao": "FWD", "kwh": 0, "km100": 0, "maxAC": 0, "maxDC": 0 },
+        { "id": 46, "marca": "FIAT", "modelo": "Pulse", "versao": "Impetus Hybrid", "disp_name": "Pulse Impetus Hybrid", "tecnologia": "MHEV", "motor": "—", "potencia": "125 cv", "bateria": "—", "autonomia_eletrica": "—", "autonomia_total": "—", "tracao": "FWD", "kwh": 0, "km100": 0, "maxAC": 0, "maxDC": 0 },
+        { "id": 47, "marca": "FIAT", "modelo": "Fastback", "versao": "Audace Hybrid", "disp_name": "Fastback Audace Hybrid", "tecnologia": "MHEV", "motor": "—", "potencia": "125 cv", "bateria": "—", "autonomia_eletrica": "—", "autonomia_total": "—", "tracao": "FWD", "kwh": 0, "km100": 0, "maxAC": 0, "maxDC": 0 },
+        { "id": 48, "marca": "FIAT", "modelo": "Fastback", "versao": "Impetus Hybrid", "disp_name": "Fastback Impetus Hybrid", "tecnologia": "MHEV", "motor": "—", "potencia": "125 cv", "bateria": "—", "autonomia_eletrica": "—", "autonomia_total": "—", "tracao": "FWD", "kwh": 0, "km100": 0, "maxAC": 0, "maxDC": 0 }
       ]
     },
     {
-      marca: "Hyundai / KIA",
-      modelos: [
-        { id: 73, modelo: "KIA EV6 GT-Line (100% EV)", kwh: 77.4, km100: 380, maxAC: 11.0, maxDC: 233 },
-        { id: 75, modelo: "Hyundai Ioniq 5 (100% EV)", kwh: 77.4, km100: 380, maxAC: 11.0, maxDC: 233 },
-        { id: 76, modelo: "Hyundai Kona EV (100% EV)", kwh: 64.8, km100: 305, maxAC: 11.0, maxDC: 100 },
-        { id: 105, modelo: "KIA EV9 (100% EV)", kwh: 99.8, km100: 440, maxAC: 11.0, maxDC: 210 },
-        { id: 106, modelo: "Hyundai Ioniq 6 (100% EV)", kwh: 77.4, km100: 420, maxAC: 11.0, maxDC: 233 }
+      "marca": "TOYOTA",
+      "modelos": [
+        { "id": 49, "marca": "TOYOTA", "modelo": "Corolla", "versao": "Hybrid", "disp_name": "Corolla Hybrid", "tecnologia": "HEV", "motor": "—", "potencia": "—", "bateria": "—", "autonomia_eletrica": "—", "autonomia_total": "—", "tracao": "FWD", "kwh": 0, "km100": 0, "maxAC": 0, "maxDC": 0 },
+        { "id": 50, "marca": "TOYOTA", "modelo": "Corolla Cross", "versao": "XRX Hybrid", "disp_name": "Corolla Cross XRX Hybrid", "tecnologia": "HEV", "motor": "—", "potencia": "101 cv*", "bateria": "—", "autonomia_eletrica": "—", "autonomia_total": "—", "tracao": "FWD", "kwh": 0, "km100": 0, "maxAC": 0, "maxDC": 0 },
+        { "id": 51, "marca": "TOYOTA", "modelo": "RAV4", "versao": "SX Connect", "disp_name": "RAV4 SX Connect", "tecnologia": "HEV", "motor": "—", "potencia": "222 cv", "bateria": "—", "autonomia_eletrica": "—", "autonomia_total": "—", "tracao": "AWD", "kwh": 0, "km100": 0, "maxAC": 0, "maxDC": 0 },
+        { "id": 52, "marca": "TOYOTA", "modelo": "RAV4", "versao": "XSE", "disp_name": "RAV4 XSE", "tecnologia": "PHEV", "motor": "—", "potencia": "306 cv", "bateria": "18,1 kWh", "autonomia_eletrica": "75 km", "autonomia_total": "—", "tracao": "AWD", "kwh": 18.1, "km100": 75, "maxAC": 6.6, "maxDC": 18.0 },
+        { "id": 53, "marca": "TOYOTA", "modelo": "bZ4X", "versao": "AWD", "disp_name": "bZ4X AWD", "tecnologia": "BEV", "motor": "—", "potencia": "343 cv", "bateria": "73,1 kWh", "autonomia_eletrica": "361 km", "autonomia_total": "—", "tracao": "AWD", "kwh": 73.1, "km100": 361, "maxAC": 11.0, "maxDC": 80.0 }
       ]
     },
     {
-      marca: "Jaecoo / Omoda / Chery Group",
-      modelos: [
-        { id: 14, modelo: "Omoda E5 (100% EV)", kwh: 61.0, km100: 310, maxAC: 9.9, maxDC: 80 },
-        { id: 15, modelo: "Jaecoo J6 EV (100% EV)", kwh: 65.7, km100: 320, maxAC: 11.0, maxDC: 85 },
-        { id: 79, modelo: "Jaecoo J7 PHEV (Híbrido)", kwh: 18.3, km100: 90, maxAC: 6.6, maxDC: 40 },
-        { id: 98, modelo: "Omoda 5 PHEV (Híbrido)", kwh: 18.3, km100: 85, maxAC: 6.6, maxDC: 40 },
-        { id: 99, modelo: "Jaecoo J8 PHEV (Híbrido)", kwh: 34.4, km100: 140, maxAC: 6.6, maxDC: 70 },
-        { id: 100, modelo: "Omoda 7 PHEV (Híbrido)", kwh: 19.4, km100: 95, maxAC: 6.6, maxDC: 45 }
+      "marca": "HONDA",
+      "modelos": [
+        { "id": 54, "marca": "HONDA", "modelo": "Civic", "versao": "Advanced Hybrid", "disp_name": "Civic Advanced Hybrid", "tecnologia": "HEV", "motor": "—", "potencia": "—", "bateria": "~1 kWh", "autonomia_eletrica": "—", "autonomia_total": "—", "tracao": "FWD", "kwh": 0, "km100": 0, "maxAC": 0, "maxDC": 0 },
+        { "id": 55, "marca": "HONDA", "modelo": "Accord", "versao": "Advanced Hybrid", "disp_name": "Accord Advanced Hybrid", "tecnologia": "HEV", "motor": "—", "potencia": "204 cv", "bateria": "1,05 kWh", "autonomia_eletrica": "—", "autonomia_total": "—", "tracao": "FWD", "kwh": 0, "km100": 0, "maxAC": 0, "maxDC": 0 },
+        { "id": 56, "marca": "HONDA", "modelo": "CR-V", "versao": "Advanced Hybrid", "disp_name": "CR-V Advanced Hybrid", "tecnologia": "HEV", "motor": "—", "potencia": "—", "bateria": "—", "autonomia_eletrica": "—", "autonomia_total": "—", "tracao": "AWD", "kwh": 0, "km100": 0, "maxAC": 0, "maxDC": 0 }
       ]
     },
     {
-      marca: "Jaguar / Land Rover",
-      modelos: [
-        { id: 107, modelo: "Jaguar I-Pace EV400 (100% EV)", kwh: 90.0, km100: 362, maxAC: 11.0, maxDC: 100 },
-        { id: 108, modelo: "Range Rover Sport PHEV", kwh: 38.2, km100: 113, maxAC: 7.2, maxDC: 50 },
-        { id: 109, modelo: "Range Rover Velar PHEV", kwh: 19.2, km100: 53, maxAC: 7.0, maxDC: 32 },
-        { id: 110, modelo: "Defender PHEV P400e", kwh: 19.2, km100: 43, maxAC: 7.0, maxDC: 32 }
+      "marca": "HYUNDAI",
+      "modelos": [
+        { "id": 57, "marca": "HYUNDAI", "modelo": "Kona", "versao": "Hybrid Ultimate", "disp_name": "Kona Hybrid Ultimate", "tecnologia": "HEV", "motor": "—", "potencia": "141 cv", "bateria": "1,32 kWh", "autonomia_eletrica": "—", "autonomia_total": "—", "tracao": "FWD", "kwh": 0, "km100": 0, "maxAC": 0, "maxDC": 0 },
+        { "id": 58, "marca": "HYUNDAI", "modelo": "Kona", "versao": "Hybrid Signature", "disp_name": "Kona Hybrid Signature", "tecnologia": "HEV", "motor": "—", "potencia": "141 cv", "bateria": "1,32 kWh", "autonomia_eletrica": "—", "autonomia_total": "—", "tracao": "FWD", "kwh": 0, "km100": 0, "maxAC": 0, "maxDC": 0 },
+        { "id": 59, "marca": "HYUNDAI", "modelo": "Ioniq 5", "versao": "—", "disp_name": "Ioniq 5", "tecnologia": "BEV", "motor": "—", "potencia": "325 cv", "bateria": "84 kWh", "autonomia_eletrica": "374 km", "autonomia_total": "—", "tracao": "AWD", "kwh": 84.0, "km100": 374, "maxAC": 11.0, "maxDC": 150.0 }
       ]
     },
     {
-      marca: "Leapmotor",
-      modelos: [
-        { id: 12, modelo: "T03 (100% EV)", kwh: 37.3, km100: 265, maxAC: 6.6, maxDC: 45 },
-        { id: 13, modelo: "C10 (100% EV)", kwh: 69.9, km100: 340, maxAC: 11.0, maxDC: 84 },
-        { id: 115, modelo: "C10 REEV (Híbrido EREV)", kwh: 28.4, km100: 140, maxAC: 6.6, maxDC: 35 },
-        { id: 20, modelo: "B10 (100% EV)", kwh: 56.2, km100: 288, maxAC: 11.0, maxDC: 70 }
+      "marca": "KIA",
+      "modelos": [
+        { "id": 60, "marca": "KIA", "modelo": "Niro", "versao": "EX", "disp_name": "Niro EX", "tecnologia": "HEV", "motor": "—", "potencia": "141 cv", "bateria": "—", "autonomia_eletrica": "—", "autonomia_total": "—", "tracao": "FWD", "kwh": 0, "km100": 0, "maxAC": 0, "maxDC": 0 },
+        { "id": 61, "marca": "KIA", "modelo": "Niro", "versao": "SX", "disp_name": "Niro SX", "tecnologia": "HEV", "motor": "—", "potencia": "141 cv", "bateria": "—", "autonomia_eletrica": "—", "autonomia_total": "—", "tracao": "FWD", "kwh": 0, "km100": 0, "maxAC": 0, "maxDC": 0 },
+        { "id": 62, "marca": "KIA", "modelo": "EV5", "versao": "Land", "disp_name": "EV5 Land", "tecnologia": "BEV", "motor": "—", "potencia": "217 cv", "bateria": "88,16 kWh", "autonomia_eletrica": "406 km", "autonomia_total": "—", "tracao": "FWD", "kwh": 88.16, "km100": 406, "maxAC": 11.0, "maxDC": 150.0 },
+        { "id": 63, "marca": "KIA", "modelo": "EV9", "versao": "GTL", "disp_name": "EV9 GTL", "tecnologia": "BEV", "motor": "—", "potencia": "384 cv", "bateria": "99 kWh", "autonomia_eletrica": "436 km", "autonomia_total": "—", "tracao": "AWD", "kwh": 99.0, "km100": 436, "maxAC": 11.0, "maxDC": 150.0 }
       ]
     },
     {
-      marca: "Mercedes-Benz",
-      modelos: [
-        { id: 52, modelo: "EQA 250 (100% EV)", kwh: 66.5, km100: 290, maxAC: 11.0, maxDC: 100 },
-        { id: 53, modelo: "EQB 350 4MATIC (100% EV)", kwh: 66.5, km100: 270, maxAC: 11.0, maxDC: 100 },
-        { id: 54, modelo: "EQE 300 SUV (100% EV)", kwh: 89.0, km100: 367, maxAC: 11.0, maxDC: 170 },
-        { id: 55, modelo: "EQS 450+ (100% EV)", kwh: 107.8, km100: 450, maxAC: 11.0, maxDC: 200 },
-        { id: 56, modelo: "GLC 300 e 4MATIC (Híbrido PHEV)", kwh: 31.2, km100: 100, maxAC: 11.0, maxDC: 60 }
+      "marca": "MG",
+      "modelos": [
+        { "id": 64, "marca": "MG", "modelo": "MG4", "versao": "Urban Comfort", "disp_name": "MG4 Urban Comfort", "tecnologia": "BEV", "motor": "—", "potencia": "150 cv", "bateria": "43 kWh", "autonomia_eletrica": "299 km", "autonomia_total": "—", "tracao": "RWD", "kwh": 43.0, "km100": 299, "maxAC": 6.6, "maxDC": 40.0 },
+        { "id": 65, "marca": "MG", "modelo": "MG4", "versao": "Urban Luxury", "disp_name": "MG4 Urban Luxury (43 kWh)", "tecnologia": "BEV", "motor": "—", "potencia": "150 cv", "bateria": "43 kWh", "autonomia_eletrica": "299 km", "autonomia_total": "—", "tracao": "RWD", "kwh": 43.0, "km100": 299, "maxAC": 6.6, "maxDC": 40.0 },
+        { "id": 66, "marca": "MG", "modelo": "MG4", "versao": "Urban Luxury", "disp_name": "MG4 Urban Luxury (54 kWh)", "tecnologia": "BEV", "motor": "—", "potencia": "160 cv", "bateria": "54 kWh", "autonomia_eletrica": "358 km", "autonomia_total": "—", "tracao": "RWD", "kwh": 54.0, "km100": 358, "maxAC": 6.6, "maxDC": 80.0 },
+        { "id": 67, "marca": "MG", "modelo": "MG4", "versao": "Luxury", "disp_name": "MG4 Luxury", "tecnologia": "BEV", "motor": "—", "potencia": "204 cv", "bateria": "64 kWh", "autonomia_eletrica": "364 km", "autonomia_total": "—", "tracao": "RWD", "kwh": 64.0, "km100": 364, "maxAC": 11.0, "maxDC": 80.0 }
       ]
     },
     {
-      marca: "Mini",
-      modelos: [
-        { id: 77, modelo: "Mini Cooper SE (100% EV)", kwh: 32.6, km100: 161, maxAC: 11.0, maxDC: 50 },
-        { id: 78, modelo: "Mini Countryman SE ALL4 (100% EV)", kwh: 66.4, km100: 320, maxAC: 22.0, maxDC: 130 },
-        { id: 111, modelo: "Mini Aceman SE (100% EV)", kwh: 54.2, km100: 300, maxAC: 11.0, maxDC: 95 }
+      "marca": "RENAULT",
+      "modelos": [
+        { "id": 68, "marca": "RENAULT", "modelo": "Kwid E-Tech", "versao": "E-Tech", "disp_name": "Kwid E-Tech", "tecnologia": "BEV", "motor": "—", "potencia": "65 cv", "bateria": "26,8 kWh", "autonomia_eletrica": "180 km", "autonomia_total": "—", "tracao": "FWD", "kwh": 26.8, "km100": 180, "maxAC": 6.6, "maxDC": 40.0 },
+        { "id": 69, "marca": "RENAULT", "modelo": "Megane E-Tech", "versao": "E-Tech", "disp_name": "Megane E-Tech", "tecnologia": "BEV", "motor": "—", "potencia": "218 cv", "bateria": "60 kWh", "autonomia_eletrica": "248 km", "autonomia_total": "—", "tracao": "FWD", "kwh": 60.0, "km100": 248, "maxAC": 11.0, "maxDC": 80.0 }
       ]
     },
     {
-      marca: "Nissan",
-      modelos: [
-        { id: 71, modelo: "Leaf Tekna (100% EV)", kwh: 40.0, km100: 192, maxAC: 6.6, maxDC: 50 },
-        { id: 72, modelo: "Ariya Evolve (100% EV)", kwh: 87.0, km100: 400, maxAC: 22.0, maxDC: 130 }
+      "marca": "VOLVO",
+      "modelos": [
+        { "id": 70, "marca": "VOLVO", "modelo": "EX30", "versao": "Plus", "disp_name": "EX30 Plus", "tecnologia": "BEV", "motor": "—", "potencia": "272 cv", "bateria": "51 kWh", "autonomia_eletrica": "250 km", "autonomia_total": "—", "tracao": "RWD", "kwh": 51.0, "km100": 250, "maxAC": 6.6, "maxDC": 80.0 },
+        { "id": 71, "marca": "VOLVO", "modelo": "EX30", "versao": "Ultra Twin Motor", "disp_name": "EX30 Ultra Twin Motor", "tecnologia": "BEV", "motor": "—", "potencia": "428 cv", "bateria": "69 kWh", "autonomia_eletrica": "316 km", "autonomia_total": "—", "tracao": "AWD", "kwh": 69.0, "km100": 316, "maxAC": 11.0, "maxDC": 80.0 },
+        { "id": 72, "marca": "VOLVO", "modelo": "EX30", "versao": "Cross Country", "disp_name": "EX30 Cross Country", "tecnologia": "BEV", "motor": "—", "potencia": "428 cv", "bateria": "69 kWh", "autonomia_eletrica": "327 km", "autonomia_total": "—", "tracao": "AWD", "kwh": 69.0, "km100": 327, "maxAC": 11.0, "maxDC": 80.0 }
       ]
     },
     {
-      marca: "Porsche",
-      modelos: [
-        { id: 32, modelo: "Taycan 4S (100% EV)", kwh: 89.0, km100: 380, maxAC: 22.0, maxDC: 270 },
-        { id: 33, modelo: "Cayenne E-Hybrid (Híbrido PHEV)", kwh: 25.9, km100: 70, maxAC: 11.0, maxDC: 11.0 },
-        { id: 34, modelo: "Panamera E-Hybrid (Híbrido PHEV)", kwh: 25.9, km100: 75, maxAC: 11.0, maxDC: 11.0 },
-        { id: 51, modelo: "Macan EV Turbo (100% EV)", kwh: 100.0, km100: 430, maxAC: 11.0, maxDC: 270 }
+      "marca": "CHEVROLET",
+      "modelos": [
+        { "id": 73, "marca": "CHEVROLET", "modelo": "Spark EUV", "versao": "41,9 kWh", "disp_name": "Spark EUV 41,9 kWh", "tecnologia": "BEV", "motor": "—", "potencia": "102 cv", "bateria": "41,9 kWh", "autonomia_eletrica": "260 km", "autonomia_total": "—", "tracao": "FWD", "kwh": 41.9, "km100": 260, "maxAC": 6.6, "maxDC": 40.0 },
+        { "id": 74, "marca": "CHEVROLET", "modelo": "Equinox EV", "versao": "85 kWh", "disp_name": "Equinox EV 85 kWh", "tecnologia": "BEV", "motor": "—", "potencia": "292 cv", "bateria": "85 kWh", "autonomia_eletrica": "442 km", "autonomia_total": "—", "tracao": "FWD", "kwh": 85.0, "km100": 442, "maxAC": 11.0, "maxDC": 150.0 }
       ]
     },
     {
-      marca: "Renault",
-      modelos: [
-        { id: 10, modelo: "Kwid E-Tech (100% EV)", kwh: 26.8, km100: 185, maxAC: 7.4, maxDC: 30 },
-        { id: 57, modelo: "Megane E-Tech (100% EV)", kwh: 60.0, km100: 337, maxAC: 22.0, maxDC: 130 },
-        { id: 58, modelo: "Kangoo E-Tech (100% EV)", kwh: 45.0, km100: 210, maxAC: 22.0, maxDC: 80 },
-        { id: 59, modelo: "Zoe E-Tech (100% EV)", kwh: 52.0, km100: 247, maxAC: 22.0, maxDC: 50 },
-        { id: 112, modelo: "Renault 5 E-Tech (100% EV)", kwh: 52.0, km100: 300, maxAC: 11.0, maxDC: 100 }
+      "marca": "SUZUKI",
+      "modelos": [
+        { "id": 75, "marca": "SUZUKI", "modelo": "e-Vitara", "versao": "—", "disp_name": "e-Vitara", "tecnologia": "BEV", "motor": "—", "potencia": "184 cv", "bateria": "61 kWh", "autonomia_eletrica": "293 km", "autonomia_total": "—", "tracao": "AWD", "kwh": 61.0, "km100": 293, "maxAC": 11.0, "maxDC": 80.0 }
       ]
     },
     {
-      marca: "Volvo",
-      modelos: [
-        { id: 8, modelo: "EX30 Core/Plus (100% EV)", kwh: 51.0, km100: 250, maxAC: 11.0, maxDC: 134 },
-        { id: 9, modelo: "EX30 Extended Range (100% EV)", kwh: 69.0, km100: 338, maxAC: 22.0, maxDC: 153 },
-        { id: 26, modelo: "XC60 Recharge (Híbrido PHEV)", kwh: 18.8, km100: 78, maxAC: 6.4, maxDC: 6.4 },
-        { id: 27, modelo: "XC90 Recharge (Híbrido PHEV)", kwh: 18.8, km100: 71, maxAC: 6.4, maxDC: 6.4 },
-        { id: 28, modelo: "EX90 (100% EV)", kwh: 111.0, km100: 450, maxAC: 11.0, maxDC: 250 },
-        { id: 40, modelo: "C40 Recharge (100% EV)", kwh: 78.0, km100: 385, maxAC: 11.0, maxDC: 150 },
-        { id: 41, modelo: "XC40 Recharge (100% EV)", kwh: 69.0, km100: 305, maxAC: 11.0, maxDC: 130 }
+      "marca": "JETOUR",
+      "modelos": [
+        { "id": 76, "marca": "JETOUR", "modelo": "T1", "versao": "PHEV", "disp_name": "T1 PHEV", "tecnologia": "PHEV", "motor": "—", "potencia": "315 cv", "bateria": "26,7 kWh", "autonomia_eletrica": "88 km", "autonomia_total": "—", "tracao": "AWD", "kwh": 26.7, "km100": 88, "maxAC": 6.6, "maxDC": 30.0 },
+        { "id": 77, "marca": "JETOUR", "modelo": "T2", "versao": "PHEV", "disp_name": "T2 PHEV", "tecnologia": "PHEV", "motor": "—", "potencia": "339 cv", "bateria": "26,7 kWh", "autonomia_eletrica": "75 km", "autonomia_total": "—", "tracao": "AWD", "kwh": 26.7, "km100": 75, "maxAC": 6.6, "maxDC": 30.0 }
+      ]
+    },
+    {
+      "marca": "DENZA",
+      "modelos": [
+        { "id": 78, "marca": "DENZA", "modelo": "B5", "versao": "—", "disp_name": "B5", "tecnologia": "PHEV", "motor": "—", "potencia": "677 cv", "bateria": "31,8 kWh", "autonomia_eletrica": "74 km", "autonomia_total": "—", "tracao": "AWD", "kwh": 31.8, "km100": 74, "maxAC": 6.6, "maxDC": 30.0 },
+        { "id": 79, "marca": "DENZA", "modelo": "Z9 GT", "versao": "—", "disp_name": "Z9 GT", "tecnologia": "BEV", "motor": "—", "potencia": "965 cv", "bateria": "100 kWh", "autonomia_eletrica": "440 km", "autonomia_total": "—", "tracao": "AWD", "kwh": 100.0, "km100": 440, "maxAC": 11.0, "maxDC": 150.0 }
+      ]
+    },
+    {
+      "marca": "AVATR",
+      "modelos": [
+        { "id": 80, "marca": "AVATR", "modelo": "11", "versao": "5 lugares", "disp_name": "11 (5 lugares)", "tecnologia": "BEV", "motor": "—", "potencia": "585 cv", "bateria": "116 kWh", "autonomia_eletrica": "550 km", "autonomia_total": "—", "tracao": "AWD", "kwh": 116.0, "km100": 550, "maxAC": 11.0, "maxDC": 150.0 },
+        { "id": 81, "marca": "AVATR", "modelo": "11", "versao": "4 lugares", "disp_name": "11 (4 lugares)", "tecnologia": "BEV", "motor": "—", "potencia": "585 cv", "bateria": "116 kWh", "autonomia_eletrica": "550 km", "autonomia_total": "—", "tracao": "AWD", "kwh": 116.0, "km100": 550, "maxAC": 11.0, "maxDC": 150.0 }
+      ]
+    },
+    {
+      "marca": "LEXUS",
+      "modelos": [
+        { "id": 82, "marca": "LEXUS", "modelo": "ES", "versao": "350h", "disp_name": "ES 350h", "tecnologia": "HEV", "motor": "—", "potencia": "247 cv", "bateria": "Li-ion 251,6 V", "autonomia_eletrica": "—", "autonomia_total": "—", "tracao": "FWD", "kwh": 0, "km100": 0, "maxAC": 0, "maxDC": 0 }
+      ]
+    },
+    {
+      "marca": "PEUGEOT",
+      "modelos": [
+        { "id": 83, "marca": "PEUGEOT", "modelo": "e-2008", "versao": "—", "disp_name": "e-2008", "tecnologia": "BEV", "motor": "—", "potencia": "—", "bateria": "54 kWh", "autonomia_eletrica": "261 km", "autonomia_total": "—", "tracao": "FWD", "kwh": 54.0, "km100": 261, "maxAC": 11.0, "maxDC": 100.0 },
+        { "id": 84, "marca": "PEUGEOT", "modelo": "e-208", "versao": "—", "disp_name": "e-208", "tecnologia": "BEV", "motor": "—", "potencia": "—", "bateria": "50 kWh", "autonomia_eletrica": "220 km", "autonomia_total": "—", "tracao": "FWD", "kwh": 50.0, "km100": 220, "maxAC": 7.4, "maxDC": 100.0 },
+        { "id": 85, "marca": "PEUGEOT", "modelo": "e-Expert", "versao": "—", "disp_name": "e-Expert", "tecnologia": "BEV", "motor": "—", "potencia": "—", "bateria": "75 kWh", "autonomia_eletrica": "230 km", "autonomia_total": "—", "tracao": "FWD", "kwh": 75.0, "km100": 230, "maxAC": 11.0, "maxDC": 100.0 }
       ]
     }
   ];
@@ -728,12 +786,12 @@
     modelSelect.innerHTML = '';
 
     const brandData = evDatabase.find(b => b.marca === brandName) || evDatabase[0];
-    brandData.modelos.sort((a, b) => a.modelo.localeCompare(b.modelo));
+    brandData.modelos.sort((a, b) => a.disp_name.localeCompare(b.disp_name));
 
     brandData.modelos.forEach(car => {
       const option = document.createElement('option');
       option.value = car.id;
-      option.textContent = `${car.modelo} (${car.kwh} kWh)`;
+      option.textContent = `${car.disp_name} (${car.tecnologia})`;
       modelSelect.appendChild(option);
     });
   }
@@ -821,11 +879,27 @@
     return parseFloat(valStr) || 0;
   }
 
+  function updateCarSpecCard(car) {
+    document.getElementById('specMarca').textContent = car.marca || '—';
+    document.getElementById('specModelo').textContent = car.modelo || '—';
+    document.getElementById('specVersao').textContent = car.versao || '—';
+    document.getElementById('specTecnologia').textContent = car.tecnologia || '—';
+    document.getElementById('specMotor').textContent = car.motor || '—';
+    document.getElementById('specPotencia').textContent = car.potencia || '—';
+    document.getElementById('specBateria').textContent = car.bateria || '—';
+    document.getElementById('specAutonomiaEletrica').textContent = car.autonomia_eletrica || '—';
+    document.getElementById('specAutonomiaTotal').textContent = car.autonomia_total || '—';
+    document.getElementById('specTracao').textContent = car.tracao || '—';
+  }
+
   function calculate() {
     const allCars = getAllCarsFlat();
     const selectedId = parseInt(document.getElementById('modelSelect').value);
     const car = allCars.find(c => c.id === selectedId) || allCars[0];
     
+    // Atualiza a ficha técnica descritiva
+    updateCarSpecCard(car);
+
     const currentPct = parseFloat(document.getElementById('currentBattery').value);
     const targetPct = parseFloat(document.getElementById('targetBattery').value);
     const pricePerKwh = parseInputValue('pricePerKwh');
@@ -861,23 +935,26 @@
     let effectivePower = chargerPower;
     let isLimited = false;
 
-    if (effectivePower > maxAllowed) {
+    if (effectivePower > maxAllowed && maxAllowed > 0) {
       effectivePower = maxAllowed;
       isLimited = true;
     }
 
     const warningElem = document.getElementById('limitWarning');
-    if (isLimited && chargerPower > 0) {
+    if (car.kwh === 0) {
+      warningElem.style.display = 'block';
+      warningElem.textContent = `ℹ️ Veículo HEV/MHEV não plugável ou bateria externa não informada.`;
+    } else if (isLimited && chargerPower > 0) {
       warningElem.style.display = 'block';
       warningElem.textContent = `⚠️ Potência limitada pelo veículo a ${effectivePower} kW (${isDC ? 'DC' : 'AC'}).`;
     } else {
       warningElem.style.display = 'none';
     }
 
-    document.getElementById('totalCostDisplay').textContent = `R$ ${totalCost.toFixed(2).replace('.', ',')}`;
-    document.getElementById('kwhNeededDisplay').textContent = `Energia necessária: ${neededKwh.toFixed(1)} kWh`;
+    document.getElementById('totalCostDisplay').textContent = car.kwh > 0 ? `R$ ${totalCost.toFixed(2).replace('.', ',')}` : "R$ 0,00";
+    document.getElementById('kwhNeededDisplay').textContent = car.kwh > 0 ? `Energia necessária: ${neededKwh.toFixed(1)} kWh` : "Bateria não plugável";
 
-    if (effectivePower > 0 && diffPct > 0) {
+    if (effectivePower > 0 && diffPct > 0 && car.kwh > 0) {
       const totalHours = neededKwh / effectivePower;
       totalEstimatedSeconds = Math.round(totalHours * 3600);
       const hours = Math.floor(totalHours);
@@ -888,11 +965,15 @@
       document.getElementById('timeDisplay').textContent = `Tempo estimado: 0h 0min`;
     }
 
-    const currentKm = Math.round((car.km100 * currentPct) / 100);
-    const targetKm = Math.round((car.km100 * targetPct) / 100);
-
-    document.getElementById('currentRangeDisplay').textContent = `Autonomia com carga atual: ${currentKm} km`;
-    document.getElementById('targetRangeDisplay').textContent = `Autonomia com meta escolhida: ${targetKm} km`;
+    if (car.km100 > 0) {
+      const currentKm = Math.round((car.km100 * currentPct) / 100);
+      const targetKm = Math.round((car.km100 * targetPct) / 100);
+      document.getElementById('currentRangeDisplay').textContent = `Autonomia com carga atual: ${currentKm} km`;
+      document.getElementById('targetRangeDisplay').textContent = `Autonomia com meta escolhida: ${targetKm} km`;
+    } else {
+      document.getElementById('currentRangeDisplay').textContent = `Autonomia elétrica: ${car.autonomia_eletrica}`;
+      document.getElementById('targetRangeDisplay').textContent = `Autonomia total: ${car.autonomia_total}`;
+    }
 
     if (isTimerActive) {
       updateActiveTimerState();
@@ -901,7 +982,7 @@
 
   function startChargingTimer() {
     if (totalEstimatedSeconds <= 0) {
-      alert("Defina uma meta e selecione um carregador com potência válida para iniciar.");
+      alert("Defina uma meta e selecione um veículo/carregador com suporte a recarga elétrica.");
       return;
     }
 
@@ -976,12 +1057,7 @@
   }
 
   function triggerPreFinishAlert(minutes) {
-    let alertMsg = "";
-    if (minutes === 1) {
-      alertMsg = "⚠️ ATENÇÃO: Falta 1 minuto para o fim da simulação!";
-    } else {
-      alertMsg = `⚠️ ATENÇÃO: Faltam ${minutes} minutos para o fim da simulação!`;
-    }
+    let alertMsg = minutes === 1 ? "⚠️ ATENÇÃO: Falta 1 minuto para o fim da simulação!" : `⚠️ ATENÇÃO: Faltam ${minutes} minutos para o fim da simulação!`;
 
     document.getElementById('timerStatusMsg').textContent = alertMsg;
     document.getElementById('timerStatusMsg').style.color = "#f59e0b";
@@ -1078,7 +1154,7 @@
     let maxAllowed = isDC ? (car.maxDC || 50) : (car.maxAC || 6.6);
     let effectivePower = chargerPower;
 
-    if (effectivePower > maxAllowed) {
+    if (effectivePower > maxAllowed && maxAllowed > 0) {
       effectivePower = maxAllowed;
       powerStr += ` [Limitada pelo veículo a ${effectivePower} kW]`;
     }
@@ -1088,15 +1164,13 @@
     const totalCost = (neededKwh * pricePerKwh) + startFee;
 
     let timeStr = "0h 0min";
-    if (effectivePower > 0 && diffPct > 0) {
+    if (effectivePower > 0 && diffPct > 0 && car.kwh > 0) {
       const totalHours = neededKwh / effectivePower;
       const hours = Math.floor(totalHours);
       const minutes = Math.round((totalHours - hours) * 60);
       timeStr = `${hours}h ${minutes}min`;
     }
 
-    const currentKm = Math.round((car.km100 * currentPct) / 100);
-    const targetKm = Math.round((car.km100 * targetPct) / 100);
     const dataAtual = new Date().toLocaleDateString('pt-BR');
     const horaAtual = new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
 
@@ -1107,13 +1181,22 @@
 ==================================================
 Data: ${dataAtual} às ${horaAtual}
 
---- DADOS DO VEÍCULO E PARÂMETROS ---
-Marca / Modelo:           ${car.marcaGroup} ${car.modelo}
-Capacidade da Bateria:    ${car.kwh} kWh
+--- FICHA TÉCNICA DO VEÍCULO ---
+Marca:                    ${car.marca}
+Modelo:                   ${car.modelo}
+Versão:                   ${car.versao}
+Tecnologia:               ${car.tecnologia}
+Motor Combustão:          ${car.motor}
+Potência Total:           ${car.potencia}
+Bateria Especificada:     ${car.bateria}
+Autonomia Elétrica Spec:  ${car.autonomia_eletrica}
+Autonomia Total Spec:     ${car.autonomia_total}
+Tração:                   ${car.tracao}
+
+--- PARÂMETROS DA RECARGA ---
 Carga Atual:              ${currentPct}%
 Meta Desejada:            ${targetPct}%
 Potência Selecionada:     ${powerStr}
-Teto Máximo do Veículo:   AC: ${car.maxAC} kW | DC: ${car.maxDC} kW
 Valor por kWh:            R$ ${pricePerKwh.toFixed(2).replace('.', ',')}
 Taxa de Start / Início:   R$ ${startFee.toFixed(2).replace('.', ',')}
 Alerta Programado:        Faltando ${alertMin} min
@@ -1121,13 +1204,8 @@ Potência Compartilhada:   ${sharedText}
 
 --- RESUMO FINANCEIRO E TÉCNICO ---
 VALOR TOTAL ESTIMADO:     R$ ${totalCost.toFixed(2).replace('.', ',')}
-Energia Necessária:       ${neededKwh.toFixed(1)} kWh
+Energia Necessária:       ${car.kwh > 0 ? neededKwh.toFixed(1) + " kWh" : "N/A"}
 Tempo Estimado de Carga:  ${timeStr}
-
---- ESTIMATIVA DE AUTONOMIA (INMETRO) ---
-Autonomia Carga Atual:    ${currentKm} km
-Autonomia Meta Escolhida: ${targetKm} km
-Autonomia Total (100%):   ${car.km100} km
 ==================================================
 EletroCalc — Calculadora de Carregamento Veicular
 ==================================================`;
@@ -1135,7 +1213,7 @@ EletroCalc — Calculadora de Carregamento Veicular
     const blob = new Blob([txtContent], { type: 'text/plain;charset=utf-8' });
     const link = document.createElement('a');
     link.href = URL.createObjectURL(blob);
-    link.download = `EletroCalc_${car.marcaGroup}_${car.modelo}.txt`;
+    link.download = `EletroCalc_${car.marca}_${car.modelo}_${car.versao}.txt`;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
