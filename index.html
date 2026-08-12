@@ -72,7 +72,6 @@
       filter: drop-shadow(0px 4px 12px rgba(16, 185, 129, 0.25));
     }
 
-    /* Bloco de Instruções do Topo */
     .header-instructions {
       margin-top: 14px;
       padding: 12px 16px;
@@ -275,6 +274,13 @@
       margin-bottom: 6px;
     }
 
+    .power-limit-warning {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: #f59e0b;
+      margin-bottom: 8px;
+    }
+
     .result-range {
       font-size: 0.9rem;
       font-weight: 600;
@@ -391,13 +397,13 @@
   <div class="form-group">
     <label for="chargerPower">Potência do Carregador</label>
     <select id="chargerPower" class="neu-input" onchange="toggleManualPower(); calculate();">
-      <option value="3.7">3.7 kW (Portátil / 20A)</option>
-      <option value="7.4" selected>7.4 kW (Wallbox Monofásico)</option>
-      <option value="11">11.0 kW (Wallbox Trifásico)</option>
-      <option value="22">22.0 kW (AC Rápido)</option>
-      <option value="50">50.0 kW (DC Rápido)</option>
-      <option value="150">150.0 kW (DC Ultra-rápido)</option>
-      <option value="custom">Outra potência (Manual)</option>
+      <option value="3.7" data-type="ac">3.7 kW (Portátil / 20A)</option>
+      <option value="7.4" data-type="ac" selected>7.4 kW (Wallbox Monofásico)</option>
+      <option value="11" data-type="ac">11.0 kW (Wallbox Trifásico)</option>
+      <option value="22" data-type="ac">22.0 kW (AC Rápido)</option>
+      <option value="50" data-type="dc">50.0 kW (DC Rápido)</option>
+      <option value="150" data-type="dc">150.0 kW (DC Ultra-rápido)</option>
+      <option value="custom" data-type="ac">Outra potência (Manual)</option>
     </select>
     <div class="manual-power-container" id="manualPowerGroup">
       <input type="text" id="manualChargerPower" class="neu-input" placeholder="Digite a potência em kW (ex: 2,5)" oninput="calculate()">
@@ -432,6 +438,7 @@
     <div class="result-kwh" id="kwhNeededDisplay">Energia necessária: 0.0 kWh</div>
     <div class="divider"></div>
     <div class="result-time" id="timeDisplay">Tempo estimado: 0h 0min</div>
+    <div class="power-limit-warning" id="limitWarning" style="display:none;"></div>
     <div class="result-range">
       <div id="currentRangeDisplay">Autonomia com carga atual: 0 km</div>
       <div id="targetRangeDisplay">Autonomia com meta escolhida: 0 km</div>
@@ -458,172 +465,88 @@
     {
       marca: "BYD",
       modelos: [
-        { id: 1, modelo: "Dolphin GS (100% EV)", kwh: 44.9, km100: 291 },
-        { id: 2, modelo: "Dolphin Mini (100% EV)", kwh: 38.8, km100: 280 },
-        { id: 3, modelo: "Dolphin Plus (100% EV)", kwh: 60.48, km100: 330 },
-        { id: 4, modelo: "Yuan Plus (100% EV)", kwh: 60.48, km100: 294 },
-        { id: 5, modelo: "Seal (100% EV)", kwh: 82.56, km100: 372 },
-        { id: 21, modelo: "Song Plus GS (Híbrido PHEV)", kwh: 18.3, km100: 105 },
-        { id: 22, modelo: "King GS (Híbrido PHEV)", kwh: 18.3, km100: 100 },
-        { id: 23, modelo: "Tan EV (100% EV)", kwh: 108.8, km100: 430 },
-        { id: 37, modelo: "Han EV (100% EV)", kwh: 85.4, km100: 349 },
-        { id: 38, modelo: "Yuan Pro (100% EV)", kwh: 45.1, km100: 250 },
-        { id: 39, modelo: "Shark GS (Híbrido PHEV)", kwh: 29.6, km100: 100 }
+        { id: 1, modelo: "Dolphin GS (100% EV)", kwh: 44.9, km100: 291, maxAC: 6.6, maxDC: 60 },
+        { id: 2, modelo: "Dolphin Mini (100% EV)", kwh: 38.8, km100: 280, maxAC: 6.6, maxDC: 40 },
+        { id: 3, modelo: "Dolphin Plus (100% EV)", kwh: 60.48, km100: 330, maxAC: 7.0, maxDC: 88 },
+        { id: 4, modelo: "Yuan Plus (100% EV)", kwh: 60.48, km100: 294, maxAC: 7.0, maxDC: 80 },
+        { id: 5, modelo: "Seal (100% EV)", kwh: 82.56, km100: 372, maxAC: 11.0, maxDC: 150 },
+        { id: 21, modelo: "Song Plus GS (Híbrido PHEV)", kwh: 18.3, km100: 105, maxAC: 3.3, maxDC: 18 },
+        { id: 22, modelo: "King GS (Híbrido PHEV)", kwh: 18.3, km100: 100, maxAC: 6.6, maxDC: 18 },
+        { id: 23, modelo: "Tan EV (100% EV)", kwh: 108.8, km100: 430, maxAC: 11.0, maxDC: 170 },
+        { id: 37, modelo: "Han EV (100% EV)", kwh: 85.4, km100: 349, maxAC: 6.6, maxDC: 120 },
+        { id: 38, modelo: "Yuan Pro (100% EV)", kwh: 45.1, km100: 250, maxAC: 6.6, maxDC: 65 },
+        { id: 39, modelo: "Shark GS (Híbrido PHEV)", kwh: 29.6, km100: 100, maxAC: 6.6, maxDC: 40 },
+        { id: 82, modelo: "D9 MPV (100% EV)", kwh: 103.0, km100: 480, maxAC: 11.0, maxDC: 166 },
+        { id: 83, modelo: "Seagull / Dolphin Mini 30kWh", kwh: 30.0, km100: 220, maxAC: 3.3, maxDC: 30 },
+        { id: 84, modelo: "E2 (100% EV)", kwh: 43.2, km100: 300, maxAC: 6.6, maxDC: 50 },
+        { id: 85, modelo: "Song Pro PHEV", kwh: 18.3, km100: 100, maxAC: 3.3, maxDC: 18 },
+        { id: 86, modelo: "Qin Plus DM-i (Híbrido PHEV)", kwh: 8.3, km100: 50, maxAC: 3.3, maxDC: 3.3 },
+        { id: 87, modelo: "Frigate 07 (Híbrido PHEV)", kwh: 36.8, km100: 170, maxAC: 6.6, maxDC: 75 },
+        { id: 88, modelo: "Yangwang U8 (Híbrido EREV)", kwh: 49.05, km100: 180, maxAC: 6.6, maxDC: 110 },
+        { id: 89, modelo: "Yangwang U9 (100% EV)", kwh: 80.0, km100: 350, maxAC: 11.0, maxDC: 500 },
+        { id: 90, modelo: "Bao 5 / Leopard 5 (Híbrido PHEV)", kwh: 31.8, km100: 125, maxAC: 6.6, maxDC: 100 }
+      ]
+    },
+    {
+      marca: "Geely / Zeekr / Geometry",
+      modelos: [
+        { id: 16, modelo: "Zeekr 001 (Standard)", kwh: 86.0, km100: 400, maxAC: 22.0, maxDC: 200 },
+        { id: 17, modelo: "Zeekr 001 (Long Range)", kwh: 100.0, km100: 450, maxAC: 22.0, maxDC: 360 },
+        { id: 18, modelo: "Zeekr X", kwh: 66.0, km100: 332, maxAC: 22.0, maxDC: 150 },
+        { id: 19, modelo: "Geometry E", kwh: 39.4, km100: 280, maxAC: 6.6, maxDC: 50 },
+        { id: 91, modelo: "Zeekr 009 MPV", kwh: 116.0, km100: 500, maxAC: 22.0, maxDC: 300 },
+        { id: 92, modelo: "Zeekr 007 Sedan", kwh: 75.0, km100: 420, maxAC: 11.0, maxDC: 500 },
+        { id: 93, modelo: "Geely Radar RD6 Pickup", kwh: 86.0, km100: 350, maxAC: 11.0, maxDC: 120 },
+        { id: 94, modelo: "Geely Galaxy L7 PHEV", kwh: 18.7, km100: 90, maxAC: 6.6, maxDC: 38 },
+        { id: 95, modelo: "Geely Galaxy E8 EV", kwh: 76.0, km100: 410, maxAC: 11.0, maxDC: 360 },
+        { id: 96, modelo: "Geometry C", kwh: 70.0, km100: 360, maxAC: 11.0, maxDC: 75 },
+        { id: 97, modelo: "Geometry A", kwh: 53.0, km100: 310, maxAC: 6.6, maxDC: 60 }
+      ]
+    },
+    {
+      marca: "Omoda / Jaecoo / Chery Group",
+      modelos: [
+        { id: 14, modelo: "Omoda E5 (100% EV)", kwh: 61.0, km100: 310, maxAC: 9.9, maxDC: 80 },
+        { id: 15, modelo: "Jaecoo J6 EV (100% EV)", kwh: 65.7, km100: 320, maxAC: 11.0, maxDC: 85 },
+        { id: 79, modelo: "Jaecoo J7 PHEV (Híbrido)", kwh: 18.3, km100: 90, maxAC: 6.6, maxDC: 40 },
+        { id: 98, modelo: "Omoda 5 PHEV (Híbrido)", kwh: 18.3, km100: 85, maxAC: 6.6, maxDC: 40 },
+        { id: 99, modelo: "Jaecoo J8 PHEV (Híbrido)", kwh: 34.4, km100: 140, maxAC: 6.6, maxDC: 70 },
+        { id: 100, modelo: "Omoda 7 PHEV (Híbrido)", kwh: 19.4, km100: 95, maxAC: 6.6, maxDC: 45 }
       ]
     },
     {
       marca: "GWM",
       modelos: [
-        { id: 6, modelo: "Ora 03 Skin (100% EV)", kwh: 48.0, km100: 232 },
-        { id: 7, modelo: "Ora 03 GT (100% EV)", kwh: 63.0, km100: 319 },
-        { id: 24, modelo: "Haval H6 Premium PHEV19 (Híbrido)", kwh: 19.0, km100: 110 },
-        { id: 25, modelo: "Haval H6 GT PHEV34 (Híbrido)", kwh: 34.0, km100: 170 }
+        { id: 6, modelo: "Ora 03 Skin (100% EV)", kwh: 48.0, km100: 232, maxAC: 11.0, maxDC: 64 },
+        { id: 7, modelo: "Ora 03 GT (100% EV)", kwh: 63.0, km100: 319, maxAC: 11.0, maxDC: 67 },
+        { id: 24, modelo: "Haval H6 Premium PHEV19 (Híbrido)", kwh: 19.0, km100: 110, maxAC: 6.6, maxDC: 33 },
+        { id: 25, modelo: "Haval H6 GT PHEV34 (Híbrido)", kwh: 34.0, km100: 170, maxAC: 6.6, maxDC: 48 }
       ]
     },
     {
       marca: "Volvo",
       modelos: [
-        { id: 8, modelo: "EX30 Core/Plus (100% EV)", kwh: 51.0, km100: 250 },
-        { id: 9, modelo: "EX30 Extended Range (100% EV)", kwh: 69.0, km100: 338 },
-        { id: 26, modelo: "XC60 Recharge (Híbrido PHEV)", kwh: 18.8, km100: 78 },
-        { id: 27, modelo: "XC90 Recharge (Híbrido PHEV)", kwh: 18.8, km100: 71 },
-        { id: 28, modelo: "EX90 (100% EV)", kwh: 111.0, km100: 450 },
-        { id: 40, modelo: "C40 Recharge (100% EV)", kwh: 78.0, km100: 385 },
-        { id: 41, modelo: "XC40 Recharge (100% EV)", kwh: 69.0, km100: 305 },
-        { id: 42, modelo: "EM90 MPV (100% EV)", kwh: 116.0, km100: 500 }
+        { id: 8, modelo: "EX30 Core/Plus (100% EV)", kwh: 51.0, km100: 250, maxAC: 11.0, maxDC: 134 },
+        { id: 9, modelo: "EX30 Extended Range (100% EV)", kwh: 69.0, km100: 338, maxAC: 22.0, maxDC: 153 },
+        { id: 26, modelo: "XC60 Recharge (Híbrido PHEV)", kwh: 18.8, km100: 78, maxAC: 6.4, maxDC: 6.4 },
+        { id: 27, modelo: "XC90 Recharge (Híbrido PHEV)", kwh: 18.8, km100: 71, maxAC: 6.4, maxDC: 6.4 },
+        { id: 28, modelo: "EX90 (100% EV)", kwh: 111.0, km100: 450, maxAC: 11.0, maxDC: 250 }
       ]
     },
     {
       marca: "BMW",
       modelos: [
-        { id: 11, modelo: "i4 eDrive40 (100% EV)", kwh: 80.7, km100: 422 },
-        { id: 29, modelo: "iX3 M Sport (100% EV)", kwh: 80.0, km100: 381 },
-        { id: 30, modelo: "330e M Sport (Híbrido PHEV)", kwh: 12.0, km100: 56 },
-        { id: 31, modelo: "X5 xDrive50e (Híbrido PHEV)", kwh: 25.7, km100: 90 },
-        { id: 43, modelo: "iX xDrive50 (100% EV)", kwh: 111.5, km100: 521 },
-        { id: 44, modelo: "iX1 xDrive30 (100% EV)", kwh: 66.5, km100: 303 },
-        { id: 45, modelo: "i7 xDrive60 (100% EV)", kwh: 101.7, km100: 479 },
-        { id: 46, modelo: "i5 eDrive40 (100% EV)", kwh: 81.2, km100: 390 }
+        { id: 11, modelo: "i4 eDrive40 (100% EV)", kwh: 80.7, km100: 422, maxAC: 11.0, maxDC: 205 },
+        { id: 29, modelo: "iX3 M Sport (100% EV)", kwh: 80.0, km100: 381, maxAC: 11.0, maxDC: 150 },
+        { id: 30, modelo: "330e M Sport (Híbrido PHEV)", kwh: 12.0, km100: 56, maxAC: 3.7, maxDC: 3.7 },
+        { id: 31, modelo: "X5 xDrive50e (Híbrido PHEV)", kwh: 25.7, km100: 90, maxAC: 7.4, maxDC: 7.4 }
       ]
     },
     {
-      marca: "Audi",
+      marca: "Outros Populares",
       modelos: [
-        { id: 36, modelo: "Q5 TFSIe (Híbrido PHEV)", kwh: 17.9, km100: 62 },
-        { id: 47, modelo: "Q8 e-tron 55 (100% EV)", kwh: 114.0, km100: 342 },
-        { id: 48, modelo: "Q4 e-tron (100% EV)", kwh: 82.0, km100: 380 },
-        { id: 49, modelo: "RS e-tron GT (100% EV)", kwh: 93.4, km100: 313 },
-        { id: 50, modelo: "Q6 e-tron (100% EV)", kwh: 100.0, km100: 410 }
-      ]
-    },
-    {
-      marca: "Porsche",
-      modelos: [
-        { id: 32, modelo: "Taycan 4S (100% EV)", kwh: 89.0, km100: 380 },
-        { id: 33, modelo: "Cayenne E-Hybrid (Híbrido PHEV)", kwh: 25.9, km100: 70 },
-        { id: 34, modelo: "Panamera E-Hybrid (Híbrido PHEV)", kwh: 25.9, km100: 75 },
-        { id: 51, modelo: "Macan EV Turbo (100% EV)", kwh: 100.0, km100: 430 }
-      ]
-    },
-    {
-      marca: "Leapmotor",
-      modelos: [
-        { id: 12, modelo: "T03 (100% EV)", kwh: 37.3, km100: 265 },
-        { id: 13, modelo: "C10 (100% EV)", kwh: 69.9, km100: 340 },
-        { id: 20, modelo: "B10 (100% EV)", kwh: 56.2, km100: 288 }
-      ]
-    },
-    {
-      marca: "Mercedes-Benz",
-      modelos: [
-        { id: 52, modelo: "EQA 250 (100% EV)", kwh: 66.5, km100: 290 },
-        { id: 53, modelo: "EQB 350 4MATIC (100% EV)", kwh: 66.5, km100: 270 },
-        { id: 54, modelo: "EQE 300 SUV (100% EV)", kwh: 89.0, km100: 367 },
-        { id: 55, modelo: "EQS 450+ (100% EV)", kwh: 107.8, km100: 450 },
-        { id: 56, modelo: "GLC 300 e 4MATIC (Híbrido PHEV)", kwh: 31.2, km100: 100 }
-      ]
-    },
-    {
-      marca: "Renault / Alpine",
-      modelos: [
-        { id: 10, modelo: "Kwid E-Tech (100% EV)", kwh: 26.8, km100: 185 },
-        { id: 57, modelo: "Megane E-Tech (100% EV)", kwh: 60.0, km100: 337 },
-        { id: 58, modelo: "Kangoo E-Tech (100% EV)", kwh: 45.0, km100: 210 },
-        { id: 59, modelo: "Zoe E-Tech (100% EV)", kwh: 52.0, km100: 247 }
-      ]
-    },
-    {
-      marca: "Peugeot / Citroën / Stellantis",
-      modelos: [
-        { id: 60, modelo: "Peugeot e-208 GT (100% EV)", kwh: 50.0, km100: 220 },
-        { id: 61, modelo: "Peugeot e-2008 (100% EV)", kwh: 54.0, km100: 261 },
-        { id: 62, modelo: "Citroën ë-C4 (100% EV)", kwh: 50.0, km100: 230 },
-        { id: 63, modelo: "Fiat 500e (100% EV)", kwh: 42.0, km100: 227 }
-      ]
-    },
-    {
-      marca: "Chevrolet",
-      modelos: [
-        { id: 64, modelo: "Bolt EV (100% EV)", kwh: 66.0, km100: 259 },
-        { id: 65, modelo: "Bolt EUV (100% EV)", kwh: 65.0, km100: 247 },
-        { id: 66, modelo: "Blazer EV RS (100% EV)", kwh: 85.0, km100: 381 },
-        { id: 67, modelo: "Equinox EV (100% EV)", kwh: 85.0, km100: 380 }
-      ]
-    },
-    {
-      marca: "Ford",
-      modelos: [
-        { id: 68, modelo: "Mustang Mach-E GT (100% EV)", kwh: 91.0, km100: 379 },
-        { id: 69, modelo: "E-Transit (100% EV)", kwh: 68.0, km100: 210 },
-        { id: 70, modelo: "Maverick Hybrid (Híbrido HEV)", kwh: 1.1, km100: 0 }
-      ]
-    },
-    {
-      marca: "Nissan",
-      modelos: [
-        { id: 71, modelo: "Leaf Tekna (100% EV)", kwh: 40.0, km100: 192 },
-        { id: 72, modelo: "Ariya Evolve (100% EV)", kwh: 87.0, km100: 400 }
-      ]
-    },
-    {
-      marca: "KIA / Hyundai",
-      modelos: [
-        { id: 73, modelo: "KIA EV6 GT-Line (100% EV)", kwh: 77.4, km100: 380 },
-        { id: 74, modelo: "KIA Niro HEV (Híbrido)", kwh: 1.32, km100: 0 },
-        { id: 75, modelo: "Hyundai Ioniq 5 (100% EV)", kwh: 77.4, km100: 380 },
-        { id: 76, modelo: "Hyundai Kona EV (100% EV)", kwh: 64.8, km100: 305 }
-      ]
-    },
-    {
-      marca: "Mini",
-      modelos: [
-        { id: 77, modelo: "Mini Cooper SE (100% EV)", kwh: 32.6, km100: 161 },
-        { id: 78, modelo: "Mini Countryman SE ALL4 (100% EV)", kwh: 66.4, km100: 320 }
-      ]
-    },
-    {
-      marca: "Geely / Zeekr",
-      modelos: [
-        { id: 16, modelo: "Zeekr 001 (Standard)", kwh: 86.0, km100: 400 },
-        { id: 17, modelo: "Zeekr 001 (Long Range)", kwh: 100.0, km100: 450 },
-        { id: 18, modelo: "Zeekr X", kwh: 66.0, km100: 332 },
-        { id: 19, modelo: "Geometry E", kwh: 39.4, km100: 280 }
-      ]
-    },
-    {
-      marca: "Omoda / Jaecoo",
-      modelos: [
-        { id: 14, modelo: "Omoda E5 (100% EV)", kwh: 61.0, km100: 310 },
-        { id: 15, modelo: "Jaecoo J6 EV (100% EV)", kwh: 65.7, km100: 320 },
-        { id: 79, modelo: "Jaecoo J7 PHEV (Híbrido)", kwh: 18.3, km100: 90 }
-      ]
-    },
-    {
-      marca: "Caoa Chery",
-      modelos: [
-        { id: 35, modelo: "Tiggo 8 Pro Plug-in Hybrid", kwh: 19.2, km100: 77 },
-        { id: 80, modelo: "iCar (100% EV)", kwh: 30.8, km100: 197 },
-        { id: 81, modelo: "Tiggo 7 Pro Hybrid (PHEV)", kwh: 19.2, km100: 75 }
+        { id: 10, modelo: "Renault Kwid E-Tech (100% EV)", kwh: 26.8, km100: 185, maxAC: 7.4, maxDC: 30 },
+        { id: 35, modelo: "Caoa Chery Tiggo 8 Pro Plug-in Hybrid", kwh: 19.2, km100: 77, maxAC: 6.6, maxDC: 6.6 }
       ]
     }
   ];
@@ -788,13 +711,17 @@
     const pricePerKwh = parseInputValue('pricePerKwh');
     const startFee = parseInputValue('startFee');
     
-    let powerSelectVal = document.getElementById('chargerPower').value;
-    let power = 0;
+    const powerSelect = document.getElementById('chargerPower');
+    let powerSelectVal = powerSelect.value;
+    let selectedOption = powerSelect.options[powerSelect.selectedIndex];
+    let isDC = selectedOption ? selectedOption.getAttribute('data-type') === 'dc' : false;
+    
+    let chargerPower = 0;
 
     if (powerSelectVal === 'custom') {
-      power = parseInputValue('manualChargerPower');
+      chargerPower = parseInputValue('manualChargerPower');
     } else {
-      power = parseFloat(powerSelectVal) || 0;
+      chargerPower = parseFloat(powerSelectVal) || 0;
     }
 
     const isShared = document.getElementById('sharedPower').checked;
@@ -805,15 +732,33 @@
     const neededKwh = car.kwh * (diffPct / 100);
     const totalCost = (neededKwh * pricePerKwh) + startFee;
 
-    if (isShared && power > 0) {
-      power = power / 2;
+    if (isShared && chargerPower > 0) {
+      chargerPower = chargerPower / 2;
+    }
+
+    // APLICAÇÃO DO TETO MÁXIMO DE CARREGAMENTO DO VEÍCULO
+    let maxAllowed = isDC ? (car.maxDC || 50) : (car.maxAC || 6.6);
+    let effectivePower = chargerPower;
+    let isLimited = false;
+
+    if (effectivePower > maxAllowed) {
+      effectivePower = maxAllowed;
+      isLimited = true;
+    }
+
+    const warningElem = document.getElementById('limitWarning');
+    if (isLimited && chargerPower > 0) {
+      warningElem.style.display = 'block';
+      warningElem.textContent = `⚠️ Potência do carregador limitada a ${effectivePower} kW pelo veículo.`;
+    } else {
+      warningElem.style.display = 'none';
     }
 
     document.getElementById('totalCostDisplay').textContent = `R$ ${totalCost.toFixed(2).replace('.', ',')}`;
     document.getElementById('kwhNeededDisplay').textContent = `Energia necessária: ${neededKwh.toFixed(1)} kWh`;
 
-    if (power > 0 && diffPct > 0) {
-      const totalHours = neededKwh / power;
+    if (effectivePower > 0 && diffPct > 0) {
+      const totalHours = neededKwh / effectivePower;
       totalEstimatedSeconds = Math.round(totalHours * 3600);
       const hours = Math.floor(totalHours);
       const minutes = Math.round((totalHours - hours) * 60);
@@ -986,24 +931,36 @@
     const startFee = parseInputValue('startFee');
     const alertMin = parseInt(document.getElementById('alertMinutes').value) || 10;
     
-    let powerSelectVal = document.getElementById('chargerPower').value;
+    let powerSelect = document.getElementById('chargerPower');
+    let powerSelectVal = powerSelect.value;
+    let selectedOption = powerSelect.options[powerSelect.selectedIndex];
+    let isDC = selectedOption ? selectedOption.getAttribute('data-type') === 'dc' : false;
+    
+    let chargerPower = 0;
     let powerStr = "";
-    let powerNum = 0;
 
     if (powerSelectVal === 'custom') {
-      powerNum = parseInputValue('manualChargerPower');
-      powerStr = `${powerNum.toString().replace('.', ',')} kW (Manual)`;
+      chargerPower = parseInputValue('manualChargerPower');
+      powerStr = `${chargerPower.toString().replace('.', ',')} kW (Manual)`;
     } else {
-      powerNum = parseFloat(powerSelectVal) || 0;
-      powerStr = `${powerNum.toString().replace('.', ',')} kW`;
+      chargerPower = parseFloat(powerSelectVal) || 0;
+      powerStr = `${chargerPower.toString().replace('.', ',')} kW`;
     }
 
     const isShared = document.getElementById('sharedPower').checked;
     const sharedText = isShared ? "Sim" : "Não";
 
-    if (isShared && powerNum > 0) {
-      powerNum = powerNum / 2;
-      powerStr += ` (Efetiva: ${powerNum.toFixed(1).replace('.', ',')} kW)`;
+    if (isShared && chargerPower > 0) {
+      chargerPower = chargerPower / 2;
+      powerStr += ` (Efetiva Compartilhada: ${chargerPower.toFixed(1).replace('.', ',')} kW)`;
+    }
+
+    let maxAllowed = isDC ? (car.maxDC || 50) : (car.maxAC || 6.6);
+    let effectivePower = chargerPower;
+
+    if (effectivePower > maxAllowed) {
+      effectivePower = maxAllowed;
+      powerStr += ` [Limitada pelo veículo a ${effectivePower} kW]`;
     }
 
     const diffPct = Math.max(0, targetPct - currentPct);
@@ -1011,8 +968,8 @@
     const totalCost = (neededKwh * pricePerKwh) + startFee;
 
     let timeStr = "0h 0min";
-    if (powerNum > 0 && diffPct > 0) {
-      const totalHours = neededKwh / powerNum;
+    if (effectivePower > 0 && diffPct > 0) {
+      const totalHours = neededKwh / effectivePower;
       const hours = Math.floor(totalHours);
       const minutes = Math.round((totalHours - hours) * 60);
       timeStr = `${hours}h ${minutes}min`;
@@ -1035,7 +992,8 @@ Marca / Modelo:           ${car.marcaGroup} ${car.modelo}
 Capacidade da Bateria:    ${car.kwh} kWh
 Carga Atual:              ${currentPct}%
 Meta Desejada:            ${targetPct}%
-Potência do Carregador:   ${powerStr}
+Potência Selecionada:     ${powerStr}
+Teto Máximo do Veículo:   AC: ${car.maxAC} kW | DC: ${car.maxDC} kW
 Valor por kWh:            R$ ${pricePerKwh.toFixed(2).replace('.', ',')}
 Taxa de Start / Início:   R$ ${startFee.toFixed(2).replace('.', ',')}
 Alerta Programado:        Faltando ${alertMin} min
