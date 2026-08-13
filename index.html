@@ -34,6 +34,7 @@
       --text-time: #f59e0b;
       --text-range: #38bdf8;
       --danger: #ef4444;
+      --favorite-gold: #f59e0b;
     }
 
     * {
@@ -131,6 +132,32 @@
     select.neu-input option {
       background-color: #0f172a;
       color: var(--text-main);
+    }
+
+    .model-select-wrapper {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .btn-fav {
+      background: var(--bg-color);
+      border: none;
+      border-radius: 16px;
+      padding: 14px 16px;
+      font-size: 1.2rem;
+      cursor: pointer;
+      box-shadow: 4px 4px 8px var(--shadow-dark),
+                 -4px -4px 8px var(--shadow-light);
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .btn-fav:active {
+      box-shadow: inset 2px 2px 4px var(--shadow-dark),
+                  inset -2px -2px 4px var(--shadow-light);
     }
 
     .neu-info-card {
@@ -403,6 +430,10 @@
       box-shadow: 6px 6px 12px var(--shadow-dark),
                  -6px -6px 12px var(--shadow-light);
       transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
     }
 
     .btn-start-charge {
@@ -411,6 +442,10 @@
 
     .btn-cancel-charge {
       color: var(--danger);
+    }
+
+    .btn-maps {
+      color: #a855f7;
     }
 
     .btn-action:active {
@@ -456,7 +491,10 @@
 
   <div class="form-group">
     <label for="modelSelect">Modelo do Veículo</label>
-    <select id="modelSelect" class="neu-input" onchange="calculate()"></select>
+    <div class="model-select-wrapper">
+      <select id="modelSelect" class="neu-input" onchange="calculate()"></select>
+      <button class="btn-fav" id="favBtn" onclick="toggleFavorite()" title="Favoritar este veículo">☆</button>
+    </div>
   </div>
 
   <div class="neu-info-card" id="carSpecCard">
@@ -583,6 +621,7 @@
   <div class="button-group">
     <button class="btn-action btn-start-charge" id="startChargeBtn" onclick="startChargingTimer()">⚡ Iniciar a Simulação</button>
     <button class="btn-action btn-cancel-charge" id="cancelChargeBtn" style="display: none;" onclick="stopChargingTimer()">⏹ Interromper a Simulação</button>
+    <button class="btn-action btn-maps" onclick="openChargerFinder()">📍 Encontrar Eletropostos Próximos</button>
     <button class="btn-action" onclick="exportTXT()">Exportar Resumo (.txt)</button>
   </div>
 
@@ -861,14 +900,17 @@
       brandSelect.appendChild(option);
     });
 
+    const favCarId = parseInt(localStorage.getItem('eletrocalc_fav_car'));
     const savedCarId = parseInt(localStorage.getItem('eletrocalc_car'));
-    const allCars = getAllCarsFlat();
-    const savedCar = allCars.find(c => c.id === savedCarId);
+    const initialCarId = favCarId || savedCarId;
 
-    if (savedCar) {
-      brandSelect.value = savedCar.marcaGroup;
-      populateModels(savedCar.marcaGroup);
-      document.getElementById('modelSelect').value = savedCar.id;
+    const allCars = getAllCarsFlat();
+    const initialCar = allCars.find(c => c.id === initialCarId);
+
+    if (initialCar) {
+      brandSelect.value = initialCar.marcaGroup;
+      populateModels(initialCar.marcaGroup);
+      document.getElementById('modelSelect').value = initialCar.id;
     } else {
       populateModels(evDatabase[0].marca);
     }
@@ -890,13 +932,16 @@
     const modelSelect = document.getElementById('modelSelect');
     modelSelect.innerHTML = '';
 
+    const favCarId = parseInt(localStorage.getItem('eletrocalc_fav_car'));
+
     const brandData = evDatabase.find(b => b.marca === brandName) || evDatabase[0];
     brandData.modelos.sort((a, b) => a.disp_name.localeCompare(b.disp_name));
 
     brandData.modelos.forEach(car => {
       const option = document.createElement('option');
       option.value = car.id;
-      option.textContent = `${car.disp_name} (${car.tecnologia})`;
+      const isFav = car.id === favCarId;
+      option.textContent = `${isFav ? '★ ' : ''}${car.disp_name} (${car.tecnologia})`;
       modelSelect.appendChild(option);
     });
   }
@@ -905,6 +950,40 @@
     const selectedBrand = document.getElementById('brandSelect').value;
     populateModels(selectedBrand);
     calculate();
+  }
+
+  function toggleFavorite() {
+    const selectedId = parseInt(document.getElementById('modelSelect').value);
+    const currentFav = parseInt(localStorage.getItem('eletrocalc_fav_car'));
+
+    if (currentFav === selectedId) {
+      localStorage.removeItem('eletrocalc_fav_car');
+    } else {
+      localStorage.setItem('eletrocalc_fav_car', selectedId);
+    }
+
+    const selectedBrand = document.getElementById('brandSelect').value;
+    populateModels(selectedBrand);
+    document.getElementById('modelSelect').value = selectedId;
+    updateFavButtonUI();
+  }
+
+  function updateFavButtonUI() {
+    const selectedId = parseInt(document.getElementById('modelSelect').value);
+    const favCarId = parseInt(localStorage.getItem('eletrocalc_fav_car'));
+    const btn = document.getElementById('favBtn');
+
+    if (selectedId === favCarId) {
+      btn.textContent = '★';
+      btn.style.color = 'var(--favorite-gold)';
+    } else {
+      btn.textContent = '☆';
+      btn.style.color = 'var(--text-muted)';
+    }
+  }
+
+  function openChargerFinder() {
+    window.open("https://www.google.com/maps/search/eletroposto+carregador+veiculo+eletrico/", '_blank');
   }
 
   function toggleManualPower() {
@@ -1015,6 +1094,7 @@
     const car = allCars.find(c => c.id === selectedId) || allCars[0];
     
     updateCarSpecCard(car);
+    updateFavButtonUI();
 
     const currentPct = parseFloat(document.getElementById('currentBattery').value);
     const targetPct = parseFloat(document.getElementById('targetBattery').value);
