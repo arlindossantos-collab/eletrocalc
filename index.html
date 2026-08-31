@@ -134,6 +134,12 @@
       color: var(--text-main);
     }
 
+    select.neu-input optgroup {
+      background-color: #0f172a;
+      color: var(--primary);
+      font-weight: 700;
+    }
+
     .model-select-wrapper {
       display: flex;
       gap: 10px;
@@ -530,15 +536,49 @@
   </div>
 
   <div class="form-group">
-    <label for="chargerPower">Potência do Carregador</label>
+    <label for="chargerPower">Modelo / Potência do Carregador</label>
     <select id="chargerPower" class="neu-input" onchange="toggleManualPower(); calculate();">
-      <option value="3.7" data-type="ac">3.7 kW (Portátil / 20A - 220V)</option>
-      <option value="7.4" data-type="ac" selected>7.4 kW (Wallbox Monofásico)</option>
-      <option value="11" data-type="ac">11.0 kW (Wallbox Trifásico)</option>
-      <option value="22" data-type="ac">22.0 kW (AC Rápido)</option>
-      <option value="50" data-type="dc">50.0 kW (DC Rápido)</option>
-      <option value="150" data-type="dc">150.0 kW (DC Ultra-rápido)</option>
-      <option value="custom" data-type="ac">Outra potência (Manual)</option>
+      <optgroup label="── RESIDENCIAL & PORTÁTIL LENTO ──">
+        <option value="1.8" data-type="ac">1.8 kW - Portátil Original de Emergência (6A - 8A | 110V - 220V Monofásico)</option>
+        <option value="3.5" data-type="ac">3.5 kW - Portátil Ajustável Universal (10A - 16A | 220V Monofásico)</option>
+        <option value="3.7" data-type="ac">3.7 kW - WEG Portable Cable WEMOB-P (16A | 220V Monofásico)</option>
+        <option value="3.5" data-type="ac">3.5 kW - GreenV Portable Charger (16A | 220V Monofásico)</option>
+        <option value="3.7" data-type="ac">3.7 kW - NeoCharge Portátil T2 (16A | 220V Monofásico)</option>
+      </optgroup>
+      <optgroup label="── RESIDENCIAL & COMERCIAL SEMI-RÁPIDO ──">
+        <option value="7.0" data-type="ac">7.0 kW - BYD Wallbox Home (32A | 220V Monofásico/Bifásico)</option>
+        <option value="7.4" data-type="ac" selected>7.4 kW - WEG WEMOB Wall (32A | 220V Monofásico/Bifásico)</option>
+        <option value="7.4" data-type="ac">7.4 kW - Intelbras CVE Pro 7kW (32A | 220V Monofásico/Bifásico)</option>
+        <option value="7.4" data-type="ac">7.4 kW - ABB Terra AC Wallbox Single Phase (32A | 220V Monofásico/Bifásico)</option>
+        <option value="7.4" data-type="ac">7.4 kW - NeoCharge Wallbox Smart (32A | 220V Monofásico/Bifásico)</option>
+        <option value="9.6" data-type="ac">9.6 kW - ChargePoint Home Flex (40A | 240V Monofásico/Bifásico)</option>
+        <option value="9.6" data-type="ac">9.6 kW - Tesla Wall Connector Gen 3 (40A | 240V Monofásico/Bifásico)</option>
+      </optgroup>
+      <optgroup label="── RESIDENCIAL AVANÇADO & COMERCIAL TRIFÁSICO ──">
+        <option value="11.0" data-type="ac">11 kW - WEG WEMOB Parking / Wall (16A | 380V Trifásico)</option>
+        <option value="11.0" data-type="ac">11 kW - Schneider EVlink Smart Wallbox (16A | 380V Trifásico)</option>
+        <option value="11.0" data-type="ac">11 kW - Wallbox Pulsar Plus 11kW (16A | 380V Trifásico)</option>
+        <option value="11.0" data-type="ac">11 kW - BYD Commercial Wallbox (16A | 380V Trifásico)</option>
+        <option value="22.0" data-type="ac">22 kW - Intelbras CVE Business (32A | 380V Trifásico)</option>
+        <option value="22.0" data-type="ac">22 kW - Wallbox Commander 2 (32A | 380V Trifásico)</option>
+        <option value="22.0" data-type="ac">22 kW - ABB Terra AC Wallbox Three Phase (32A | 380V Trifásico)</option>
+        <option value="22.0" data-type="ac">22 kW - Siemens VersiCharge AC (32A | 380V Trifásico)</option>
+      </optgroup>
+      <optgroup label="── COMERCIAL & ESTAÇÕES RÁPIDAS (DC) ──">
+        <option value="30.0" data-type="dc">30 kW - WEG WEMOB Station DC Compact (~80A | 380V/440V Trifásico)</option>
+        <option value="30.0" data-type="dc">30 kW - Enelion Fast Charger (~80A | 380V Trifásico)</option>
+        <option value="50.0" data-type="dc">50 kW - Delta DC City Charger (~125A | 380V Trifásico)</option>
+        <option value="50.0" data-type="dc">50 kW - ABB Terra 54 DC (~125A | 380V Trifásico)</option>
+        <option value="60.0" data-type="dc">60 kW - NeoCharge Fast DC 60kW (~150A | 380V Trifásico)</option>
+      </optgroup>
+      <optgroup label="── RODOVIÁRIO & ULTRARRÁPIDO (DC) ──">
+        <option value="120.0" data-type="dc">120 kW - WEG WEMOB Station DC High Power (~250A | 380V/480V Trifásico)</option>
+        <option value="120.0" data-type="dc">120 kW - ABB Terra 124 DC (~250A | 380V/480V Trifásico)</option>
+        <option value="175.0" data-type="dc">175 kW - Tritium Veefil-PK 175 (~350A | 480V Trifásico)</option>
+        <option value="250.0" data-type="dc">250 kW - Tesla Supercharger V3 (~600A | Alta Tensão)</option>
+        <option value="360.0" data-type="dc">360 kW - ABB Terra 360 (~500A+ | Alta Tensão)</option>
+      </optgroup>
+      <option value="custom" data-type="ac">⚡ Outra potência (Configuração Manual)</option>
     </select>
 
     <div class="manual-power-container" id="manualPowerGroup">
