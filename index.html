@@ -42,8 +42,8 @@
 
       <article class="card">
         <h2>🔋 Estado da bateria</h2>
-        <div class="range-row"><label>Carga atual <output id="currentOut">20%</output></label><input id="currentBattery" type="range" min="0" max="100" value="20"></div>
-        <div class="range-row"><label>Meta de carga <output id="targetOut">80%</output></label><input id="targetBattery" type="range" min="0" max="100" value="80"></div>
+        <div class="range-row"><label>Carga atual <output id="currentOut" class="battery-level">20%</output></label><input id="currentBattery" type="range" min="0" max="100" value="20"></div>
+        <div class="range-row"><label>Meta de carga <output id="targetOut" class="battery-level">80%</output></label><input id="targetBattery" type="range" min="0" max="100" value="80"></div>
 
         <h2>🔌 Carregamento</h2>
         <label>Perfil <select id="chargerProfile"></select></label>
@@ -65,6 +65,7 @@
           </div>
         </div>
         <label class="check"><input id="sharedPower" type="checkbox"> Potência compartilhada (50%)</label>
+        <div id="chargerCompatibility" class="compatibility info"><strong>ℹ️ Compatibilidade do veículo</strong><span>Selecione um veículo e um carregador.</span></div>
       </article>
     </div>
 

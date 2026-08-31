@@ -6,12 +6,42 @@ import * as timer from "./timer.js";
 const $=id=>document.getElementById(id); let base=[],result=null,paused=false;
 const prefs=()=>({price:parseNum($("pricePerKwh").value),fee:parseNum($("startFee").value),efficiency:Number($("efficiency").value)||90});
 const parseNum=v=>Number(String(v).replace(",","."))||0;
+function batteryClass(percent){
+ const p=Number(percent)||0;
+ if(p<=15)return "battery-critical";
+ if(p<=35)return "battery-low";
+ if(p<=60)return "battery-medium";
+ if(p<=80)return "battery-good";
+ return "battery-high";
+}
+function updateBatteryColor(id,percent){
+ const el=$(id);
+ el.className="battery-level "+batteryClass(percent);
+ el.textContent=percent+"%";
+}
+function updateCompatibility(input,calcResult){
+ const box=$("chargerCompatibility");
+ if(!box||!input.car)return;
+ const max=input.type==="dc"?Number(input.car.maxDC)||0:Number(input.car.maxAC)||0;
+ const requested=input.shared?input.power/2:input.power;
+ box.className="compatibility";
+ if(!input.car.kwh || max<=0){
+   box.classList.add("incompatible");
+   box.innerHTML=`<strong>⛔ Carregador incompatível</strong><span>O ${input.car.modelo} não aceita recarga ${input.type.toUpperCase()}${input.type==="dc"?" rápida em corrente contínua":""}. Limite informado para esta modalidade: 0 kW.</span>`;
+ }else if(requested>max){
+   box.classList.add("limited");
+   box.innerHTML=`<strong>⚠️ Recarga limitada pelo veículo</strong><span>Você selecionou ${fmt(requested)} kW ${input.type.toUpperCase()}, mas o ${input.car.modelo} aceita no máximo ${fmt(max)} kW ${input.type.toUpperCase()}. O cálculo será feito com ${fmt(calcResult.power)} kW.</span>`;
+ }else{
+   box.classList.add("compatible");
+   box.innerHTML=`<strong>✅ Carregador compatível</strong><span>O ${input.car.modelo} suporta ${fmt(requested)} kW ${input.type.toUpperCase()} nesta configuração. Limite do veículo: ${fmt(max)} kW.</span>`;
+ }
+}
 function allCars(){return [...base.flatMap(g=>g.modelos),...store.get(keys.customVehicles,[])]}
 function selectedCar(){return allCars().find(c=>String(c.id)===$("modelSelect").value)}
 function getInput(){const o=$("chargerPower").selectedOptions[0],custom=o.value==="custom",power=custom?parseNum($("manualChargerPower").value):Number(o.value),type=custom?$("manualType").value:o.dataset.type;return {car:selectedCar(),current:Number($("currentBattery").value),target:Number($("targetBattery").value),power,type,shared:$("sharedPower").checked,...prefs()}}
 function render(){
  const i=getInput(); if(!i.car)return; result=calc(i); const c=i.car;
- $("currentOut").textContent=i.current+"%";$("targetOut").textContent=i.target+"%";
+ updateBatteryColor("currentOut",i.current);updateBatteryColor("targetOut",i.target);updateCompatibility(i,result);
  $("totalCostDisplay").textContent=money(result.cost);$("gridEnergyDisplay").textContent=`Energia da rede: ${fmt(result.gridKwh)} kWh`;
  $("timeDisplay").textContent=`${Math.floor(result.hours)}h ${Math.round((result.hours%1)*60)}min`;$("kwhNeededDisplay").textContent=`Energia na bateria: ${fmt(result.batteryKwh)} kWh`;
  $("currentRangeDisplay").textContent=`Carga atual: ${fmt(result.rangeNow)} km`;$("targetRangeDisplay").textContent=`Meta: ${fmt(result.rangeTarget)} km`;

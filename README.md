@@ -1,4 +1,4 @@
-# ⚡ EletroCalc v3.0.1
+# ⚡ EletroCalc v3.0.2
 
 Aplicação estática para simulação e planejamento de recarga de veículos eletrificados.
 
@@ -35,3 +35,10 @@ Após alterar a versão, atualize também a constante `CACHE` em `sw.js` para fo
 
 ## Atualização 3.0.1
 - Logo oficial do EletroCalc adicionada ao cabeçalho e ao PWA.
+
+## Atualização 3.0.2
+- Cor dinâmica da porcentagem da bateria: vermelho próximo de 0%, evoluindo até verde próximo de 100%.
+- Validação visual da compatibilidade entre veículo e carregador.
+- Aviso de incompatibilidade quando o veículo não aceita AC/DC na modalidade selecionada.
+- Aviso de limitação quando a potência do carregador ultrapassa o limite máximo aceito pelo veículo.
+- O cálculo continua usando automaticamente a potência máxima compatível do veículo.
