@@ -1,17 +1,15 @@
 {
+  "name": "EletroCalc",
   "short_name": "EletroCalc",
-  "name": "EletroCalc - Calculadora de Carregamento Veicular",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#0f172a",
+  "theme_color": "#0f172a",
   "icons": [
     {
-      "src": "logo.png",
-      "type": "image/png",
+      "src": "assets/logo.png",
       "sizes": "512x512",
-      "purpose": "any maskable"
+      "type": "image/png"
     }
-  ],
-  "start_url": "./index.html",
-  "background_color": "#0f172a",
-  "theme_color": "#10b981",
-  "display": "standalone",
-  "orientation": "portrait"
+  ]
 }

@@ -1,0 +1,6 @@
+export function exportTxt(r){
+ const d=new Date().toLocaleString("pt-BR"),c=r.car,x=r.result;
+ const t=`ELETROCALC - RELATÓRIO DE RECARGA\nData: ${d}\n\nVEÍCULO\n${c.marca} ${c.modelo} ${c.versao}\nTecnologia: ${c.tecnologia}\nBateria: ${c.bateria}\n\nRECARGA\nCarga: ${r.current}% → ${r.target}%\nPotência efetiva: ${x.power.toFixed(1)} kW\nEnergia na bateria: ${x.batteryKwh.toFixed(1)} kWh\nEnergia da rede: ${x.gridKwh.toFixed(1)} kWh\nCusto estimado: ${x.cost.toLocaleString("pt-BR",{style:"currency",currency:"BRL"})}\nTempo estimado: ${Math.floor(x.hours)}h ${Math.round((x.hours%1)*60)}min\n\nObservação: valores estimados.`;
+ const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([t],{type:"text/plain;charset=utf-8"}));a.download=`EletroCalc_${c.marca}_${c.modelo}.txt`;a.click();URL.revokeObjectURL(a.href);
+}
+export async function shareResult(r){const text=`⚡ EletroCalc\n${r.car.marca} ${r.car.modelo}\n${r.current}% → ${r.target}%\nCusto: ${r.result.cost.toLocaleString("pt-BR",{style:"currency",currency:"BRL"})}\nTempo: ${Math.floor(r.result.hours)}h ${Math.round((r.result.hours%1)*60)}min`;if(navigator.share)await navigator.share({title:"EletroCalc",text});else await navigator.clipboard.writeText(text);alert(navigator.share?"Compartilhamento aberto.":"Resumo copiado para a área de transferência.");}

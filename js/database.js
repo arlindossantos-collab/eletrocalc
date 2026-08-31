@@ -1,0 +1,1 @@
+export async function loadVehicles(){const r=await fetch("./data/vehicles.json");if(!r.ok)throw new Error("Base de veículos indisponível");return r.json()}
