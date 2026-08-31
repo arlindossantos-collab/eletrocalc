@@ -1,4 +1,4 @@
-# ⚡ EletroCalc v3.0.2
+# ⚡ EletroCalc v3.1.0
 
 Aplicação estática para simulação e planejamento de recarga de veículos eletrificados.
 
@@ -42,3 +42,9 @@ Após alterar a versão, atualize também a constante `CACHE` em `sw.js` para fo
 - Aviso de incompatibilidade quando o veículo não aceita AC/DC na modalidade selecionada.
 - Aviso de limitação quando a potência do carregador ultrapassa o limite máximo aceito pelo veículo.
 - O cálculo continua usando automaticamente a potência máxima compatível do veículo.
+
+## Atualização 3.1.0
+- Base Técnica dos Veículos adicionada.
+- BYD King GS: 6,6 kW AC e 25 kW DC.
+- Volvo EX30: 11 kW AC.
+- Demais modelos: status Sem informações, sem alteração automática das potências cadastradas.

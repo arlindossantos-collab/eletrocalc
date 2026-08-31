@@ -36,11 +36,15 @@ function updateCompatibility(input,calcResult){
    box.innerHTML=`<strong>✅ Carregador compatível</strong><span>O ${input.car.modelo} suporta ${fmt(requested)} kW ${input.type.toUpperCase()} nesta configuração. Limite do veículo: ${fmt(max)} kW.</span>`;
  }
 }
+function auditBadge(a){const status=a?.status||"no_information",label=a?.statusLabel||"Sem informações";return `<span class="audit-badge audit-${status}">${status==="reviewed"?"◉":"○"} ${label}</span>`}
+function renderVehicleAudit(c){const box=$("auditInfo");if(!box)return;const a=c.audit||{};box.innerHTML=`<div class="audit-head"><strong>🔎 Situação técnica</strong>${auditBadge(a)}</div><p><b>Ano/modelo:</b> ${c.ano||"Sem informações"}</p><p><b>Fonte:</b> ${a.sourceName||"Sem informações"}</p><p>${a.notes||"Sem informações técnicas confirmadas nesta versão."}</p>`}
+function renderAudit(){const list=$("auditList");if(!list)return;list.innerHTML=base.flatMap(g=>g.modelos).map(c=>{const a=c.audit||{};return `<div class="audit-item"><div class="audit-head"><div><b>${c.marca} ${c.disp_name||c.modelo} ${c.versao||""}</b><div class="muted">AC ${c.maxAC??"Sem informações"} kW · DC ${c.maxDC??"Sem informações"} kW</div></div>${auditBadge(a)}</div><p class="muted">${a.notes||"Sem informações técnicas confirmadas nesta versão."}</p></div>`}).join("")}
 function allCars(){return [...base.flatMap(g=>g.modelos),...store.get(keys.customVehicles,[])]}
 function selectedCar(){return allCars().find(c=>String(c.id)===$("modelSelect").value)}
 function getInput(){const o=$("chargerPower").selectedOptions[0],custom=o.value==="custom",power=custom?parseNum($("manualChargerPower").value):Number(o.value),type=custom?$("manualType").value:o.dataset.type;return {car:selectedCar(),current:Number($("currentBattery").value),target:Number($("targetBattery").value),power,type,shared:$("sharedPower").checked,...prefs()}}
 function render(){
  const i=getInput(); if(!i.car)return; result=calc(i); const c=i.car;
+ renderVehicleAudit(c);
  updateBatteryColor("currentOut",i.current);updateBatteryColor("targetOut",i.target);updateCompatibility(i,result);
  $("totalCostDisplay").textContent=money(result.cost);$("gridEnergyDisplay").textContent=`Energia da rede: ${fmt(result.gridKwh)} kWh`;
  $("timeDisplay").textContent=`${Math.floor(result.hours)}h ${Math.round((result.hours%1)*60)}min`;$("kwhNeededDisplay").textContent=`Energia na bateria: ${fmt(result.batteryKwh)} kWh`;
@@ -58,7 +62,7 @@ function showChargers(){const list=store.get(keys.chargers,[]);$("chargersList")
 function showHistory(){const h=store.get(keys.history,[]);const cost=h.reduce((s,x)=>s+x.cost,0),energy=h.reduce((s,x)=>s+x.gridKwh,0);$("historySummary").innerHTML=`<div class="result-card"><span>Recargas</span><strong>${h.length}</strong></div><div class="result-card"><span>Total gasto</span><strong>${money(cost)}</strong></div><div class="result-card"><span>Energia da rede</span><strong>${fmt(energy)} kWh</strong></div>`;$("historyList").innerHTML=h.length?h.map(x=>`<div class="item"><b>${x.car}</b><span class="muted">${new Date(x.date).toLocaleString("pt-BR")} · ${x.current}%→${x.target}% · ${money(x.cost)}</span></div>`).join(""):"<p class='muted'>Nenhuma recarga salva.</p>"}
 function dialog(title,fields,onSave){$("dialogContent").innerHTML=`<h2>${title}</h2>`+fields.map(f=>`<label>${f.label}<input id="f_${f.id}" type="${f.type||"text"}" value="${f.value||""}" ${f.step?`step="${f.step}"`:""}></label>`).join("");const d=$("formDialog");d.showModal();$("dialogSaveBtn").onclick=e=>{e.preventDefault();onSave(Object.fromEntries(fields.map(f=>[f.id,$("f_"+f.id).value])));d.close()}}
 function setup(){
- document.querySelectorAll(".tab").forEach(b=>b.onclick=()=>{document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active"));document.querySelectorAll(".tab-panel").forEach(x=>x.classList.remove("active"));b.classList.add("active");$("tab-"+b.dataset.tab).classList.add("active");if(b.dataset.tab==="history")showHistory()});
+ document.querySelectorAll(".tab").forEach(b=>b.onclick=()=>{document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active"));document.querySelectorAll(".tab-panel").forEach(x=>x.classList.remove("active"));b.classList.add("active");$("tab-"+b.dataset.tab).classList.add("active");if(b.dataset.tab==="history")showHistory();if(b.dataset.tab==="audit")renderAudit()});
  ["currentBattery","targetBattery","chargerPower","manualChargerPower","manualType","sharedPower","pricePerKwh","startFee","efficiency"].forEach(id=>$(id).addEventListener("input",()=>{ $("customPowerBox").classList.toggle("hidden",$("chargerPower").value!=="custom");render()}));
  $("brandSelect").onchange=populateModels;$("modelSelect").onchange=render;
  $("favoriteBtn").onclick=()=>{store.set(keys.favorite,selectedCar().id);render()};

@@ -18,7 +18,16 @@
         "kwh": 116.0,
         "km100": 550,
         "maxAC": 11.0,
-        "maxDC": 240.0
+        "maxDC": 240.0,
+        "ano": "Sem informações",
+        "audit": {
+          "status": "no_information",
+          "statusLabel": "Sem informações",
+          "verifiedAt": null,
+          "sourceName": "Sem informações",
+          "sourceUrl": "",
+          "notes": "Sem informações técnicas confirmadas nesta versão."
+        }
       },
       {
         "id": 81,
@@ -36,7 +45,16 @@
         "kwh": 116.0,
         "km100": 550,
         "maxAC": 11.0,
-        "maxDC": 240.0
+        "maxDC": 240.0,
+        "ano": "Sem informações",
+        "audit": {
+          "status": "no_information",
+          "statusLabel": "Sem informações",
+          "verifiedAt": null,
+          "sourceName": "Sem informações",
+          "sourceUrl": "",
+          "notes": "Sem informações técnicas confirmadas nesta versão."
+        }
       }
     ]
   },
@@ -59,7 +77,16 @@
         "kwh": 66.5,
         "km100": 303,
         "maxAC": 22.0,
-        "maxDC": 130.0
+        "maxDC": 130.0,
+        "ano": "Sem informações",
+        "audit": {
+          "status": "no_information",
+          "statusLabel": "Sem informações",
+          "verifiedAt": null,
+          "sourceName": "Sem informações",
+          "sourceUrl": "",
+          "notes": "Sem informações técnicas confirmadas nesta versão."
+        }
       },
       {
         "id": 96,
@@ -77,7 +104,16 @@
         "kwh": 80.0,
         "km100": 381,
         "maxAC": 11.0,
-        "maxDC": 150.0
+        "maxDC": 150.0,
+        "ano": "Sem informações",
+        "audit": {
+          "status": "no_information",
+          "statusLabel": "Sem informações",
+          "verifiedAt": null,
+          "sourceName": "Sem informações",
+          "sourceUrl": "",
+          "notes": "Sem informações técnicas confirmadas nesta versão."
+        }
       }
     ]
   },
@@ -100,7 +136,16 @@
         "kwh": 38.0,
         "km100": 281,
         "maxAC": 6.6,
-        "maxDC": 40.0
+        "maxDC": 40.0,
+        "ano": "Sem informações",
+        "audit": {
+          "status": "no_information",
+          "statusLabel": "Sem informações",
+          "verifiedAt": null,
+          "sourceName": "Sem informações",
+          "sourceUrl": "",
+          "notes": "Sem informações técnicas confirmadas nesta versão."
+        }
       },
       {
         "id": 2,
@@ -118,7 +163,16 @@
         "kwh": 44.9,
         "km100": 292,
         "maxAC": 6.6,
-        "maxDC": 60.0
+        "maxDC": 60.0,
+        "ano": "Sem informações",
+        "audit": {
+          "status": "no_information",
+          "statusLabel": "Sem informações",
+          "verifiedAt": null,
+          "sourceName": "Sem informações",
+          "sourceUrl": "",
+          "notes": "Sem informações técnicas confirmadas nesta versão."
+        }
       },
       {
         "id": 3,
@@ -136,7 +190,16 @@
         "kwh": 60.4,
         "km100": 429,
         "maxAC": 11.0,
-        "maxDC": 88.0
+        "maxDC": 88.0,
+        "ano": "Sem informações",
+        "audit": {
+          "status": "no_information",
+          "statusLabel": "Sem informações",
+          "verifiedAt": null,
+          "sourceName": "Sem informações",
+          "sourceUrl": "",
+          "notes": "Sem informações técnicas confirmadas nesta versão."
+        }
       },
       {
         "id": 4,
@@ -154,7 +217,16 @@
         "kwh": 45.1,
         "km100": 320,
         "maxAC": 6.6,
-        "maxDC": 65.0
+        "maxDC": 65.0,
+        "ano": "Sem informações",
+        "audit": {
+          "status": "no_information",
+          "statusLabel": "Sem informações",
+          "verifiedAt": null,
+          "sourceName": "Sem informações",
+          "sourceUrl": "",
+          "notes": "Sem informações técnicas confirmadas nesta versão."
+        }
       },
       {
         "id": 90,
@@ -172,7 +244,16 @@
         "kwh": 60.48,
         "km100": 294,
         "maxAC": 11.0,
-        "maxDC": 80.0
+        "maxDC": 80.0,
+        "ano": "Sem informações",
+        "audit": {
+          "status": "no_information",
+          "statusLabel": "Sem informações",
+          "verifiedAt": null,
+          "sourceName": "Sem informações",
+          "sourceUrl": "",
+          "notes": "Sem informações técnicas confirmadas nesta versão."
+        }
       },
       {
         "id": 5,
@@ -190,7 +271,16 @@
         "kwh": 82.5,
         "km100": 372,
         "maxAC": 11.0,
-        "maxDC": 150.0
+        "maxDC": 150.0,
+        "ano": "Sem informações",
+        "audit": {
+          "status": "no_information",
+          "statusLabel": "Sem informações",
+          "verifiedAt": null,
+          "sourceName": "Sem informações",
+          "sourceUrl": "",
+          "notes": "Sem informações técnicas confirmadas nesta versão."
+        }
       },
       {
         "id": 6,
@@ -208,7 +298,16 @@
         "kwh": 82.56,
         "km100": 500,
         "maxAC": 11.0,
-        "maxDC": 150.0
+        "maxDC": 150.0,
+        "ano": "Sem informações",
+        "audit": {
+          "status": "no_information",
+          "statusLabel": "Sem informações",
+          "verifiedAt": null,
+          "sourceName": "Sem informações",
+          "sourceUrl": "",
+          "notes": "Sem informações técnicas confirmadas nesta versão."
+        }
       },
       {
         "id": 91,
@@ -226,7 +325,16 @@
         "kwh": 85.4,
         "km100": 349,
         "maxAC": 11.0,
-        "maxDC": 120.0
+        "maxDC": 120.0,
+        "ano": "Sem informações",
+        "audit": {
+          "status": "no_information",
+          "statusLabel": "Sem informações",
+          "verifiedAt": null,
+          "sourceName": "Sem informações",
+          "sourceUrl": "",
+          "notes": "Sem informações técnicas confirmadas nesta versão."
+        }
       },
       {
         "id": 7,
@@ -244,7 +352,16 @@
         "kwh": 108.8,
         "km100": 435,
         "maxAC": 11.0,
-        "maxDC": 170.0
+        "maxDC": 170.0,
+        "ano": "Sem informações",
+        "audit": {
+          "status": "no_information",
+          "statusLabel": "Sem informações",
+          "verifiedAt": null,
+          "sourceName": "Sem informações",
+          "sourceUrl": "",
+          "notes": "Sem informações técnicas confirmadas nesta versão."
+        }
       },
       {
         "id": 8,
@@ -262,7 +379,16 @@
         "kwh": 10.8,
         "km100": 80,
         "maxAC": 3.3,
-        "maxDC": 0.0
+        "maxDC": 0.0,
+        "ano": "Sem informações",
+        "audit": {
+          "status": "no_information",
+          "statusLabel": "Sem informações",
+          "verifiedAt": null,
+          "sourceName": "Sem informações",
+          "sourceUrl": "",
+          "notes": "Sem informações técnicas confirmadas nesta versão."
+        }
       },
       {
         "id": 9,
@@ -279,8 +405,17 @@
         "tracao": "FWD",
         "kwh": 18.3,
         "km100": 80,
-        "maxAC": 3.3,
-        "maxDC": 18.0
+        "maxAC": 6.6,
+        "maxDC": 25.0,
+        "ano": "2024/2025",
+        "audit": {
+          "status": "reviewed",
+          "statusLabel": "Revisado",
+          "verifiedAt": "31/08/2026",
+          "sourceName": "Revisão técnica da base",
+          "sourceUrl": "",
+          "notes": "Valores ajustados nesta versão: AC 6,6 kW e DC 25 kW."
+        }
       },
       {
         "id": 10,
@@ -298,7 +433,16 @@
         "kwh": 12.9,
         "km100": 71,
         "maxAC": 3.3,
-        "maxDC": 0.0
+        "maxDC": 0.0,
+        "ano": "Sem informações",
+        "audit": {
+          "status": "no_information",
+          "statusLabel": "Sem informações",
+          "verifiedAt": null,
+          "sourceName": "Sem informações",
+          "sourceUrl": "",
+          "notes": "Sem informações técnicas confirmadas nesta versão."
+        }
       },
       {
         "id": 11,
@@ -316,7 +460,16 @@
         "kwh": 18.3,
         "km100": 72,
         "maxAC": 3.3,
-        "maxDC": 18.0
+        "maxDC": 18.0,
+        "ano": "Sem informações",
+        "audit": {
+          "status": "no_information",
+          "statusLabel": "Sem informações",
+          "verifiedAt": null,
+          "sourceName": "Sem informações",
+          "sourceUrl": "",
+          "notes": "Sem informações técnicas confirmadas nesta versão."
+        }
       },
       {
         "id": 12,
@@ -334,7 +487,16 @@
         "kwh": 18.3,
         "km100": 110,
         "maxAC": 3.3,
-        "maxDC": 18.0
+        "maxDC": 18.0,
+        "ano": "Sem informações",
+        "audit": {
+          "status": "no_information",
+          "statusLabel": "Sem informações",
+          "verifiedAt": null,
+          "sourceName": "Sem informações",
+          "sourceUrl": "",
+          "notes": "Sem informações técnicas confirmadas nesta versão."
+        }
       },
       {
         "id": 13,
@@ -352,7 +514,16 @@
         "kwh": 26.6,
         "km100": 87,
         "maxAC": 6.6,
-        "maxDC": 30.0
+        "maxDC": 30.0,
+        "ano": "Sem informações",
+        "audit": {
+          "status": "no_information",
+          "statusLabel": "Sem informações",
+          "verifiedAt": null,
+          "sourceName": "Sem informações",
+          "sourceUrl": "",
+          "notes": "Sem informações técnicas confirmadas nesta versão."
+        }
       },
       {
         "id": 14,
@@ -370,7 +541,16 @@
         "kwh": 29.6,
         "km100": 100,
         "maxAC": 6.6,
-        "maxDC": 40.0
+        "maxDC": 40.0,
+        "ano": "Sem informações",
+        "audit": {
+          "status": "no_information",
+          "statusLabel": "Sem informações",
+          "verifiedAt": null,
+          "sourceName": "Sem informações",
+          "sourceUrl": "",
+          "notes": "Sem informações técnicas confirmadas nesta versão."
+        }
       }
     ]
   },
@@ -393,7 +573,16 @@
         "kwh": 66.0,
         "km100": 259,
         "maxAC": 11.0,
-        "maxDC": 50.0
+        "maxDC": 50.0,
+        "ano": "Sem informações",
+        "audit": {
+          "status": "no_information",
+          "statusLabel": "Sem informações",
+          "verifiedAt": null,
+          "sourceName": "Sem informações",
+          "sourceUrl": "",
+          "notes": "Sem informações técnicas confirmadas nesta versão."
+        }
       },
       {
         "id": 88,
@@ -411,7 +600,16 @@
         "kwh": 65.6,
         "km100": 256,
         "maxAC": 11.0,
-        "maxDC": 50.0
+        "maxDC": 50.0,
+        "ano": "Sem informações",
+        "audit": {
+          "status": "no_information",
+          "statusLabel": "Sem informações",
+          "verifiedAt": null,
+          "sourceName": "Sem informações",
+          "sourceUrl": "",
+          "notes": "Sem informações técnicas confirmadas nesta versão."
+        }
       },
       {
         "id": 89,
@@ -429,7 +627,16 @@
         "kwh": 102.0,
         "km100": 481,
         "maxAC": 22.0,
-        "maxDC": 190.0
+        "maxDC": 190.0,
+        "ano": "Sem informações",
+        "audit": {
+          "status": "no_information",
+          "statusLabel": "Sem informações",
+          "verifiedAt": null,
+          "sourceName": "Sem informações",
+          "sourceUrl": "",
+          "notes": "Sem informações técnicas confirmadas nesta versão."
+        }
       },
       {
         "id": 73,
@@ -447,7 +654,16 @@
         "kwh": 41.9,
         "km100": 260,
         "maxAC": 7.4,
-        "maxDC": 50.0
+        "maxDC": 50.0,
+        "ano": "Sem informações",
+        "audit": {
+          "status": "no_information",
+          "statusLabel": "Sem informações",
+          "verifiedAt": null,
+          "sourceName": "Sem informações",
+          "sourceUrl": "",
+          "notes": "Sem informações técnicas confirmadas nesta versão."
+        }
       },
       {
         "id": 74,
@@ -465,7 +681,16 @@
         "kwh": 85.0,
         "km100": 442,
         "maxAC": 11.5,
-        "maxDC": 150.0
+        "maxDC": 150.0,
+        "ano": "Sem informações",
+        "audit": {
+          "status": "no_information",
+          "statusLabel": "Sem informações",
+          "verifiedAt": null,
+          "sourceName": "Sem informações",
+          "sourceUrl": "",
+          "notes": "Sem informações técnicas confirmadas nesta versão."
+        }
       }
     ]
   },
@@ -488,7 +713,16 @@
         "kwh": 31.8,
         "km100": 74,
         "maxAC": 6.6,
-        "maxDC": 100.0
+        "maxDC": 100.0,
+        "ano": "Sem informações",
+        "audit": {
+          "status": "no_information",
+          "statusLabel": "Sem informações",
+          "verifiedAt": null,
+          "sourceName": "Sem informações",
+          "sourceUrl": "",
+          "notes": "Sem informações técnicas confirmadas nesta versão."
+        }
       },
       {
         "id": 79,
@@ -506,7 +740,16 @@
         "kwh": 100.0,
         "km100": 440,
         "maxAC": 11.0,
-        "maxDC": 270.0
+        "maxDC": 270.0,
+        "ano": "Sem informações",
+        "audit": {
+          "status": "no_information",
+          "statusLabel": "Sem informações",
+          "verifiedAt": null,
+          "sourceName": "Sem informações",
+          "sourceUrl": "",
+          "notes": "Sem informações técnicas confirmadas nesta versão."
+        }
       }
     ]
   },
@@ -529,7 +772,16 @@
         "kwh": 44.12,
         "km100": 253,
         "maxAC": 6.6,
-        "maxDC": 60.0
+        "maxDC": 60.0,
+        "ano": "Sem informações",
+        "audit": {
+          "status": "no_information",
+          "statusLabel": "Sem informações",
+          "verifiedAt": null,
+          "sourceName": "Sem informações",
+          "sourceUrl": "",
+          "notes": "Sem informações técnicas confirmadas nesta versão."
+        }
       },
       {
         "id": 35,
@@ -547,7 +799,16 @@
         "kwh": 60.0,
         "km100": 310,
         "maxAC": 11.0,
-        "maxDC": 80.0
+        "maxDC": 80.0,
+        "ano": "Sem informações",
+        "audit": {
+          "status": "no_information",
+          "statusLabel": "Sem informações",
+          "verifiedAt": null,
+          "sourceName": "Sem informações",
+          "sourceUrl": "",
+          "notes": "Sem informações técnicas confirmadas nesta versão."
+        }
       },
       {
         "id": 36,
@@ -565,7 +826,16 @@
         "kwh": 55.2,
         "km100": 314,
         "maxAC": 6.6,
-        "maxDC": 80.0
+        "maxDC": 80.0,
+        "ano": "Sem informações",
+        "audit": {
+          "status": "no_information",
+          "statusLabel": "Sem informações",
+          "verifiedAt": null,
+          "sourceName": "Sem informações",
+          "sourceUrl": "",
+          "notes": "Sem informações técnicas confirmadas nesta versão."
+        }
       },
       {
         "id": 37,
@@ -583,7 +853,16 @@
         "kwh": 63.2,
         "km100": 316,
         "maxAC": 11.0,
-        "maxDC": 80.0
+        "maxDC": 80.0,
+        "ano": "Sem informações",
+        "audit": {
+          "status": "no_information",
+          "statusLabel": "Sem informações",
+          "verifiedAt": null,
+          "sourceName": "Sem informações",
+          "sourceUrl": "",
+          "notes": "Sem informações técnicas confirmadas nesta versão."
+        }
       },
       {
         "id": 38,
@@ -601,7 +880,16 @@
         "kwh": 75.3,
         "km100": 392,
         "maxAC": 11.0,
-        "maxDC": 120.0
+        "maxDC": 120.0,
+        "ano": "Sem informações",
+        "audit": {
+          "status": "no_information",
+          "statusLabel": "Sem informações",
+          "verifiedAt": null,
+          "sourceName": "Sem informações",
+          "sourceUrl": "",
+          "notes": "Sem informações técnicas confirmadas nesta versão."
+        }
       },
       {
         "id": 39,
@@ -619,7 +907,16 @@
         "kwh": 72.7,
         "km100": 362,
         "maxAC": 11.0,
-        "maxDC": 150.0
+        "maxDC": 150.0,
+        "ano": "Sem informações",
+        "audit": {
+          "status": "no_information",
+          "statusLabel": "Sem informações",
+          "verifiedAt": null,
+          "sourceName": "Sem informações",
+          "sourceUrl": "",
+          "notes": "Sem informações técnicas confirmadas nesta versão."
+        }
       }
     ]
   },
@@ -642,7 +939,16 @@
         "kwh": 39.4,
         "km100": 288,
         "maxAC": 6.6,
-        "maxDC": 50.0
+        "maxDC": 50.0,
+        "ano": "Sem informações",
+        "audit": {
+          "status": "no_information",
+          "statusLabel": "Sem informações",
+          "verifiedAt": null,
+          "sourceName": "Sem informações",
+          "sourceUrl": "",
+          "notes": "Sem informações técnicas confirmadas nesta versão."
+        }
       },
       {
         "id": 19,
@@ -660,7 +966,16 @@
         "kwh": 39.4,
         "km100": 288,
         "maxAC": 6.6,
-        "maxDC": 50.0
+        "maxDC": 50.0,
+        "ano": "Sem informações",
+        "audit": {
+          "status": "no_information",
+          "statusLabel": "Sem informações",
+          "verifiedAt": null,
+          "sourceName": "Sem informações",
+          "sourceUrl": "",
+          "notes": "Sem informações técnicas confirmadas nesta versão."
+        }
       },
       {
         "id": 20,
@@ -678,7 +993,16 @@
         "kwh": 60.22,
         "km100": 400,
         "maxAC": 11.0,
-        "maxDC": 100.0
+        "maxDC": 100.0,
+        "ano": "Sem informações",
+        "audit": {
+          "status": "no_information",
+          "statusLabel": "Sem informações",
+          "verifiedAt": null,
+          "sourceName": "Sem informações",
+          "sourceUrl": "",
+          "notes": "Sem informações técnicas confirmadas nesta versão."
+        }
       },
       {
         "id": 21,
@@ -696,7 +1020,16 @@
         "kwh": 60.22,
         "km100": 400,
         "maxAC": 11.0,
-        "maxDC": 100.0
+        "maxDC": 100.0,
+        "ano": "Sem informações",
+        "audit": {
+          "status": "no_information",
+          "statusLabel": "Sem informações",
+          "verifiedAt": null,
+          "sourceName": "Sem informações",
+          "sourceUrl": "",
+          "notes": "Sem informações técnicas confirmadas nesta versão."
+        }
       },
       {
         "id": 22,
@@ -714,7 +1047,16 @@
         "kwh": 18.4,
         "km100": 65,
         "maxAC": 6.6,
-        "maxDC": 38.0
+        "maxDC": 38.0,
+        "ano": "Sem informações",
+        "audit": {
+          "status": "no_information",
+          "statusLabel": "Sem informações",
+          "verifiedAt": null,
+          "sourceName": "Sem informações",
+          "sourceUrl": "",
+          "notes": "Sem informações técnicas confirmadas nesta versão."
+        }
       },
       {
         "id": 23,
@@ -732,7 +1074,16 @@
         "kwh": 18.4,
         "km100": 65,
         "maxAC": 6.6,
-        "maxDC": 38.0
+        "maxDC": 38.0,
+        "ano": "Sem informações",
+        "audit": {
+          "status": "no_information",
+          "statusLabel": "Sem informações",
+          "verifiedAt": null,
+          "sourceName": "Sem informações",
+          "sourceUrl": "",
+          "notes": "Sem informações técnicas confirmadas nesta versão."
+        }
       },
       {
         "id": 24,
@@ -750,7 +1101,16 @@
         "kwh": 29.8,
         "km100": 112,
         "maxAC": 6.6,
-        "maxDC": 38.0
+        "maxDC": 38.0,
+        "ano": "Sem informações",
+        "audit": {
+          "status": "no_information",
+          "statusLabel": "Sem informações",
+          "verifiedAt": null,
+          "sourceName": "Sem informações",
+          "sourceUrl": "",
+          "notes": "Sem informações técnicas confirmadas nesta versão."
+        }
       }
     ]
   },
@@ -773,7 +1133,16 @@
         "kwh": 48.0,
         "km100": 312,
         "maxAC": 11.0,
-        "maxDC": 64.0
+        "maxDC": 64.0,
+        "ano": "Sem informações",
+        "audit": {
+          "status": "no_information",
+          "statusLabel": "Sem informações",
+          "verifiedAt": null,
+          "sourceName": "Sem informações",
+          "sourceUrl": "",
+          "notes": "Sem informações técnicas confirmadas nesta versão."
+        }
       },
       {
         "id": 26,
@@ -791,7 +1160,16 @@
         "kwh": 58.0,
         "km100": 315,
         "maxAC": 11.0,
-        "maxDC": 67.0
+        "maxDC": 67.0,
+        "ano": "Sem informações",
+        "audit": {
+          "status": "no_information",
+          "statusLabel": "Sem informações",
+          "verifiedAt": null,
+          "sourceName": "Sem informações",
+          "sourceUrl": "",
+          "notes": "Sem informações técnicas confirmadas nesta versão."
+        }
       },
       {
         "id": 27,
@@ -809,7 +1187,16 @@
         "kwh": 63.0,
         "km100": 397,
         "maxAC": 11.0,
-        "maxDC": 67.0
+        "maxDC": 67.0,
+        "ano": "Sem informações",
+        "audit": {
+          "status": "no_information",
+          "statusLabel": "Sem informações",
+          "verifiedAt": null,
+          "sourceName": "Sem informações",
+          "sourceUrl": "",
+          "notes": "Sem informações técnicas confirmadas nesta versão."
+        }
       },
       {
         "id": 30,
@@ -827,7 +1214,16 @@
         "kwh": 19.0,
         "km100": 110,
         "maxAC": 6.6,
-        "maxDC": 33.0
+        "maxDC": 33.0,
+        "ano": "Sem informações",
+        "audit": {
+          "status": "no_information",
+          "statusLabel": "Sem informações",
+          "verifiedAt": null,
+          "sourceName": "Sem informações",
+          "sourceUrl": "",
+          "notes": "Sem informações técnicas confirmadas nesta versão."
+        }
       },
       {
         "id": 31,
@@ -845,7 +1241,16 @@
         "kwh": 34.0,
         "km100": 170,
         "maxAC": 6.6,
-        "maxDC": 48.0
+        "maxDC": 48.0,
+        "ano": "Sem informações",
+        "audit": {
+          "status": "no_information",
+          "statusLabel": "Sem informações",
+          "verifiedAt": null,
+          "sourceName": "Sem informações",
+          "sourceUrl": "",
+          "notes": "Sem informações técnicas confirmadas nesta versão."
+        }
       },
       {
         "id": 86,
@@ -863,7 +1268,16 @@
         "kwh": 35.0,
         "km100": 175,
         "maxAC": 6.6,
-        "maxDC": 48.0
+        "maxDC": 48.0,
+        "ano": "Sem informações",
+        "audit": {
+          "status": "no_information",
+          "statusLabel": "Sem informações",
+          "verifiedAt": null,
+          "sourceName": "Sem informações",
+          "sourceUrl": "",
+          "notes": "Sem informações técnicas confirmadas nesta versão."
+        }
       },
       {
         "id": 32,
@@ -881,7 +1295,16 @@
         "kwh": 34.0,
         "km100": 170,
         "maxAC": 6.6,
-        "maxDC": 48.0
+        "maxDC": 48.0,
+        "ano": "Sem informações",
+        "audit": {
+          "status": "no_information",
+          "statusLabel": "Sem informações",
+          "verifiedAt": null,
+          "sourceName": "Sem informações",
+          "sourceUrl": "",
+          "notes": "Sem informações técnicas confirmadas nesta versão."
+        }
       },
       {
         "id": 33,
@@ -899,7 +1322,16 @@
         "kwh": 37.1,
         "km100": 105,
         "maxAC": 6.6,
-        "maxDC": 50.0
+        "maxDC": 50.0,
+        "ano": "Sem informações",
+        "audit": {
+          "status": "no_information",
+          "statusLabel": "Sem informações",
+          "verifiedAt": null,
+          "sourceName": "Sem informações",
+          "sourceUrl": "",
+          "notes": "Sem informações técnicas confirmadas nesta versão."
+        }
       }
     ]
   },
@@ -922,7 +1354,16 @@
         "kwh": 84.0,
         "km100": 374,
         "maxAC": 11.0,
-        "maxDC": 233.0
+        "maxDC": 233.0,
+        "ano": "Sem informações",
+        "audit": {
+          "status": "no_information",
+          "statusLabel": "Sem informações",
+          "verifiedAt": null,
+          "sourceName": "Sem informações",
+          "sourceUrl": "",
+          "notes": "Sem informações técnicas confirmadas nesta versão."
+        }
       }
     ]
   },
@@ -945,7 +1386,16 @@
         "kwh": 18.3,
         "km100": 79,
         "maxAC": 6.6,
-        "maxDC": 40.0
+        "maxDC": 40.0,
+        "ano": "Sem informações",
+        "audit": {
+          "status": "no_information",
+          "statusLabel": "Sem informações",
+          "verifiedAt": null,
+          "sourceName": "Sem informações",
+          "sourceUrl": "",
+          "notes": "Sem informações técnicas confirmadas nesta versão."
+        }
       }
     ]
   },
@@ -968,7 +1418,16 @@
         "kwh": 26.7,
         "km100": 88,
         "maxAC": 6.6,
-        "maxDC": 30.0
+        "maxDC": 30.0,
+        "ano": "Sem informações",
+        "audit": {
+          "status": "no_information",
+          "statusLabel": "Sem informações",
+          "verifiedAt": null,
+          "sourceName": "Sem informações",
+          "sourceUrl": "",
+          "notes": "Sem informações técnicas confirmadas nesta versão."
+        }
       },
       {
         "id": 77,
@@ -986,7 +1445,16 @@
         "kwh": 26.7,
         "km100": 75,
         "maxAC": 6.6,
-        "maxDC": 30.0
+        "maxDC": 30.0,
+        "ano": "Sem informações",
+        "audit": {
+          "status": "no_information",
+          "statusLabel": "Sem informações",
+          "verifiedAt": null,
+          "sourceName": "Sem informações",
+          "sourceUrl": "",
+          "notes": "Sem informações técnicas confirmadas nesta versão."
+        }
       },
       {
         "id": 98,
@@ -1004,7 +1472,16 @@
         "kwh": 19.27,
         "km100": 80,
         "maxAC": 6.6,
-        "maxDC": 30.0
+        "maxDC": 30.0,
+        "ano": "Sem informações",
+        "audit": {
+          "status": "no_information",
+          "statusLabel": "Sem informações",
+          "verifiedAt": null,
+          "sourceName": "Sem informações",
+          "sourceUrl": "",
+          "notes": "Sem informações técnicas confirmadas nesta versão."
+        }
       },
       {
         "id": 99,
@@ -1022,7 +1499,16 @@
         "kwh": 19.43,
         "km100": 84,
         "maxAC": 6.6,
-        "maxDC": 40.0
+        "maxDC": 40.0,
+        "ano": "Sem informações",
+        "audit": {
+          "status": "no_information",
+          "statusLabel": "Sem informações",
+          "verifiedAt": null,
+          "sourceName": "Sem informações",
+          "sourceUrl": "",
+          "notes": "Sem informações técnicas confirmadas nesta versão."
+        }
       }
     ]
   },
@@ -1045,7 +1531,16 @@
         "kwh": 88.16,
         "km100": 406,
         "maxAC": 11.0,
-        "maxDC": 150.0
+        "maxDC": 150.0,
+        "ano": "Sem informações",
+        "audit": {
+          "status": "no_information",
+          "statusLabel": "Sem informações",
+          "verifiedAt": null,
+          "sourceName": "Sem informações",
+          "sourceUrl": "",
+          "notes": "Sem informações técnicas confirmadas nesta versão."
+        }
       },
       {
         "id": 63,
@@ -1063,7 +1558,16 @@
         "kwh": 99.0,
         "km100": 436,
         "maxAC": 11.0,
-        "maxDC": 210.0
+        "maxDC": 210.0,
+        "ano": "Sem informações",
+        "audit": {
+          "status": "no_information",
+          "statusLabel": "Sem informações",
+          "verifiedAt": null,
+          "sourceName": "Sem informações",
+          "sourceUrl": "",
+          "notes": "Sem informações técnicas confirmadas nesta versão."
+        }
       }
     ]
   },
@@ -1086,7 +1590,16 @@
         "kwh": 56.2,
         "km100": 288,
         "maxAC": 11.0,
-        "maxDC": 70.0
+        "maxDC": 70.0,
+        "ano": "Sem informações",
+        "audit": {
+          "status": "no_information",
+          "statusLabel": "Sem informações",
+          "verifiedAt": null,
+          "sourceName": "Sem informações",
+          "sourceUrl": "",
+          "notes": "Sem informações técnicas confirmadas nesta versão."
+        }
       },
       {
         "id": 16,
@@ -1104,7 +1617,16 @@
         "kwh": 69.9,
         "km100": 340,
         "maxAC": 11.0,
-        "maxDC": 84.0
+        "maxDC": 84.0,
+        "ano": "Sem informações",
+        "audit": {
+          "status": "no_information",
+          "statusLabel": "Sem informações",
+          "verifiedAt": null,
+          "sourceName": "Sem informações",
+          "sourceUrl": "",
+          "notes": "Sem informações técnicas confirmadas nesta versão."
+        }
       },
       {
         "id": 17,
@@ -1122,7 +1644,16 @@
         "kwh": 28.4,
         "km100": 140,
         "maxAC": 6.6,
-        "maxDC": 35.0
+        "maxDC": 35.0,
+        "ano": "Sem informações",
+        "audit": {
+          "status": "no_information",
+          "statusLabel": "Sem informações",
+          "verifiedAt": null,
+          "sourceName": "Sem informações",
+          "sourceUrl": "",
+          "notes": "Sem informações técnicas confirmadas nesta versão."
+        }
       }
     ]
   },
@@ -1145,7 +1676,16 @@
         "kwh": 43.0,
         "km100": 299,
         "maxAC": 6.6,
-        "maxDC": 88.0
+        "maxDC": 88.0,
+        "ano": "Sem informações",
+        "audit": {
+          "status": "no_information",
+          "statusLabel": "Sem informações",
+          "verifiedAt": null,
+          "sourceName": "Sem informações",
+          "sourceUrl": "",
+          "notes": "Sem informações técnicas confirmadas nesta versão."
+        }
       },
       {
         "id": 65,
@@ -1163,7 +1703,16 @@
         "kwh": 43.0,
         "km100": 299,
         "maxAC": 6.6,
-        "maxDC": 88.0
+        "maxDC": 88.0,
+        "ano": "Sem informações",
+        "audit": {
+          "status": "no_information",
+          "statusLabel": "Sem informações",
+          "verifiedAt": null,
+          "sourceName": "Sem informações",
+          "sourceUrl": "",
+          "notes": "Sem informações técnicas confirmadas nesta versão."
+        }
       },
       {
         "id": 66,
@@ -1181,7 +1730,16 @@
         "kwh": 54.0,
         "km100": 358,
         "maxAC": 6.6,
-        "maxDC": 88.0
+        "maxDC": 88.0,
+        "ano": "Sem informações",
+        "audit": {
+          "status": "no_information",
+          "statusLabel": "Sem informações",
+          "verifiedAt": null,
+          "sourceName": "Sem informações",
+          "sourceUrl": "",
+          "notes": "Sem informações técnicas confirmadas nesta versão."
+        }
       },
       {
         "id": 67,
@@ -1199,7 +1757,16 @@
         "kwh": 64.0,
         "km100": 364,
         "maxAC": 11.0,
-        "maxDC": 140.0
+        "maxDC": 140.0,
+        "ano": "Sem informações",
+        "audit": {
+          "status": "no_information",
+          "statusLabel": "Sem informações",
+          "verifiedAt": null,
+          "sourceName": "Sem informações",
+          "sourceUrl": "",
+          "notes": "Sem informações técnicas confirmadas nesta versão."
+        }
       }
     ]
   },
@@ -1222,7 +1789,16 @@
         "kwh": 32.6,
         "km100": 161,
         "maxAC": 11.0,
-        "maxDC": 50.0
+        "maxDC": 50.0,
+        "ano": "Sem informações",
+        "audit": {
+          "status": "no_information",
+          "statusLabel": "Sem informações",
+          "verifiedAt": null,
+          "sourceName": "Sem informações",
+          "sourceUrl": "",
+          "notes": "Sem informações técnicas confirmadas nesta versão."
+        }
       }
     ]
   },
@@ -1245,7 +1821,16 @@
         "kwh": 40.0,
         "km100": 192,
         "maxAC": 6.6,
-        "maxDC": 50.0
+        "maxDC": 50.0,
+        "ano": "Sem informações",
+        "audit": {
+          "status": "no_information",
+          "statusLabel": "Sem informações",
+          "verifiedAt": null,
+          "sourceName": "Sem informações",
+          "sourceUrl": "",
+          "notes": "Sem informações técnicas confirmadas nesta versão."
+        }
       }
     ]
   },
@@ -1268,7 +1853,16 @@
         "kwh": 54.0,
         "km100": 261,
         "maxAC": 11.0,
-        "maxDC": 100.0
+        "maxDC": 100.0,
+        "ano": "Sem informações",
+        "audit": {
+          "status": "no_information",
+          "statusLabel": "Sem informações",
+          "verifiedAt": null,
+          "sourceName": "Sem informações",
+          "sourceUrl": "",
+          "notes": "Sem informações técnicas confirmadas nesta versão."
+        }
       },
       {
         "id": 84,
@@ -1286,7 +1880,16 @@
         "kwh": 50.0,
         "km100": 220,
         "maxAC": 7.4,
-        "maxDC": 100.0
+        "maxDC": 100.0,
+        "ano": "Sem informações",
+        "audit": {
+          "status": "no_information",
+          "statusLabel": "Sem informações",
+          "verifiedAt": null,
+          "sourceName": "Sem informações",
+          "sourceUrl": "",
+          "notes": "Sem informações técnicas confirmadas nesta versão."
+        }
       },
       {
         "id": 85,
@@ -1304,7 +1907,16 @@
         "kwh": 75.0,
         "km100": 230,
         "maxAC": 11.0,
-        "maxDC": 100.0
+        "maxDC": 100.0,
+        "ano": "Sem informações",
+        "audit": {
+          "status": "no_information",
+          "statusLabel": "Sem informações",
+          "verifiedAt": null,
+          "sourceName": "Sem informações",
+          "sourceUrl": "",
+          "notes": "Sem informações técnicas confirmadas nesta versão."
+        }
       }
     ]
   },
@@ -1327,7 +1939,16 @@
         "kwh": 26.8,
         "km100": 180,
         "maxAC": 7.4,
-        "maxDC": 30.0
+        "maxDC": 30.0,
+        "ano": "Sem informações",
+        "audit": {
+          "status": "no_information",
+          "statusLabel": "Sem informações",
+          "verifiedAt": null,
+          "sourceName": "Sem informações",
+          "sourceUrl": "",
+          "notes": "Sem informações técnicas confirmadas nesta versão."
+        }
       },
       {
         "id": 69,
@@ -1345,7 +1966,16 @@
         "kwh": 60.0,
         "km100": 248,
         "maxAC": 22.0,
-        "maxDC": 130.0
+        "maxDC": 130.0,
+        "ano": "Sem informações",
+        "audit": {
+          "status": "no_information",
+          "statusLabel": "Sem informações",
+          "verifiedAt": null,
+          "sourceName": "Sem informações",
+          "sourceUrl": "",
+          "notes": "Sem informações técnicas confirmadas nesta versão."
+        }
       }
     ]
   },
@@ -1368,7 +1998,16 @@
         "kwh": 61.0,
         "km100": 293,
         "maxAC": 11.0,
-        "maxDC": 100.0
+        "maxDC": 100.0,
+        "ano": "Sem informações",
+        "audit": {
+          "status": "no_information",
+          "statusLabel": "Sem informações",
+          "verifiedAt": null,
+          "sourceName": "Sem informações",
+          "sourceUrl": "",
+          "notes": "Sem informações técnicas confirmadas nesta versão."
+        }
       }
     ]
   },
@@ -1391,7 +2030,16 @@
         "kwh": 18.1,
         "km100": 75,
         "maxAC": 6.6,
-        "maxDC": 18.0
+        "maxDC": 18.0,
+        "ano": "Sem informações",
+        "audit": {
+          "status": "no_information",
+          "statusLabel": "Sem informações",
+          "verifiedAt": null,
+          "sourceName": "Sem informações",
+          "sourceUrl": "",
+          "notes": "Sem informações técnicas confirmadas nesta versão."
+        }
       },
       {
         "id": 53,
@@ -1409,7 +2057,16 @@
         "kwh": 73.1,
         "km100": 361,
         "maxAC": 11.0,
-        "maxDC": 150.0
+        "maxDC": 150.0,
+        "ano": "Sem informações",
+        "audit": {
+          "status": "no_information",
+          "statusLabel": "Sem informações",
+          "verifiedAt": null,
+          "sourceName": "Sem informações",
+          "sourceUrl": "",
+          "notes": "Sem informações técnicas confirmadas nesta versão."
+        }
       }
     ]
   },
@@ -1432,7 +2089,16 @@
         "kwh": 51.0,
         "km100": 250,
         "maxAC": 11.0,
-        "maxDC": 134.0
+        "maxDC": 134.0,
+        "ano": "Sem informações",
+        "audit": {
+          "status": "reviewed",
+          "statusLabel": "Revisado",
+          "verifiedAt": "31/08/2026",
+          "sourceName": "Revisão técnica da base",
+          "sourceUrl": "",
+          "notes": "Limite AC ajustado para 11 kW."
+        }
       },
       {
         "id": 71,
@@ -1449,8 +2115,17 @@
         "tracao": "AWD",
         "kwh": 69.0,
         "km100": 316,
-        "maxAC": 22.0,
-        "maxDC": 153.0
+        "maxAC": 11.0,
+        "maxDC": 153.0,
+        "ano": "Sem informações",
+        "audit": {
+          "status": "reviewed",
+          "statusLabel": "Revisado",
+          "verifiedAt": "31/08/2026",
+          "sourceName": "Revisão técnica da base",
+          "sourceUrl": "",
+          "notes": "Limite AC ajustado para 11 kW."
+        }
       },
       {
         "id": 72,
@@ -1467,8 +2142,17 @@
         "tracao": "AWD",
         "kwh": 69.0,
         "km100": 327,
-        "maxAC": 22.0,
-        "maxDC": 153.0
+        "maxAC": 11.0,
+        "maxDC": 153.0,
+        "ano": "Sem informações",
+        "audit": {
+          "status": "reviewed",
+          "statusLabel": "Revisado",
+          "verifiedAt": "31/08/2026",
+          "sourceName": "Revisão técnica da base",
+          "sourceUrl": "",
+          "notes": "Limite AC ajustado para 11 kW."
+        }
       },
       {
         "id": 92,
@@ -1486,7 +2170,16 @@
         "kwh": 69.0,
         "km100": 242,
         "maxAC": 11.0,
-        "maxDC": 135.0
+        "maxDC": 135.0,
+        "ano": "Sem informações",
+        "audit": {
+          "status": "no_information",
+          "statusLabel": "Sem informações",
+          "verifiedAt": null,
+          "sourceName": "Sem informações",
+          "sourceUrl": "",
+          "notes": "Sem informações técnicas confirmadas nesta versão."
+        }
       },
       {
         "id": 93,
@@ -1504,7 +2197,16 @@
         "kwh": 82.0,
         "km100": 385,
         "maxAC": 11.0,
-        "maxDC": 200.0
+        "maxDC": 200.0,
+        "ano": "Sem informações",
+        "audit": {
+          "status": "no_information",
+          "statusLabel": "Sem informações",
+          "verifiedAt": null,
+          "sourceName": "Sem informações",
+          "sourceUrl": "",
+          "notes": "Sem informações técnicas confirmadas nesta versão."
+        }
       }
     ]
   }

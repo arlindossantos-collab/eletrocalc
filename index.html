@@ -27,6 +27,7 @@
     <button class="tab" data-tab="vehicles">🚗 Veículos</button>
     <button class="tab" data-tab="chargers">🔌 Carregadores</button>
     <button class="tab" data-tab="history">📊 Histórico</button>
+    <button class="tab" data-tab="audit">🔎 Base Técnica</button>
     <button class="tab" data-tab="settings">⚙️ Ajustes</button>
   </nav>
 
@@ -38,6 +39,7 @@
         <label>Modelo <select id="modelSelect"></select></label>
         <button id="favoriteBtn" class="secondary">☆ Favoritar veículo</button>
         <div id="vehicleSpec" class="spec-grid"></div>
+        <div id="auditInfo" class="audit-box"></div>
       </article>
 
       <article class="card">
@@ -91,6 +93,7 @@
   <section class="tab-panel" id="tab-vehicles"><article class="card"><div class="section-head"><h2>🚗 Meus veículos</h2><button id="addVehicleBtn">+ Adicionar</button></div><div id="customVehiclesList"></div></article></section>
   <section class="tab-panel" id="tab-chargers"><article class="card"><div class="section-head"><h2>🔌 Meus carregadores</h2><button id="addChargerBtn">+ Adicionar</button></div><div id="chargersList"></div></article></section>
   <section class="tab-panel" id="tab-history"><article class="card"><div class="section-head"><h2>📊 Histórico de recargas</h2><button id="clearHistoryBtn" class="danger">Limpar histórico</button></div><div id="historySummary" class="grid three"></div><div id="historyList"></div></article></section>
+  <section class="tab-panel" id="tab-audit"><article class="card"><div class="section-head"><h2>🔎 Base Técnica dos Veículos</h2></div><p class="muted">Somente os modelos revisados nesta versão são identificados como revisados. Os demais aparecem como <b>Sem informações</b>.</p><div id="auditList"></div></article></section>
   <section class="tab-panel" id="tab-settings"><article class="card"><h2>⚙️ Ajustes</h2><p><b>Versão:</b> <span id="settingsVersion"></span></p><p><b>Última atualização:</b> <span id="buildDate"></span></p><hr><h3>Sobre os cálculos</h3><p>Os resultados são estimativas. A potência real pode variar conforme temperatura, estado da bateria, infraestrutura e curva de carregamento.</p></article></section>
 </main>
 
